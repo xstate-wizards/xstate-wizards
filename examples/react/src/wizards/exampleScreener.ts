@@ -1,15 +1,8 @@
-import {
-  CANCEL_STATE,
-  createLocalId,
-  createResourceOnContext,
-  createWizard,
-  INTERVIEW_INTRO_STATE,
-  SAVE_STATE,
-} from "@upsolve/wizards";
-import { assign } from "xstate";
+import { CANCEL_STATE, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
 import { selectUser } from "../models/user";
-import { getWizardMap, ID_EXAMPLE_SCREENER } from "./wizardMap";
 import { wizardModelLoaders } from "./wizardModels";
+
+export const ID_EXAMPLE_SCREENER = "exampleScreener";
 
 export const machineMapping = createWizard({
   config: {
@@ -21,31 +14,12 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
-  machineMap: getWizardMap(),
   schema: {
     states: {
       isInterestedInInterview: null,
       wizardScore: 0,
     },
     machineModels: [wizardModelLoaders.User({ loader: { arbitraryParamForWaiting: 1000 * 2.5 } })],
-  },
-  serializations: {
-    actions: {
-      createUser: assign((ctx) =>
-        createResourceOnContext(ctx, {
-          modelName: "User",
-          id: createLocalId(),
-        })
-      ),
-      incrementWizardScore: assign({ states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }) }),
-      incrementWizardScoreBy: assign({
-        states: (ctx, ev) => ({
-          ...ctx.states,
-          wizardScore: ctx.states.wizardScore + Math.max(Number(ev?.data?.incrementBy) || 0),
-        }),
-      }),
-      isInterested: assign({ states: (ctx) => ({ ...ctx.states, isInterestedInInterview: true }) }),
-    },
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -67,7 +41,7 @@ export const machineMapping = createWizard({
         { type: "button", text: "Nope", event: "NO" },
       ],
       on: {
-        YES: { target: "questionComplexity", actions: ["incrementWizardScore"] },
+        YES: { target: "questionComplexity", actions: ["Screener.incrementWizardScore"] },
         NO: "questionComplexity",
       },
     },
@@ -80,7 +54,7 @@ export const machineMapping = createWizard({
       on: {
         SUBMIT: {
           target: "developerExperience",
-          actions: ["incrementWizardScoreBy"],
+          actions: ["Screener.incrementWizardScoreBy"],
         },
       },
     },
@@ -94,7 +68,7 @@ export const machineMapping = createWizard({
         { type: "button", text: "Eh, not really", event: "NO" },
       ],
       on: {
-        YES: { target: "evaluationProcessing", actions: ["incrementWizardScore"] },
+        YES: { target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] },
         NO: "evaluationProcessing",
       },
     },
@@ -178,8 +152,7 @@ export const machineMapping = createWizard({
       on: {
         // Just updates state if interested
         INTERESTED: {
-          // actions: ["isInterested", "createUser"],
-          actions: ["isInterested"],
+          actions: ["Screener.isInterested", "Models.User.create"],
         },
         NOT_INTERESTED: CANCEL_STATE,
         SUBMIT: SAVE_STATE,

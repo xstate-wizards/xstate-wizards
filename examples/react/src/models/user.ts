@@ -1,5 +1,3 @@
-import { createLocalId } from "@upsolve/wizards";
-
 type TLocalUserModel = {
   id?: string;
   firstName?: string;
@@ -10,9 +8,9 @@ type TLocalUserModel = {
 
 // In memory data storage for showing saving/fetching examples with wizards
 const localUser: TLocalUserModel = {
-  id: createLocalId(),
-  firstName: "o",
-  lastName: "o",
+  id: undefined,
+  firstName: undefined,
+  lastName: undefined,
 };
 export const getUser = async () => (localUser?.id ? localUser : null);
 export const putUser = async ({ firstName, id, lastName }: TLocalUserModel) => {

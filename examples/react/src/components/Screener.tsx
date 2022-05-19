@@ -1,8 +1,10 @@
 import { WizardRunner } from "@upsolve/wizards";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
-import { getWizardMap, ID_EXAMPLE_SCREENER } from "../wizards/wizardMap";
+import { wizardMap } from "../wizards/wizardMap";
 import { putUser, selectUser } from "../models/user";
+import { wizardSerializations } from "../wizards/wizardSerializations";
+import { ID_EXAMPLE_SCREENER } from "../wizards/exampleScreener";
 
 type TScreenerProps = {
   onClose: () => void;
@@ -10,13 +12,7 @@ type TScreenerProps = {
 
 export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
   const navigate = useNavigate();
-  const [wizardMap, setWizardMap] = useState();
-  // HACK: set async to avoid wizardMap circular dependency issue...
-  useEffect(() => {
-    getWizardMap().then(setWizardMap);
-  }, []);
-
-  return !wizardMap ? null : (
+  return (
     <WizardRunner
       debugConfig={{
         logging: true,
@@ -24,10 +20,7 @@ export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
       }}
       machineId={ID_EXAMPLE_SCREENER}
       machineMap={wizardMap}
-      machineSerializations={{
-        components: {},
-        validations: {},
-      }}
+      machineSerializations={wizardSerializations}
       navigate={navigate}
       sessionEnabled={false}
       onMachineFinal={({ machine }) => {

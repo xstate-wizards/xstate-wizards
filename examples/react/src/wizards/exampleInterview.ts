@@ -1,19 +1,17 @@
 import {
   // CONTENT_NODE_BACK,
   createLocalId,
-  createResourceOnContext,
   createWizard,
-  deleteResourceOnContext,
   INTERVIEW_INTRO_STATE,
-  resolveInvokedContext,
   SAVE_STATE,
 } from "@upsolve/wizards";
 import { assign } from "xstate";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES, selectPets } from "../models/pet";
 import { selectUser } from "../models/user";
-import { getWizardMap, ID_EXAMPLE_INTERVIEW, ID_EXAMPLE_SPAWNED_MACHINE } from "./wizardMap";
 import { wizardModelLoaders } from "./wizardModels";
+
+export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 
 export const machineMapping = createWizard({
   config: {
@@ -25,36 +23,9 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
-  machineMap: getWizardMap(),
   schema: {
     states: {},
     machineModels: [wizardModelLoaders.User(), wizardModelLoaders.Pet(), wizardModelLoaders.Hobby()],
-  },
-  serializations: {
-    actions: {
-      createPet: assign((ctx) =>
-        createResourceOnContext(ctx, {
-          modelName: "Pet",
-          id: createLocalId(),
-        })
-      ),
-      removePet: assign((ctx, ev) =>
-        deleteResourceOnContext(ctx, {
-          modelName: "Pet",
-          id: ev?.data?.id,
-        })
-      ),
-      resolveInvokedContext,
-    },
-    // serializations here can be overriden by WizardRunner machineSerializations,
-    // TODO: could be more obvious
-    validations: {
-      isCurrentYear: (value) => (String(new Date().getFullYear()) === value ? null : "That's the wrong year"),
-      startOfPi: (value) => {
-        if (!String(value).startsWith("3.14")) return "Pi should start with 3.14...";
-        return null;
-      },
-    },
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -250,8 +221,8 @@ export const machineMapping = createWizard({
         { type: "button", buttonType: "submit", text: "Done", event: "SUBMIT" },
       ],
       on: {
-        ADD_PET: { actions: ["createPet"] },
-        REMOVE_PET: { actions: ["removePet"] },
+        ADD_PET: { actions: ["Models.Pet.create"] },
+        REMOVE_PET: { actions: ["Models.Pet.delete"] },
         SUBMIT: "hobbiesAsk",
       },
     },
@@ -308,7 +279,7 @@ export const machineMapping = createWizard({
       on: {
         // CREATE_EDIT_HOBBY: { target: "hobbyEditor" },
         CREATE_EDIT_HOBBY: { actions: [() => alert("Spawning sub-machine editors will be exemplified soon.")] },
-        DELETE_HOBBY: { actions: ["removeHobby"] },
+        DELETE_HOBBY: { actions: ["Models.Pet.delete"] },
         CONTINUE: "sessionExplorer",
       },
     },

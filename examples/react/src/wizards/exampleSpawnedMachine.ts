@@ -1,6 +1,7 @@
 import { createWizard } from "@upsolve/wizards";
-import { getWizardMap, ID_EXAMPLE_SPAWNED_MACHINE } from "./wizardMap";
 import { wizardModelLoaders } from "./wizardModels";
+
+export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
 
 export const machineMapping = createWizard({
   config: {
@@ -12,7 +13,6 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
-  machineMap: getWizardMap(),
   schema: {
     states: {
       hobbyId: null,

@@ -1,12 +1,12 @@
-export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
-export const ID_EXAMPLE_SCREENER = "exampleScreener";
-export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
+import { ID_EXAMPLE_INTERVIEW, machineMapping as machineMappingExampleInterview } from "./exampleInterview";
+import { ID_EXAMPLE_SCREENER, machineMapping as machineMappingExampleScreener } from "./exampleScreener";
+import {
+  ID_EXAMPLE_SPAWNED_MACHINE,
+  machineMapping as machineMappingExampleSpawnedMachine,
+} from "./exampleSpawnedMachine";
 
-// HACK: deal with circular dependency issue more elegantly/behind the scenes
-export const getWizardMap = async () => {
-  return {
-    [ID_EXAMPLE_INTERVIEW]: await import("./exampleInterview").then((m) => m.machineMapping),
-    [ID_EXAMPLE_SCREENER]: await import("./exampleScreener").then((m) => m.machineMapping),
-    [ID_EXAMPLE_SPAWNED_MACHINE]: await import("./exampleSpawnedMachine").then((m) => m.machineMapping),
-  };
+export const wizardMap = {
+  [ID_EXAMPLE_INTERVIEW]: machineMappingExampleInterview,
+  [ID_EXAMPLE_SCREENER]: machineMappingExampleScreener,
+  [ID_EXAMPLE_SPAWNED_MACHINE]: machineMappingExampleSpawnedMachine,
 };
