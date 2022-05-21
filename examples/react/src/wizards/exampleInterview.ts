@@ -1,6 +1,6 @@
 import { createLocalId, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
 import { selectHobbies } from "../models/hobby";
-import { getPets, PET_TYPES, selectPets } from "../models/pet";
+import { getPets, PET_TYPES } from "../models/pet";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 import { wizardModelLoaders } from "./wizardModels";
 
@@ -9,8 +9,8 @@ export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 export const machineMapping = createWizard({
   config: {
     id: ID_EXAMPLE_INTERVIEW,
-    initial: INTERVIEW_INTRO_STATE,
-    // initial: "hobbiesAsk",
+    // initial: INTERVIEW_INTRO_STATE,
+    initial: "petsAsk",
     label: "Example Interview",
     exitTo: "/",
     progressBar: true,
@@ -31,7 +31,6 @@ export const machineMapping = createWizard({
         { type: "h4", text: "Alright, well let's walk through some functionality!" },
         { type: "button", event: "SUBMIT", text: "ok" },
       ],
-      // on: { SUBMIT: "humanTestPi" },
       on: {},
     },
     humanTestPi: {
@@ -45,6 +44,7 @@ export const machineMapping = createWizard({
           assign: "states.humanTestPi",
           validations: ["required", "startOfPi"],
         },
+        { type: "small", text: `HINT: It is not <<<X_JSON_LOGIC('{"Math.random":[]}')>>>` },
         { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
       ],
       on: {
@@ -140,7 +140,7 @@ export const machineMapping = createWizard({
       },
     },
     petsEditor: {
-      content: (ctx) => [
+      content: [
         {
           type: "h4",
           text: "From here, we'll see a 'forEach' content node in action, repeating editors for each 'Pet' model we create.",
@@ -155,7 +155,28 @@ export const machineMapping = createWizard({
         },
         {
           type: "forEach",
-          items: selectPets(ctx),
+          // selectPets(ctx)
+          // interesting json logic below
+          // 1. behind the scenes, we exteded the json-logic expressions with native javascript methods
+          // 2. as such, we can now execute Object.values() on an obj selected with standard json-logic operators
+          // 3. so to get an array of the state machine context resources, we...
+          // 3a. do a conditional to see if the resources model is defined
+          // 3b. if so, we return the 2nd arg in the array which is a selector for those vals
+          // 3c. if not, we return an empty array
+          // 4. Object.values would throw if provided undefined/null, so we had to return an {}
+          items: {
+            "Object.values": [
+              {
+                // prettier-ignore
+                // if: 1st statement is eval, 2nd is if true, 3rd is if false
+                "if": [
+                { "!=": [{ var: "resources.Pet" }, null] },
+                { var: "resources.Pet" },
+                {},
+              ],
+              },
+            ],
+          },
           content: (ctx, item) => [
             {
               type: "resourceEditor",

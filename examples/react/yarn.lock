@@ -324,14 +324,15 @@
   resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@upsolve/wizards@^0.2.1-Mark.6":
-  version "0.2.1-Mark.6"
-  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.2.1-Mark.6.tgz#09e5f24fdacfd36d81554b403efaeed0e412c025"
-  integrity sha512-sd6G5lR6NC5U8PjE5KDoERCc+IUXqKkr4l/vzBuSD2PQv6ZeZMFZ7iYrW9Rvgl1MtbEqQNwTbgGnTHc7M43xmw==
+"@upsolve/wizards@^0.2.1-Mark.27":
+  version "0.2.1-Mark.27"
+  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.2.1-Mark.27.tgz#4b144c88fac5b7f17ca405bcd017dbedec33ed0b"
+  integrity sha512-QcKKgr48RG8qoShtg4MOMNhDBIzkgcRsrtXgFeFbyC1WZuA/bex80UV8CxxX85YF6e8AkvBBzGlIa3htP0SRYw==
   dependencies:
     "@xstate/react" "1.3.4"
     acorn "^8.7.1"
     date-fns "^2.4.1"
+    json-logic-js "^2.0.2"
     lodash "^4.17.20"
     react-player "^2.10.1"
     react-use "^17.3.2"
@@ -753,6 +754,11 @@ jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
+
+json-logic-js@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/json-logic-js/-/json-logic-js-2.0.2.tgz#b613e095f5e598cb78f7b9a2bbf638e74cf98158"
+  integrity sha512-ZBtBdMJieqQcH7IX/LaBsr5pX+Y5JIW+EhejtM3Ffg2jdN9Iwf+Ht6TbHnvAZ/YtwyuhPaCBlnvzrwVeWdvGDQ==
 
 json5@^2.2.1:
   version "2.2.1"

@@ -26,7 +26,10 @@ export const machineMapping = createWizard({
         { type: "button", text: "back", event: "BACK" },
         { type: "h3", text: "Welcome!" },
         { type: "p", text: "This is a screener to help you evaluate the WonderWizard™️ in front of you." },
-        { type: "p", text: "Let's find out if this is helpful." },
+        {
+          type: "p",
+          text: `Let's find out if this is helpful. We'll keep a score: <<<X_JSON_LOGIC('{"var":["states.wizardScore"]}')>>>`,
+        },
         { type: "button", text: "Continue", event: "SUBMIT" },
       ],
       on: {
@@ -73,8 +76,11 @@ export const machineMapping = createWizard({
     },
     evaluationProcessing: {
       invoke: {
-        // Faking a delay to "process"
-        src: `<<<invokeTimer(2000)>>>`,
+        // Faking a delay to "process" with an internal serialized function (converts to be src)
+        srcSerialized: {
+          function: "X_INVOKE_TIMER",
+          params: { milliseconds: 2000 },
+        },
         onDone: [{ target: "evaluationResult" }],
       },
       content: [{ type: "p", text: "Determining whether you need this..." }],
@@ -85,57 +91,72 @@ export const machineMapping = createWizard({
         { type: "hr" },
         {
           type: "conditional",
-          conditional: `<<<gt("states.wizardScore",0)>>>`, // (ctx) => ctx.states?.wizardScore > 0,
-          true: [
-            {
-              type: "p",
-              text: `You got a wizard score of <<<get("states.wizardScore")>>>! This might be useful for you to explore.`,
-            },
-          ],
-          false: [
-            {
-              type: "p",
-              text: "You got a 0 on your wizard score, but maybe it's still worth exploring an example interview with data manipulation and logic?",
-            },
-          ],
-        },
-        {
-          type: "conditional",
-          conditional: `<<<eq("states.isInterestedInInterview",null)>>>`, // (ctx) => ctx.states?.isInterestedInInterview == null,
-          true: [
-            {
-              type: "button",
-              text: "Yea! Let's do it",
-              event: "INTERESTED",
-            },
-            { type: "button", text: "Thanks, but no thanks", event: "NOT_INTERESTED" },
-          ],
-        },
-        {
-          type: "conditional",
-          conditional: `<<<eq("states.isInterestedInInterview",true)>>>`, // (ctx) => ctx.states?.isInterestedInInterview === true,
-          true: [
-            { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
-            [
+          // (ctx) => ctx.states?.wizardScore > 0,
+          conditional: {
+            ">": [{ var: ["states.wizardScore"] }, 0],
+          },
+          options: {
+            true: [
               {
-                type: "input",
-                inputType: "text",
-                label: "First Name",
-                assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "firstName" },
-                validations: ["required"],
-              },
-              {
-                type: "input",
-                inputType: "text",
-                label: "Last Name",
-                assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "lastName" },
-                validations: ["required"],
+                type: "p",
+                text: `You got a wizard score of <<<X_JSON_LOGIC('{"var":["states.wizardScore"]}')>>>! This might be useful for you to explore.`,
               },
             ],
-            // buttonType submit will ensure all input validations pass before firing off
-            { type: "button", buttonType: "submit", text: "Yea! Let's do it", event: "SUBMIT" },
-            { type: "button", text: "Nevermind", event: "NOT_INTERESTED" },
-          ],
+            false: [
+              {
+                type: "p",
+                text: "You got a 0 on your wizard score, but maybe it's still worth exploring an example interview with data manipulation and logic?",
+              },
+            ],
+          },
+        },
+        {
+          type: "conditional",
+          // (ctx) => ctx.states?.isInterestedInInterview == null,
+          conditional: {
+            "==": [{ var: ["states.isInterestedInInterview"] }, null],
+          },
+          options: {
+            true: [
+              {
+                type: "button",
+                text: "Yea! Let's do it",
+                event: "INTERESTED",
+              },
+              { type: "button", text: "Thanks, but no thanks", event: "NOT_INTERESTED" },
+            ],
+          },
+        },
+        {
+          type: "conditional",
+          // (ctx) => ctx.states?.isInterestedInInterview === true,
+          conditional: {
+            "===": [{ var: ["states.isInterestedInInterview"] }, true],
+          },
+          options: {
+            true: [
+              { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
+              [
+                {
+                  type: "input",
+                  inputType: "text",
+                  label: "First Name",
+                  assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "firstName" },
+                  validations: ["required"],
+                },
+                {
+                  type: "input",
+                  inputType: "text",
+                  label: "Last Name",
+                  assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "lastName" },
+                  validations: ["required"],
+                },
+              ],
+              // buttonType submit will ensure all input validations pass before firing off
+              { type: "button", buttonType: "submit", text: "Yea! Let's do it", event: "SUBMIT" },
+              { type: "button", text: "Nevermind", event: "NOT_INTERESTED" },
+            ],
+          },
         },
       ],
       on: {
