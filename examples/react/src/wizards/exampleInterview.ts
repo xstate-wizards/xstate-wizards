@@ -1,14 +1,7 @@
-import {
-  // CONTENT_NODE_BACK,
-  createLocalId,
-  createWizard,
-  INTERVIEW_INTRO_STATE,
-  SAVE_STATE,
-} from "@upsolve/wizards";
-import { assign } from "xstate";
+import { createLocalId, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES, selectPets } from "../models/pet";
-import { selectUser } from "../models/user";
+import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 import { wizardModelLoaders } from "./wizardModels";
 
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
@@ -17,6 +10,7 @@ export const machineMapping = createWizard({
   config: {
     id: ID_EXAMPLE_INTERVIEW,
     initial: INTERVIEW_INTRO_STATE,
+    // initial: "hobbiesAsk",
     label: "Example Interview",
     exitTo: "/",
     progressBar: true,
@@ -25,20 +19,25 @@ export const machineMapping = createWizard({
   },
   schema: {
     states: {},
-    machineModels: [wizardModelLoaders.User(), wizardModelLoaders.Pet(), wizardModelLoaders.Hobby()],
+    machineModels: [
+      wizardModelLoaders.User({ loader: { arbitraryParamForWaiting: 1000 * 2.5 } }),
+      wizardModelLoaders.Pet(),
+      wizardModelLoaders.Hobby(),
+    ],
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
-      content: () => [
-        { type: "h3", text: "Before we begin lets make sure you're a human...." },
+      content: [
+        { type: "h4", text: "Alright, well let's walk through some functionality!" },
         { type: "button", event: "SUBMIT", text: "ok" },
       ],
+      // on: { SUBMIT: "humanTestPi" },
       on: {},
     },
     humanTestPi: {
-      content: () => [
-        // CONTENT_NODE_BACK,
-        { type: "h4", text: "What are the starting digits of Pi?" },
+      content: [
+        { type: "h4", text: "First up are custom validations on inputs! Here's an odd one below." },
+        { type: "p", text: "What are the starting digits of Pi?" },
         {
           type: "input",
           inputType: "text",
@@ -54,9 +53,9 @@ export const machineMapping = createWizard({
       },
     },
     humanTestYear: {
-      content: () => [
-        // CONTENT_NODE_BACK,
-        { type: "h4", text: "What year is it currently?" },
+      content: [
+        { type: "h4", text: "Here's an example of a custom drop down with another unique validator." },
+        { type: "p", text: "What year is it currently?" },
         {
           type: "select",
           label: "Current Year",
@@ -78,49 +77,31 @@ export const machineMapping = createWizard({
       },
     },
     userName: {
-      content: (ctx) => [
-        { type: "h4", text: "So far so good... confirm your name please:" },
+      content: [
+        { type: "h4", text: "Now let's do some editing to a **User** model/resource:" },
+        { type: "p", text: "Use a 'resourceEditor' to wrap inputs so it's easier to update values." },
         {
           type: "resourceEditor",
           config: {
             modelName: "User",
-            resourceId: selectUser(ctx)?.id,
+            resourceId: `<<<selectUser("id")>>>`,
             resourceDefaults: {},
           },
           content: [
-            [
-              {
-                type: "input",
-                inputType: "text",
-                label: "First Name",
-                assign: { path: "firstName" },
-                validations: ["required"],
-              },
-              {
-                type: "input",
-                inputType: "text",
-                label: "Last Name",
-                assign: { path: "lastName" },
-                validations: ["required"],
-              },
-            ],
-          ],
-        },
-        { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
-      ],
-      on: {},
-    },
-    userEmail: {
-      content: (ctx) => [
-        { type: "p", text: "what's your email?" },
-        {
-          type: "resourceEditor",
-          config: {
-            modelName: "User",
-            resourceId: selectUser(ctx)?.id,
-            resourceDefaults: {},
-          },
-          content: [
+            {
+              type: "input",
+              inputType: "text",
+              label: "First Name",
+              assign: { path: "firstName" },
+              validations: ["required"],
+            },
+            {
+              type: "input",
+              inputType: "text",
+              label: "Last Name",
+              assign: { path: "lastName" },
+              validations: ["required"],
+            },
             {
               type: "input",
               inputType: "text",
@@ -128,22 +109,6 @@ export const machineMapping = createWizard({
               assign: { path: "email" },
               validations: ["required", "validEmail"],
             },
-          ],
-        },
-        { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
-      ],
-    },
-    userAge: {
-      content: (ctx) => [
-        { type: "p", text: "what's your age?" },
-        {
-          type: "resourceEditor",
-          config: {
-            modelName: "User",
-            resourceId: selectUser(ctx)?.id,
-            resourceDefaults: {},
-          },
-          content: [
             {
               type: "input",
               inputType: "age",
@@ -155,11 +120,17 @@ export const machineMapping = createWizard({
         },
         { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
       ],
-      on: {},
+      on: {
+        SUBMIT: "petsAsk",
+      },
     },
     petsAsk: {
-      content: (ctx) => [
-        { type: "p", text: "do you have pets?" },
+      content: [
+        {
+          type: "h4",
+          text: "Let's now show how to skip sections! Clicking yes brings us to an list screen, no skips to the next section.",
+        },
+        { type: "p", text: "Do you have pets?" },
         { type: "button", text: "Yep!", event: "YES" },
         { type: "button", text: "No", event: "NO" },
       ],
@@ -170,8 +141,11 @@ export const machineMapping = createWizard({
     },
     petsEditor: {
       content: (ctx) => [
-        // CONTENT_NODE_BACK,
-        { type: "h2", text: "have any pets?" },
+        {
+          type: "h4",
+          text: "From here, we'll see a 'forEach' content node in action, repeating editors for each 'Pet' model we create.",
+        },
+        { type: "h2", text: "Do you have any pets?" },
         {
           type: "row",
           content: [
@@ -226,29 +200,26 @@ export const machineMapping = createWizard({
         SUBMIT: "hobbiesAsk",
       },
     },
-
-    // TODO: Implement submachine spawning example
     hobbiesAsk: {
-      content: (ctx) => [
-        // CONTENT_NODE_BACK,
-        { type: "p", text: "do you have any hobbies?" },
+      content: [
+        { type: "h4", text: "Same as before, we have a section skip based on a YES/NO event." },
+        { type: "p", text: "Do you have any hobbies?" },
         { type: "button", text: "Yep!", event: "YES" },
         { type: "button", text: "No", event: "NO" },
       ],
       on: {
-        BACK: [
-          // if no pets exist on the machine skip back to ask, not editor
-          { target: "petsAsk", cond: (ctx) => getPets(ctx)?.length === 0 },
-          { target: "petsEditor" },
-        ],
+        BACK: [{ target: "petsAsk", cond: (ctx) => getPets(ctx)?.length === 0 }, { target: "petsEditor" }],
         YES: "hobbiesList",
-        NO: "sessionExplorer",
+        NO: "faq",
       },
     },
     hobbiesList: {
       content: (ctx) => [
-        // CONTENT_NODE_BACK,
-        { type: "h2", text: "have any hobbies?" },
+        {
+          type: "h4",
+          text: "Unlike the pets section, adding a 'Hobby' model here will spawn a new state machine. Upon it resolving, we'll resolve its data payload back into the current machine's context.",
+        },
+        { type: "p", text: "Have any hobbies?" },
         {
           type: "row",
           content: [
@@ -269,7 +240,7 @@ export const machineMapping = createWizard({
               content: [
                 { type: "p", text: item.description },
                 { type: "button", text: "Edit", event: { type: "CREATE_EDIT_HOBBY", data: { hobbyId: item.id } } },
-                { type: "button", text: "Delete", event: { type: "DELETE_HOBBY", data: { hobbyId: item.id } } },
+                { type: "button", text: "Delete", event: { type: "DELETE_HOBBY", data: { id: item.id } } },
               ],
             },
           ],
@@ -277,46 +248,47 @@ export const machineMapping = createWizard({
         { type: "button", text: "Done", event: "CONTINUE" },
       ],
       on: {
-        // CREATE_EDIT_HOBBY: { target: "hobbyEditor" },
-        CREATE_EDIT_HOBBY: { actions: [() => alert("Spawning sub-machine editors will be exemplified soon.")] },
-        DELETE_HOBBY: { actions: ["Models.Pet.delete"] },
-        CONTINUE: "sessionExplorer",
-      },
-    },
-    // hobbyEditor: {
-    //   id: ID_EXAMPLE_SPAWNED_MACHINE,
-    //   context: (ctx, ev) => ({
-    //     hobbyId: ev?.data?.hobbyId,
-    //     states: { editor: { showDelete: true } },
-    //   }),
-    //   onDone: [
-    //     { target: "hobbiesList", cond: (ctx, ev) => ev?.data?.finalEvent?.type === "BACK" },
-    //     { target: "hobbiesList", actions: ["resolveInvokedContext"] },
-    //   ],
-    // },
-    sessionExplorer: {
-      content: () => [
-        {
-          type: "p",
-          text: "TODO: Show how to render a custom react component here that can access machine state/context",
-        },
-        { type: "component", component: "SessionExplorer" },
-        { type: "button", text: "Next", event: "CONTINUE" },
-      ],
-      on: {
+        CREATE_EDIT_HOBBY: { target: "hobbyEditor" },
+        DELETE_HOBBY: { actions: ["Models.Hobby.delete"] },
         CONTINUE: "faq",
       },
     },
+    hobbyEditor: {
+      id: ID_EXAMPLE_SPAWNED_MACHINE,
+      context: (ctx, ev) => ({
+        hobbyId: ev?.data?.hobbyId,
+        states: { editor: { showDelete: true } },
+      }),
+      onDone: [
+        { target: "hobbiesList", cond: (ctx, ev) => ev?.data?.finalEvent?.type === "BACK" },
+        { target: "hobbiesList", actions: ["resolveInvokedContext"] },
+      ],
+    },
     faq: {
-      content: () => [
-        { type: "h4", text: "Thanks for stopping by!" },
-        { type: "p", text: "there will be more to show and exemplify, but that's it for now. check back soon!" },
-        { type: "p", text: "in the meantime, check out these videos" },
-        { type: "p", text: "ready to head out?" },
-        { type: "button", text: "Finish", event: "CONTINUE" },
+      content: [
+        { type: "h4", text: "Awesome! Thanks for checking things out!" },
+        {
+          type: "p",
+          text: "There will be more to show and exemplify, but that's it for now. check back soon!",
+        },
+        {
+          type: "p",
+          text: "In the meantime, watch some inspiration on this approach!",
+        },
+        {
+          type: "p",
+          text: "A video about state machines and state charts from XState creator David Khourshid!",
+        },
+        { type: "video", url: "https://www.youtube.com/watch?v=_umnF7gpbfg" },
+        {
+          type: "p",
+          text: "A video about the 'Actor Model' that inspired our approach for resource editor",
+        },
+        { type: "video", url: "https://www.youtube.com/watch?v=7erJ1DV_Tlo" },
+        { type: "button", text: "Exit", event: "EXIT" },
       ],
       on: {
-        CONTINUE: SAVE_STATE,
+        EXIT: SAVE_STATE,
       },
     },
   },

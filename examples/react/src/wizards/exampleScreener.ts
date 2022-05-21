@@ -1,5 +1,4 @@
 import { CANCEL_STATE, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
-import { selectUser } from "../models/user";
 import { wizardModelLoaders } from "./wizardModels";
 
 export const ID_EXAMPLE_SCREENER = "exampleScreener";
@@ -19,11 +18,11 @@ export const machineMapping = createWizard({
       isInterestedInInterview: null,
       wizardScore: 0,
     },
-    machineModels: [wizardModelLoaders.User({ loader: { arbitraryParamForWaiting: 1000 * 2.5 } })],
+    machineModels: [wizardModelLoaders.User()],
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
-      content: () => [
+      content: [
         { type: "button", text: "back", event: "BACK" },
         { type: "h3", text: "Welcome!" },
         { type: "p", text: "This is a screener to help you evaluate the WonderWizard™️ in front of you." },
@@ -35,7 +34,7 @@ export const machineMapping = createWizard({
       },
     },
     questionVolume: {
-      content: () => [
+      content: [
         { type: "p", text: "Do you find yourself asking users **a lot** of questions?" },
         { type: "button", text: "Yes! So many", event: "YES" },
         { type: "button", text: "Nope", event: "NO" },
@@ -46,7 +45,7 @@ export const machineMapping = createWizard({
       },
     },
     questionComplexity: {
-      content: () => [
+      content: [
         { type: "p", text: "Do you find yourself asking users __complex__ questions?" },
         { type: "button", text: "Yes! Very very complex", event: { type: "SUBMIT", data: { incrementBy: 2 } } },
         { type: "button", text: "Nope, nothing fancy", event: { type: "SUBMIT" } },
@@ -59,7 +58,7 @@ export const machineMapping = createWizard({
       },
     },
     developerExperience: {
-      content: () => [
+      content: [
         {
           type: "p",
           text: "Do you wonder how to let developers easily weave content and logic for questionnaires?",
@@ -75,22 +74,22 @@ export const machineMapping = createWizard({
     evaluationProcessing: {
       invoke: {
         // Faking a delay to "process"
-        src: () => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000 * 2)),
+        src: `<<<invokeTimer(2000)>>>`,
         onDone: [{ target: "evaluationResult" }],
       },
-      content: () => [{ type: "p", text: "Determining whether you need this..." }],
+      content: [{ type: "p", text: "Determining whether you need this..." }],
     },
     evaluationResult: {
-      content: (ctx) => [
+      content: [
         { type: "h1", text: "This may be useful!" },
         { type: "hr" },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.wizardScore > 0,
+          conditional: `<<<gt("states.wizardScore",0)>>>`, // (ctx) => ctx.states?.wizardScore > 0,
           true: [
             {
               type: "p",
-              text: `You got a wizard score of ${ctx.states?.wizardScore}! This might be useful for you to explore.`,
+              text: `You got a wizard score of <<<get("states.wizardScore")>>>! This might be useful for you to explore.`,
             },
           ],
           false: [
@@ -102,7 +101,7 @@ export const machineMapping = createWizard({
         },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.isInterestedInInterview == null,
+          conditional: `<<<eq("states.isInterestedInInterview",null)>>>`, // (ctx) => ctx.states?.isInterestedInInterview == null,
           true: [
             {
               type: "button",
@@ -114,35 +113,25 @@ export const machineMapping = createWizard({
         },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.isInterestedInInterview === true,
+          conditional: `<<<eq("states.isInterestedInInterview",true)>>>`, // (ctx) => ctx.states?.isInterestedInInterview === true,
           true: [
             { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
-            {
-              type: "resourceEditor",
-              config: {
-                modelName: "User",
-                resourceId: selectUser(ctx)?.id,
-                resourceDefaults: {},
+            [
+              {
+                type: "input",
+                inputType: "text",
+                label: "First Name",
+                assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "firstName" },
+                validations: ["required"],
               },
-              content: [
-                [
-                  {
-                    type: "input",
-                    inputType: "text",
-                    label: "First Name",
-                    assign: { path: "firstName" },
-                    validations: ["required"],
-                  },
-                  {
-                    type: "input",
-                    inputType: "text",
-                    label: "Last Name",
-                    assign: { path: "lastName" },
-                    validations: ["required"],
-                  },
-                ],
-              ],
-            },
+              {
+                type: "input",
+                inputType: "text",
+                label: "Last Name",
+                assign: { modelName: "User", id: `<<<selectUser("id")>>>`, path: "lastName" },
+                validations: ["required"],
+              },
+            ],
             // buttonType submit will ensure all input validations pass before firing off
             { type: "button", buttonType: "submit", text: "Yea! Let's do it", event: "SUBMIT" },
             { type: "button", text: "Nevermind", event: "NOT_INTERESTED" },

@@ -1,4 +1,6 @@
+import { get } from "lodash";
 import {
+  $TSFixMe,
   createLocalId,
   createResourceOnContext,
   deleteResourceOnContext,
@@ -6,45 +8,13 @@ import {
   TMachineSerializations,
 } from "@upsolve/wizards";
 import { assign } from "xstate";
+import { wizardMap } from "./wizardMap";
 
 // =================
 // ACTIONS
 // =================
 const actions: TMachineSerializations["actions"] = {
-  // --- defaults/special
   resolveInvokedContext,
-  // --- models (todo: auto-generate)
-  "Models.Hobby.create": assign((ctx) =>
-    createResourceOnContext(ctx, {
-      modelName: "Hobby",
-      id: createLocalId(),
-    })
-  ),
-  "Models.Hobby.delete": assign((ctx, ev) =>
-    deleteResourceOnContext(ctx, {
-      modelName: "Hobby",
-      id: ev?.data?.id,
-    })
-  ),
-  "Models.Pet.create": assign((ctx) =>
-    createResourceOnContext(ctx, {
-      modelName: "Pet",
-      id: createLocalId(),
-    })
-  ),
-  "Models.Pet.delete": assign((ctx, ev) =>
-    deleteResourceOnContext(ctx, {
-      modelName: "Pet",
-      id: ev?.data?.id,
-    })
-  ),
-  "Models.User.create": assign((ctx) =>
-    createResourceOnContext(ctx, {
-      modelName: "User",
-      id: createLocalId(),
-    })
-  ),
-  // --- wizards
   "Screener.incrementWizardScore": assign({
     states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
   }),
@@ -55,6 +25,47 @@ const actions: TMachineSerializations["actions"] = {
     }),
   }),
   "Screener.isInterested": assign({ states: (ctx) => ({ ...ctx.states, isInterestedInInterview: true }) }),
+};
+// --- models (auto-generate from looking at all loaders modelName properties)
+Object.values(wizardMap)
+  .map((machineMap) => machineMap.machineModels.map((machineModel) => machineModel.modelName))
+  .flat()
+  .forEach((modelName) => {
+    actions[`Models.${modelName}.create`] = assign((ctx) =>
+      createResourceOnContext(ctx, {
+        modelName,
+        id: createLocalId(),
+      })
+    );
+    actions[`Models.${modelName}.delete`] = assign((ctx, ev) =>
+      deleteResourceOnContext(ctx, {
+        modelName,
+        id: ev?.data?.id,
+      })
+    );
+  });
+
+// =================
+// FUNCTIONS (for ContentNode strings, conditional evaluations, forEach iterators, etc... as well as invoked srcs)
+// =================
+const functions: TMachineSerializations["functions"] = {
+  // --- getters
+  get: (ctx: $TSFixMe, path: string) => get(ctx, path),
+  // --- operators
+  gt: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) > value, // greater than
+  gte: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) >= value, // greater than or equal
+  lt: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) < value, // less than
+  lte: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) <= value, // less than or equal
+  eq: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) == value, // equal
+  ne: (ctx: $TSFixMe, path: string, value: number) => get(ctx, path) == value, // not equal
+  // --- invokes (factory functions for invokes, meaning should expect (ctx,ev))
+  invokeTimer: (milliseconds: number) => (ctx: $TSFixMe, ev: $TSFixMe) =>
+    new Promise<void>((resolve) => setTimeout(() => resolve(), milliseconds)),
+  // --- CUSTOM
+  selectUser: (ctx: $TSFixMe, key: string) => {
+    const user = Object.values(ctx.resources?.User ?? {})?.[0];
+    return key ? user?.[key] : user;
+  },
 };
 
 // =================
@@ -71,6 +82,7 @@ const validations: TMachineSerializations["validations"] = {
 export const wizardSerializations: TMachineSerializations = {
   actions,
   components: {},
+  functions,
   guards: {},
   validations,
 };

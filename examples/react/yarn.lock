@@ -293,6 +293,11 @@
   resolved "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-2.2.7.tgz#226a9e31680835a6188e887f3988e60c04d3f6a3"
   integrity sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA==
 
+"@types/lodash@^4.14.182":
+  version "4.14.182"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz#05301a4d5e62963227eaafe0ce04dd77c54ea5c2"
+  integrity sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==
+
 "@types/prop-types@*":
   version "15.7.5"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
@@ -319,12 +324,13 @@
   resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@upsolve/wizards@^0.0.6-Mark.27":
-  version "0.0.6-Mark.27"
-  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.0.6-Mark.27.tgz#ae7eccb187a0d6b1cf06355fcd8714e773884056"
-  integrity sha512-yJwx2TKFv8ibg7aXte3jyusDnu5mU1YaxcT+YVyvxaVuQ7bqEZ2X8RcWUtE6orb6wW96Aw71FbJmFJLF7SX1TA==
+"@upsolve/wizards@^0.2.1-Mark.6":
+  version "0.2.1-Mark.6"
+  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.2.1-Mark.6.tgz#09e5f24fdacfd36d81554b403efaeed0e412c025"
+  integrity sha512-sd6G5lR6NC5U8PjE5KDoERCc+IUXqKkr4l/vzBuSD2PQv6ZeZMFZ7iYrW9Rvgl1MtbEqQNwTbgGnTHc7M43xmw==
   dependencies:
     "@xstate/react" "1.3.4"
+    acorn "^8.7.1"
     date-fns "^2.4.1"
     lodash "^4.17.20"
     react-player "^2.10.1"
@@ -358,6 +364,11 @@
   dependencies:
     use-isomorphic-layout-effect "^1.0.0"
     use-subscription "^1.3.0"
+
+acorn@^8.7.1:
+  version "8.7.1"
+  resolved "https://registry.npmjs.org/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
+  integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -753,7 +764,7 @@ load-script@^1.0.0:
   resolved "https://registry.npmjs.org/load-script/-/load-script-1.0.0.tgz#0491939e0bee5643ee494a7e3da3d2bac70c6ca4"
   integrity sha1-BJGTngvuVkPuSUp+PaPSuscMbKQ=
 
-lodash@^4.17.11, lodash@^4.17.20:
+lodash@^4.17.11, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

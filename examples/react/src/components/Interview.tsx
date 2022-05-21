@@ -28,7 +28,8 @@ export const Interview = () => {
         navigate={navigate}
         sessionEnabled={false}
         onMachineFinal={({ machine }) => {
-          // idk
+          // When done, send back to base route w/ screener
+          navigate("/");
         }}
       />
     </form>
