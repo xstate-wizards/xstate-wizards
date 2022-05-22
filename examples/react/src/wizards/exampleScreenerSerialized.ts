@@ -1,13 +1,11 @@
 import { CANCEL_STATE, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
-import { assign } from "xstate";
-import { selectUser } from "../models/user";
 import { wizardModelLoaders } from "./wizardModels";
 
-export const ID_EXAMPLE_SCREENER = "exampleScreener";
+export const ID_EXAMPLE_SCREENER_SERIALIZED = "exampleScreenerSerialized";
 
 export const machineMapping = createWizard({
   config: {
-    id: ID_EXAMPLE_SCREENER,
+    id: ID_EXAMPLE_SCREENER_SERIALIZED,
     initial: INTERVIEW_INTRO_STATE,
     label: "Example Screener",
     exitTo: "/",
@@ -24,13 +22,13 @@ export const machineMapping = createWizard({
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
-      content: (ctx) => [
+      content: [
         { type: "button", text: "back", event: "BACK" },
         { type: "h3", text: "Welcome!" },
         { type: "p", text: "This is a screener to help you evaluate the WonderWizard™️ in front of you." },
         {
           type: "p",
-          text: `Let's find out if this is helpful. We'll keep a score: ${ctx?.states?.wizardScore}`,
+          text: `Let's find out if this is helpful. We'll keep a score: <<<JSON_LOGIC('{"var":["context.states.wizardScore"]}')>>>`,
         },
         { type: "button", text: "Continue", event: "SUBMIT" },
       ],
@@ -45,14 +43,7 @@ export const machineMapping = createWizard({
         { type: "button", text: "Nope", event: "NO" },
       ],
       on: {
-        YES: {
-          target: "questionComplexity",
-          actions: [
-            assign({
-              states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
-            }),
-          ],
-        },
+        YES: { target: "questionComplexity", actions: ["Screener.incrementWizardScore"] },
         NO: "questionComplexity",
       },
     },
@@ -65,14 +56,7 @@ export const machineMapping = createWizard({
       on: {
         SUBMIT: {
           target: "developerExperience",
-          actions: [
-            assign({
-              states: (ctx, ev) => ({
-                ...ctx.states,
-                wizardScore: ctx.states.wizardScore + Math.max(Number(ev?.data?.incrementBy) || 0),
-              }),
-            }),
-          ],
+          actions: ["Screener.incrementWizardScoreBy"],
         },
       },
     },
@@ -86,32 +70,30 @@ export const machineMapping = createWizard({
         { type: "button", text: "Eh, not really", event: "NO" },
       ],
       on: {
-        YES: {
-          target: "evaluationProcessing",
-          actions: [
-            assign({
-              states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
-            }),
-          ],
-        },
+        YES: { target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] },
         NO: "evaluationProcessing",
       },
     },
     evaluationProcessing: {
       invoke: {
         // Faking a delay to "process" with an internal serialized function (converts to be src)
-        src: () => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000 * 2)),
+        srcSerialized: {
+          function: "X_INVOKE_TIMER",
+          params: { milliseconds: 2000 },
+        },
         onDone: [{ target: "evaluationResult" }],
       },
       content: [{ type: "p", text: "Determining whether you need this..." }],
     },
     evaluationResult: {
-      content: (ctx) => [
+      content: [
         { type: "h1", text: "This may be useful!" },
         { type: "hr" },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.wizardScore > 1,
+          conditional: {
+            ">": [{ var: ["context.states.wizardScore"] }, 0],
+          },
           options: {
             true: [
               {
@@ -129,7 +111,9 @@ export const machineMapping = createWizard({
         },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.isInterestedInInterview == null,
+          conditional: {
+            "==": [{ var: ["context.states.isInterestedInInterview"] }, null],
+          },
           options: {
             true: [
               {
@@ -143,7 +127,9 @@ export const machineMapping = createWizard({
         },
         {
           type: "conditional",
-          conditional: (ctx) => ctx.states?.isInterestedInInterview === true,
+          conditional: {
+            "===": [{ var: ["context.states.isInterestedInInterview"] }, true],
+          },
           options: {
             true: [
               { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
@@ -154,7 +140,9 @@ export const machineMapping = createWizard({
                   label: "First Name",
                   assign: {
                     modelName: "User",
-                    id: selectUser(ctx)?.id,
+                    id: {
+                      selectUser: [{ var: "context" }, "id"],
+                    },
                     path: "firstName",
                   },
                   validations: ["required"],
@@ -165,7 +153,9 @@ export const machineMapping = createWizard({
                   label: "Last Name",
                   assign: {
                     modelName: "User",
-                    id: selectUser(ctx)?.id,
+                    id: {
+                      selectUser: [{ var: "context" }, "id"],
+                    },
                     path: "lastName",
                   },
                   validations: ["required"],
@@ -181,7 +171,7 @@ export const machineMapping = createWizard({
       on: {
         // Just updates state if interested
         INTERESTED: {
-          actions: [assign({ isInterestedInInterview: true }), "Models.User.create"],
+          actions: ["Screener.isInterested", "Models.User.create"],
         },
         NOT_INTERESTED: CANCEL_STATE,
         SUBMIT: SAVE_STATE,

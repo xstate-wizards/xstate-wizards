@@ -10,7 +10,8 @@ export const machineMapping = createWizard({
   config: {
     id: ID_EXAMPLE_INTERVIEW,
     // initial: INTERVIEW_INTRO_STATE,
-    initial: "petsAsk",
+    initial: "userName",
+    // initial: "petsEditor",
     label: "Example Interview",
     exitTo: "/",
     progressBar: true,
@@ -44,7 +45,7 @@ export const machineMapping = createWizard({
           assign: "states.humanTestPi",
           validations: ["required", "startOfPi"],
         },
-        { type: "small", text: `HINT: It is not <<<X_JSON_LOGIC('{"Math.random":[]}')>>>` },
+        { type: "small", text: `HINT: It is not <<<JSON_LOGIC('{"Math.random":[]}')>>>` },
         { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
       ],
       on: {
@@ -84,10 +85,13 @@ export const machineMapping = createWizard({
           type: "resourceEditor",
           config: {
             modelName: "User",
-            resourceId: `<<<selectUser("id")>>>`,
+            resourceId: {
+              selectUser: [{ var: "context" }, "id"], // ctx => selectUser(ctx, "id")
+            },
             resourceDefaults: {},
           },
           content: [
+            { type: "p", text: `user id: <<<JSON_LOGIC('{"selectUser":[{"var":"context"},"id"]}')>>>` },
             {
               type: "input",
               inputType: "text",
@@ -170,22 +174,28 @@ export const machineMapping = createWizard({
                 // prettier-ignore
                 // if: 1st statement is eval, 2nd is if true, 3rd is if false
                 "if": [
-                { "!=": [{ var: "resources.Pet" }, null] },
-                { var: "resources.Pet" },
+                { "!=": [{ var: "context.resources.Pet" }, null] },
+                { var: "context.resources.Pet" },
                 {},
               ],
               },
             ],
           },
-          content: (ctx, item) => [
+          // content: (ctx, item) => [
+          content: [
+            { type: "h4", text: `pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
             {
               type: "resourceEditor",
               config: {
                 modelName: "Pet",
-                resourceId: item.id,
+                // resourceId: item.id,
+                resourceId: {
+                  var: "content.node.id",
+                },
                 resourceDefaults: {},
               },
               content: [
+                { type: "small", text: `smaller pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
                 {
                   type: "row",
                   content: [
@@ -206,7 +216,7 @@ export const machineMapping = createWizard({
                       assign: { path: "name" },
                       validations: ["required"],
                     },
-                    { type: "button", text: "Delete", event: { type: "DELETE_PET", data: { id: item.id } } },
+                    // TODO: { type: "button", text: "Delete", event: { type: "DELETE_PET", data: { id: item.id } } },
                   ],
                 },
               ],

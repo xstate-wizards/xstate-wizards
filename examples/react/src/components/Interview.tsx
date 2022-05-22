@@ -11,7 +11,7 @@ export const Interview = () => {
   useEffect(() => {
     // if no user, navigate back to home route
     getUser().then((user) => {
-      if (!user) navigate("/");
+      // if (!user) navigate("/");
     });
   }, []);
 

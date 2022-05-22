@@ -1,4 +1,5 @@
 import { $TSFixMe, resolveInvokedContext, TMachineSerializations } from "@upsolve/wizards";
+import { cloneDeep } from "lodash";
 import { assign } from "xstate";
 
 // =================
@@ -26,6 +27,7 @@ const actions: TMachineSerializations["actions"] = {
 // =================
 const functions: TMachineSerializations["functions"] = {
   selectUser: (ctx: $TSFixMe, key: string) => {
+    // console.warn("selectUser: ", cloneDeep(ctx), key);
     const user = Object.values(ctx.resources?.User ?? {})?.[0];
     return key ? user?.[key] : user;
   },

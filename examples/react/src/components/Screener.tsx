@@ -1,10 +1,11 @@
 import { WizardRunner } from "@upsolve/wizards";
 import React from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { wizardMap } from "../wizards/wizardMap";
 import { putUser, selectUser } from "../models/user";
 import { wizardSerializations } from "../wizards/wizardSerializations";
 import { ID_EXAMPLE_SCREENER } from "../wizards/exampleScreener";
+import { ID_EXAMPLE_SCREENER_SERIALIZED } from "../wizards/exampleScreenerSerialized";
 
 type TScreenerProps = {
   onClose: () => void;
@@ -18,7 +19,8 @@ export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
         logging: true,
         skipSaves: true,
       }}
-      machineId={ID_EXAMPLE_SCREENER}
+      // machineId={location.search.json ? ID_EXAMPLE_SCREENER_SERIALIZED : ID_EXAMPLE_SCREENER}
+      machineId={ID_EXAMPLE_SCREENER_SERIALIZED}
       machineMap={wizardMap}
       machineSerializations={wizardSerializations}
       navigate={navigate}

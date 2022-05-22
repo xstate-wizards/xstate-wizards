@@ -8,9 +8,11 @@ export const Home = () => {
     <div>
       <div>
         <p>hi, welcome lets get started</p>
+        <p>TODO: do you want to use the serialized/json version of interviews or javascript/function filled</p>
       </div>
       <div>
-        <button onClick={() => setIsScreening(true)}>get started</button>
+        <button onClick={() => setIsScreening(true)}>json versions</button>
+        <button onClick={() => setIsScreening(true)}>javascript versions</button>
       </div>
       {isScreening && (
         <>
