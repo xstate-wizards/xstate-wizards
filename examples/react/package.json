@@ -6,7 +6,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@upsolve/wizards": "^0.2.1-Mark.132",
+    "@upsolve/wizards": "^0.3.0",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
