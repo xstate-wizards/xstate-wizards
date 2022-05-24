@@ -101,9 +101,22 @@ export const machineMapping = createWizard({
       invoke: {
         // Faking a delay to "process" with an internal serialized function (converts to be src)
         src: () => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000 * 2)),
-        onDone: [{ target: "evaluationResult" }],
+        onDone: [{ target: {
+          "if": [
+            { ">": [{ "var": ["context.states.wizardScore"] }, 0] },
+            "evaluationResult",
+            "evaluationFailed",
+          ],
+        }}],
       },
       content: [{ type: "p", text: "Determining whether you need this..." }],
+    },
+    evaluationFailed: {
+      content: (ctx) => [
+        { type: "h1", text: "Hmm, the evaluation failed."},
+        { type: "p", text: "Let's try again to get your result."},
+        { type: "button", text: "Continue", event: "SUBMIT" },
+      ],
     },
     evaluationResult: {
       content: (ctx) => [
