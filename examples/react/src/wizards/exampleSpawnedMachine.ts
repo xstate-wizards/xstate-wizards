@@ -13,13 +13,19 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
+  models: [wizardModelLoaders.Hobby()],
   schema: {
-    states: {
-      hobbyId: null,
+    type: 'object',
+    properties: {
+      states: {
+        properties: {
+          hobbyId: {
+            default: null
+          },
+        },
+      },
     },
-    machineModels: [wizardModelLoaders.Hobby()],
   },
-  serializations: {},
   states: {
     editor: {
       content: (ctx) => [
