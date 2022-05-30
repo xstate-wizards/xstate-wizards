@@ -9,22 +9,25 @@ export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 export const machineMapping = createWizard({
   config: {
     id: ID_EXAMPLE_INTERVIEW,
-    // initial: INTERVIEW_INTRO_STATE,
+    initial: INTERVIEW_INTRO_STATE,
     // initial: "userName",
-    initial: "petsEditor",
+    // initial: "petsEditor",
     label: "Example Interview",
     exitTo: "/",
     progressBar: true,
     sectionsBar: [],
     version: 1,
   },
+  models: [
+    wizardModelLoaders.User(), // { loader: { arbitraryParamForWaiting: 1000 * 2.5 } }
+    wizardModelLoaders.Pet(),
+    wizardModelLoaders.Hobby(),
+  ],
   schema: {
-    states: {},
-    machineModels: [
-      wizardModelLoaders.User(), // { loader: { arbitraryParamForWaiting: 1000 * 2.5 } }
-      wizardModelLoaders.Pet(),
-      wizardModelLoaders.Hobby(),
-    ],
+    type: "object",
+    properties: {
+      states: {},
+    }
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -158,7 +161,6 @@ export const machineMapping = createWizard({
           ],
         },
         {
-          type: "forEach",
           // selectPets(ctx)
           // interesting json logic below
           // 1. behind the scenes, we exteded the json-logic expressions with native javascript methods
@@ -168,6 +170,7 @@ export const machineMapping = createWizard({
           // 3b. if so, we return the 2nd arg in the array which is a selector for those vals
           // 3c. if not, we return an empty array
           // 4. Object.values would throw if provided undefined/null, so we had to return an {}
+          type: "forEach",
           items: {
             "Object.values": [
               {
@@ -226,7 +229,7 @@ export const machineMapping = createWizard({
       on: {
         ADD_PET: { actions: ["Models.Pet.create"] },
         REMOVE_PET: { actions: ["Models.Pet.delete"] },
-        SUBMIT: "hobbiesAsk",
+        SUBMIT: { target: "hobbiesAsk" },
       },
     },
     hobbiesAsk: {

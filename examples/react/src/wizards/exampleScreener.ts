@@ -15,12 +15,22 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
+  models: [wizardModelLoaders.User()],
   schema: {
-    states: {
-      isInterestedInInterview: null,
-      wizardScore: 0,
+    type: "object",
+    properties: {
+      states: {
+        type: "object",
+        properties: {
+          isInterestedInInterview: {
+            default: null,
+          },
+          wizardScore: {
+            default: 0
+          },
+        },
+      }
     },
-    machineModels: [wizardModelLoaders.User()],
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -35,7 +45,7 @@ export const machineMapping = createWizard({
         { type: "button", text: "Continue", event: "SUBMIT" },
       ],
       on: {
-        SUBMIT: "questionVolume",
+        SUBMIT: { target: "questionVolume" },
       },
     },
     questionVolume: {
@@ -53,7 +63,7 @@ export const machineMapping = createWizard({
             }),
           ],
         },
-        NO: "questionComplexity",
+        NO: { target: "questionComplexity" },
       },
     },
     questionComplexity: {
@@ -69,7 +79,7 @@ export const machineMapping = createWizard({
             assign({
               states: (ctx, ev) => ({
                 ...ctx.states,
-                wizardScore: ctx.states.wizardScore + Math.max(Number(ev?.data?.incrementBy) || 0),
+                wizardScore: ctx.states.wizardScore + ev?.data?.incrementBy,
               }),
             }),
           ],

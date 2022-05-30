@@ -13,12 +13,22 @@ export const machineMapping = createWizard({
     sectionsBar: [],
     version: 1,
   },
+  models: [wizardModelLoaders.User()],
   schema: {
-    states: {
-      isInterestedInInterview: null,
-      wizardScore: 0,
+    type: "object",
+    properties: {
+      states: {
+        type: "object",
+        properties: {
+          isInterestedInInterview: {
+            default: null,
+          },
+          wizardScore: {
+            default: 0
+          },
+        },
+      }
     },
-    machineModels: [wizardModelLoaders.User()],
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -123,47 +133,62 @@ export const machineMapping = createWizard({
               },
               { type: "button", text: "Thanks, but no thanks", event: "NOT_INTERESTED" },
             ],
-          },
-        },
-        {
-          type: "conditional",
-          conditional: {
-            "===": [{ var: ["context.states.isInterestedInInterview"] }, true],
-          },
-          options: {
-            true: [
-              { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
-              [
-                {
-                  type: "input",
-                  inputType: "text",
-                  label: "First Name",
-                  assign: {
-                    modelName: "User",
-                    id: {
-                      selectUser: [{ var: "context" }, "id"],
-                    },
-                    path: "firstName",
-                  },
-                  validations: ["required"],
+            false: [
+              {
+                type: "conditional",
+                conditional: {
+                  "===": [{ var: ["context.states.isInterestedInInterview"] }, true],
                 },
-                {
-                  type: "input",
-                  inputType: "text",
-                  label: "Last Name",
-                  assign: {
-                    modelName: "User",
-                    id: {
-                      selectUser: [{ var: "context" }, "id"],
-                    },
-                    path: "lastName",
-                  },
-                  validations: ["required"],
+                options: {
+                  true: [
+                    { type: "p", text: "Great! Just add your first and last names here and we'll continue!" },
+                    [
+                      {
+                        type: "input",
+                        inputType: "text",
+                        label: "First Name",
+                        assign: {
+                          modelName: "User",
+                          id: {
+                            selectUser: [{ var: "context" }, "id"],
+                          },
+                          path: "firstName",
+                        },
+                        validations: ["required"],
+                      },
+                      {
+                        type: "input",
+                        inputType: "text",
+                        label: "Last Name",
+                        assign: {
+                          modelName: "User",
+                          id: {
+                            selectUser: [{ var: "context" }, "id"],
+                          },
+                          path: "lastName",
+                        },
+                        validations: ["required"],
+                      },
+                      {
+                        type: "input",
+                        inputType: "password",
+                        label: "Password",
+                        assign: {
+                          modelName: "User",
+                          id: {
+                            selectUser: [{ var: "context" }, "id"],
+                          },
+                          path: "password",
+                        },
+                        validations: ["required"],
+                      },
+                    ],
+                    // buttonType submit will ensure all input validations pass before firing off
+                    { type: "button", buttonType: "submit", text: "Yea! Let's do it", event: "SUBMIT" },
+                    { type: "button", text: "Nevermind", event: "NOT_INTERESTED" },
+                  ],
                 },
-              ],
-              // buttonType submit will ensure all input validations pass before firing off
-              { type: "button", buttonType: "submit", text: "Yea! Let's do it", event: "SUBMIT" },
-              { type: "button", text: "Nevermind", event: "NOT_INTERESTED" },
+              },
             ],
           },
         },
