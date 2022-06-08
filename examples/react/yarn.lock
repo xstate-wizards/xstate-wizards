@@ -332,10 +332,10 @@
   resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@upsolve/wizards@^0.4.6":
-  version "0.4.6"
-  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.4.6.tgz#e233dc60b124fbec1044929ee189ffcdad3cf332"
-  integrity sha512-jJYiNf1OLzGc9RqSep9wborwZqwXI+czriNFVtLGNy2SoSO3kwfWjo1G2v6wGaIteHN/sYudqc2TwbTqO7tvGA==
+"@upsolve/wizards@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.npmjs.org/@upsolve/wizards/-/wizards-0.4.7.tgz#91871d3cecb2eba4198cd5fe85529fa821e6febb"
+  integrity sha512-Ux8PqLKuuEcT7ocZpAuxIXaVK5n7JkIL/hg5L2wAs63WDytBO7OX4WJziWP9KodFiwAis0/+9/ZjKGcq1hWZog==
   dependencies:
     "@types/jest" "^27.5.1"
     "@xstate/react" "1.3.4"

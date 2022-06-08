@@ -76,8 +76,35 @@ export const machineMapping = createSpell({
         { type: "button", text: "Eh, not really", event: "NO" },
       ],
       on: {
-        YES: { target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] },
-        NO: "evaluationProcessing",
+        YES: [
+          { target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] }
+        ],
+        NO: [
+          {
+            target: "lastDitchAsk",
+            cond: {
+              type: "jsonLogic",
+              jsonLogic: {
+                "===": [{ var: "context.states.wizardScore" }, 0]
+              }
+            }
+          },
+          { target: "evaluationProcessing" }
+        ],
+      },
+    },
+    lastDitchAsk: {
+      content: [
+        {
+          type: "p",
+          text: "you're sure strict data collection w/ json schemas and serialized json-logic doesn't interest you? :(",
+        },
+        { type: "button", text: "Ok, that sounds sort of neat", event: "YES" },
+        { type: "button", text: "Sorry, it really doesn't", event: "NO" },
+      ],
+      on: {
+        YES: [{ target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] }],
+        NO: [{ target: "evaluationProcessing" }],
       },
     },
     evaluationProcessing: {
