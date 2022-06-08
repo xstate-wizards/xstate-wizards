@@ -1,29 +1,28 @@
-import { CANCEL_STATE, createWizard, SAVE_STATE } from "@upsolve/wizards";
-import { wizardModelLoaders } from "./wizardModels";
+import { CANCEL_STATE, createSpell, SAVE_STATE } from "@upsolve/wizards";
 
 export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
 
-export const machineMapping = createWizard({
+export const machineMapping = createSpell({
+  id: ID_EXAMPLE_SPAWNED_MACHINE,
+  version: "1",
   config: {
-    id: ID_EXAMPLE_SPAWNED_MACHINE,
     initial: "editor",
-    label: "Example Spawned Machine Editor",
+    title: "Example Spawned Machine Editor",
     exitTo: "/",
-    progressBar: true,
     sectionsBar: [],
-    version: 1,
   },
-  models: [wizardModelLoaders.Hobby()],
+  models: {
+    Hobby: { loader: {} },
+  },
   schema: {
-    type: 'object',
+    type: "object",
     properties: {
       states: {
+        type: "object",
         properties: {
-          hobbyId: {
-            default: null
-          },
+          hobbyId: { type: ["integer", "null"], default: null }
         },
-      },
+      }
     },
   },
   states: {

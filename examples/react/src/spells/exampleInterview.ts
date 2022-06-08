@@ -1,33 +1,29 @@
-import { createLocalId, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
+import { createLocalId, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES } from "../models/pet";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
-import { wizardModelLoaders } from "./wizardModels";
 
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 
-export const machineMapping = createWizard({
+export const machineMapping = createSpell({
+  id: ID_EXAMPLE_INTERVIEW,
+  version: "1",
   config: {
-    id: ID_EXAMPLE_INTERVIEW,
-    initial: INTERVIEW_INTRO_STATE,
-    // initial: "userName",
-    // initial: "petsEditor",
-    label: "Example Interview",
+    initial: "humanTestYear",
+    title: "Example Interview",
     exitTo: "/",
-    progressBar: true,
     sectionsBar: [],
-    version: 1,
   },
-  models: [
-    wizardModelLoaders.User(), // { loader: { arbitraryParamForWaiting: 1000 * 2.5 } }
-    wizardModelLoaders.Pet(),
-    wizardModelLoaders.Hobby(),
-  ],
+  models: {
+    Hobby: { loader: {} },
+    Pet: { loader: {} },
+    User: { loader: {} }, // { loader: { arbitraryParamForWaiting: 1000 * 2.5 } }
+  },
   schema: {
     type: "object",
     properties: {
-      states: {},
-    }
+      states: {}
+    },
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
@@ -70,6 +66,24 @@ export const machineMapping = createWizard({
               value: new Date().getFullYear() - i,
             }))
             .reverse(),
+          assign: "states.humanTestYearOriginal",
+          validations: ["required", "isCurrentYear"],
+        },
+        {
+          type: "select",
+          label: "Current Year",
+          options: {
+            "_.reverse": [
+              {
+                "_.map": [
+                  {
+                    "_.fill": [[], null, 0, 5]
+                  },
+
+                ]
+              }
+            ]
+          },
           assign: "states.humanTestYear",
           validations: ["required", "isCurrentYear"],
         },

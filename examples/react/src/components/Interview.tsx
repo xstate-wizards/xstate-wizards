@@ -2,8 +2,9 @@ import { WizardRunner } from "@upsolve/wizards";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { getUser } from "../models/user";
-import { ID_EXAMPLE_INTERVIEW } from "../wizards/exampleInterview";
-import { wizardMap } from "../wizards/wizardMap";
+import { ID_EXAMPLE_INTERVIEW } from "../spells/exampleInterview";
+import { spellMap } from "../spells/spellMap";
+import { wizardModelMap } from "../wizards/wizardModelMap";
 import { wizardSerializations } from "../wizards/wizardSerializations";
 
 export const Interview = () => {
@@ -22,12 +23,13 @@ export const Interview = () => {
           logging: true,
           skipSaves: true,
         }}
-        machineId={ID_EXAMPLE_INTERVIEW}
-        machineMap={wizardMap}
-        machineSerializations={wizardSerializations}
+        spellKey={ID_EXAMPLE_INTERVIEW}
+        spellMap={spellMap}
+        models={wizardModelMap}
+        serializations={wizardSerializations}
         navigate={navigate}
         sessionEnabled={false}
-        onMachineFinal={({ machine }) => {
+        onWizardFinal={({ machine }) => {
           // When done, send back to base route w/ screener
           navigate("/");
         }}

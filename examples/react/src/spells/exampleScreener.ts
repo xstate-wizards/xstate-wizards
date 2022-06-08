@@ -1,32 +1,28 @@
-import { CANCEL_STATE, createWizard, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
-import { wizardModelLoaders } from "./wizardModels";
+import { CANCEL_STATE, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
 
-export const ID_EXAMPLE_SCREENER_SERIALIZED = "exampleScreenerSerialized";
+export const ID_EXAMPLE_SCREENER = "exampleScreener";
 
-export const machineMapping = createWizard({
+export const machineMapping = createSpell({
+  id: ID_EXAMPLE_SCREENER,
+  version: "1",
   config: {
-    id: ID_EXAMPLE_SCREENER_SERIALIZED,
     initial: INTERVIEW_INTRO_STATE,
-    label: "Example Screener",
+    title: "Example Screener",
     exitTo: "/",
-    progressBar: true,
     sectionsBar: [],
-    version: 1,
   },
-  models: [wizardModelLoaders.User()],
+  models: {
+    User: { loader: {} },
+  },
   schema: {
     type: "object",
     properties: {
       states: {
         type: "object",
         properties: {
-          isInterestedInInterview: {
-            default: null,
-          },
-          wizardScore: {
-            default: 0
-          },
-        },
+          isInterestedInInterview: { type: ["boolean", "null"], default: null },
+          wizardScore: { type: ["number"], default: 0 },
+        }
       }
     },
   },

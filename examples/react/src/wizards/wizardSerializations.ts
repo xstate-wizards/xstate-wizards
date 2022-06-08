@@ -1,11 +1,10 @@
-import { $TSFixMe, resolveInvokedContext, TMachineSerializations } from "@upsolve/wizards";
-import { cloneDeep } from "lodash";
+import { $TSFixMe, resolveInvokedContext, TWizardSerializations } from "@upsolve/wizards";
 import { assign } from "xstate";
 
 // =================
 // ACTIONS
 // =================
-const actions: TMachineSerializations["actions"] = {
+const actions: TWizardSerializations["actions"] = {
   resolveInvokedContext,
   "Screener.incrementWizardScore": assign({
     states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
@@ -25,7 +24,7 @@ const actions: TMachineSerializations["actions"] = {
 // =================
 // FUNCTIONS (for ContentNode strings, conditional evaluations, forEach iterators, etc... as well as invoked srcs)
 // =================
-const functions: TMachineSerializations["functions"] = {
+const functions: TWizardSerializations["functions"] = {
   selectUser: (ctx: $TSFixMe, key: string) => {
     // console.warn("selectUser: ", cloneDeep(ctx), key);
     const user = Object.values(ctx.resources?.User ?? {})?.[0];
@@ -36,7 +35,7 @@ const functions: TMachineSerializations["functions"] = {
 // =================
 // VALIDATIONS (for inputs only)
 // =================
-const validations: TMachineSerializations["validations"] = {
+const validations: TWizardSerializations["validations"] = {
   isCurrentYear: (value) => (String(new Date().getFullYear()) === value ? null : "That's the wrong year"),
   startOfPi: (value) => {
     if (!String(value).startsWith("3.14")) return "Pi should start with 3.14...";
@@ -44,7 +43,7 @@ const validations: TMachineSerializations["validations"] = {
   },
 };
 
-export const wizardSerializations: TMachineSerializations = {
+export const wizardSerializations: TWizardSerializations = {
   actions,
   components: {},
   functions,
