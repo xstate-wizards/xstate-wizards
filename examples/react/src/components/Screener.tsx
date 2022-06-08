@@ -1,11 +1,11 @@
 import { WizardRunner } from "@upsolve/wizards";
 import React from "react";
-import { useLocation, useNavigate } from "react-router";
-import { wizardMap } from "../wizards/wizardMap";
+import { useNavigate } from "react-router";
+import { spellMap } from "../spells/spellMap";
 import { putUser, selectUser } from "../models/user";
 import { wizardSerializations } from "../wizards/wizardSerializations";
-import { ID_EXAMPLE_SCREENER } from "../wizards/exampleScreener";
-import { ID_EXAMPLE_SCREENER_SERIALIZED } from "../wizards/exampleScreenerSerialized";
+import { ID_EXAMPLE_SCREENER } from "../spells/exampleScreener";
+import { wizardModelMap } from "../wizards/wizardModelMap";
 
 type TScreenerProps = {
   onClose: () => void;
@@ -19,13 +19,13 @@ export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
         logging: true,
         skipSaves: true,
       }}
-      // machineId={location.search.json ? ID_EXAMPLE_SCREENER_SERIALIZED : ID_EXAMPLE_SCREENER}
-      machineId={ID_EXAMPLE_SCREENER_SERIALIZED}
-      machineMap={wizardMap}
-      machineSerializations={wizardSerializations}
+      spellKey={ID_EXAMPLE_SCREENER}
+      spellMap={spellMap}
+      models={wizardModelMap}
+      serializations={wizardSerializations}
       navigate={navigate}
       sessionEnabled={false}
-      onMachineFinal={({ machine }) => {
+      onWizardFinal={({ machine }) => {
         // if user qualified...
         if (machine.context.states.isInterestedInInterview) {
           // --- update user info

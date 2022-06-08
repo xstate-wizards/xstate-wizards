@@ -1,19 +1,22 @@
-import { TMachineModelLoaders } from "@upsolve/wizards";
+import { TWizardModelsMap } from "@upsolve/wizards";
 import { getUser } from "../models/user";
 
-export const wizardModelLoaders: TMachineModelLoaders = {
-  Hobby: () => ({
+export const wizardModelMap: TWizardModelsMap = {
+  Hobby: {
     modelName: "Hobby",
+    schema: {},
     loader: async () => [],
-  }),
-  Pet: () => ({
+  },
+  Pet: {
     modelName: "Pet",
+    schema: {},
     loader: async () => [],
-  }),
-  User: (options) => ({
+  },
+  User: {
     modelName: "User",
+    schema: {},
     // loader: async () => getUser(),
-    loader: async () =>
+    loader: async (options) =>
       new Promise((resolve) =>
         // Mocking an async data fetch for user data
         getUser().then((user) => {
@@ -24,5 +27,5 @@ export const wizardModelLoaders: TMachineModelLoaders = {
           }
         })
       ),
-  }),
+  },
 };
