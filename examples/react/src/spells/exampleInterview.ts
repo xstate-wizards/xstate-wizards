@@ -17,7 +17,7 @@ export const machineMapping = createSpell({
   models: {
     Hobby: { loader: {} },
     Pet: { loader: {} },
-    User: { loader: {} },
+    User: { loader: {} }, // { loader: { arbitraryParamForWaiting: 1000 * 2.5 } }
   },
   schema: {
     type: "object",
@@ -164,7 +164,6 @@ export const machineMapping = createSpell({
           ],
         },
         {
-          type: "forEach",
           // selectPets(ctx)
           // interesting json logic below
           // 1. behind the scenes, we exteded the json-logic expressions with native javascript methods
@@ -174,6 +173,7 @@ export const machineMapping = createSpell({
           // 3b. if so, we return the 2nd arg in the array which is a selector for those vals
           // 3c. if not, we return an empty array
           // 4. Object.values would throw if provided undefined/null, so we had to return an {}
+          type: "forEach",
           items: {
             "Object.values": [
               {
@@ -232,7 +232,7 @@ export const machineMapping = createSpell({
       on: {
         ADD_PET: { actions: ["Models.Pet.create"] },
         REMOVE_PET: { actions: ["Models.Pet.delete"] },
-        SUBMIT: "hobbiesAsk",
+        SUBMIT: { target: "hobbiesAsk" },
       },
     },
     hobbiesAsk: {
