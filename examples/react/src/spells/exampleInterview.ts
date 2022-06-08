@@ -59,31 +59,20 @@ export const machineMapping = createSpell({
         {
           type: "select",
           label: "Current Year",
-          options: Array(5)
-            .fill(null)
-            .map((empty, i) => ({
-              text: new Date().getFullYear() - i,
-              value: new Date().getFullYear() - i,
-            }))
-            .reverse(),
-          assign: "states.humanTestYearOriginal",
-          validations: ["required", "isCurrentYear"],
-        },
-        {
-          type: "select",
-          label: "Current Year",
           options: {
-            "_.reverse": [
-              {
-                "_.map": [
-                  {
-                    "_.fill": [[], null, 0, 5]
-                  },
-
-                ]
-              }
-            ]
+            "lodash.range": [
+              { "date-fns.getYear": [{ "Date.now": [] }] },
+              { "-": [{ "date-fns.getYear": [{ "Date.now": [] }] }, 5] },
+            ],
           },
+          // vvv -- alternatively, this is what I did at first in javascript to get the years
+          // options: Array(5)
+          //   .fill(null)
+          //   .map((empty, i) => ({
+          //     text: new Date().getFullYear() - i,
+          //     value: new Date().getFullYear() - i,
+          //   }))
+          //   .reverse(),
           assign: "states.humanTestYear",
           validations: ["required", "isCurrentYear"],
         },
@@ -191,10 +180,10 @@ export const machineMapping = createSpell({
                 // prettier-ignore
                 // if: 1st statement is eval, 2nd is if true, 3rd is if false
                 "if": [
-                { "!=": [{ var: "context.resources.Pet" }, null] },
-                { var: "context.resources.Pet" },
-                {},
-              ],
+                  { "!=": [{ var: "context.resources.Pet" }, null] },
+                  { var: "context.resources.Pet" },
+                  {},
+                ],
               },
             ],
           },
