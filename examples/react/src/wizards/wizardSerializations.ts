@@ -1,11 +1,11 @@
-import { $TSFixMe, resolveInvokedContext, TWizardSerializations } from "@upsolve/wizards";
+import { $TSFixMe, mergeEventDataResources, TWizardSerializations } from "@xstate-wizards/spells";
 import { assign } from "xstate";
 
 // =================
 // ACTIONS
 // =================
 const actions: TWizardSerializations["actions"] = {
-  resolveInvokedContext,
+  mergeEventDataResources,
   "Screener.incrementWizardScore": assign({
     states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
   }),
@@ -30,13 +30,15 @@ const functions: TWizardSerializations["functions"] = {
     const user = Object.values(ctx.resources?.User ?? {})?.[0];
     return key ? user?.[key] : user;
   },
+  waitSeconds: (seconds: number, callback?: Promise<any>) =>
+    new Promise<void>((resolve) => setTimeout(() => resolve(callback), 1000 * seconds)),
 };
 
 // =================
 // VALIDATIONS (for inputs only)
 // =================
 const validations: TWizardSerializations["validations"] = {
-  isCurrentYear: (value) => (String(new Date().getFullYear()) === value ? null : "That's the wrong year"),
+  isCurrentYear: (value) => (String(new Date().getFullYear()) === String(value) ? null : "That's the wrong year"),
   startOfPi: (value) => {
     if (!String(value).startsWith("3.14")) return "Pi should start with 3.14...";
     return null;

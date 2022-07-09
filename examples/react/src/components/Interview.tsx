@@ -1,4 +1,4 @@
-import { WizardRunner } from "@upsolve/wizards";
+import { WizardRunner } from "@xstate-wizards/wizards-of-react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { getUser } from "../models/user";

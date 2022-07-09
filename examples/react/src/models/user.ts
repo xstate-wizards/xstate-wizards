@@ -1,4 +1,4 @@
-import { createLocalId } from "@upsolve/wizards";
+import { createLocalId } from "@xstate-wizards/spells";
 
 type TLocalUserModel = {
   id?: string;
