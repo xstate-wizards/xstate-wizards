@@ -33,6 +33,12 @@ export function setupInvokedMachineState({
   test,
 }: TSetupInvokedMachineStateProps) {
   logger.debug("Invoking Machine: ", { id: key, spellMap });
+  // VALIDATE
+  // TODO: get these working lol
+  if (!key) logger.error("Invalid invoke config: Missing 'key'");
+  if (!spellMap[key]) logger.error(`Invalid invoke config: Machine/spell doesn't exist for key '${key}'`);
+
+  // SETUP
   const constructedState = {
     entry,
     invoke: {
@@ -73,15 +79,13 @@ export function setupInvokedMachineState({
     on,
     meta: { nodeType: key, test: test || (() => null) },
   };
-
-  // Deserialize
-  // traverse entry/on actions and handle assign templates/json-logic
+  // --- Deserialize (traverse entry/on actions and handle assign templates/json-logic)
   if (constructedState.entry) constructedState.entry = deserializeTransitions(constructedState.entry);
   if (constructedState.on) constructedState.on = deserializeTransitions(constructedState.on);
   if (constructedState.invoke.onDone)
     constructedState.invoke.onDone = deserializeTransitions(constructedState.invoke.onDone);
   if (constructedState.invoke.onError)
     constructedState.invoke.onError = deserializeTransitions(constructedState.invoke.onError);
-
+  // --- Return
   return constructedState;
 }

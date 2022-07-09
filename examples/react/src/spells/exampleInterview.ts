@@ -1,4 +1,4 @@
-import { createLocalId, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
+import { createLocalId, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@xstate-wizards/spells";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES } from "../models/pet";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
@@ -9,7 +9,7 @@ export const machineMapping = createSpell({
   id: ID_EXAMPLE_INTERVIEW,
   version: "1",
   config: {
-    initial: "humanTestYear",
+    initial: INTERVIEW_INTRO_STATE,
     title: "Example Interview",
     exitTo: "/",
     sectionsBar: [],
@@ -22,7 +22,7 @@ export const machineMapping = createSpell({
   schema: {
     type: "object",
     properties: {
-      states: {}
+      states: {},
     },
   },
   states: {
@@ -31,7 +31,9 @@ export const machineMapping = createSpell({
         { type: "h4", text: "Alright, well let's walk through some functionality!" },
         { type: "button", event: "SUBMIT", text: "ok" },
       ],
-      on: {},
+      on: {
+        SUBMIT: "humanTestPi",
+      },
     },
     humanTestPi: {
       content: [
@@ -92,12 +94,12 @@ export const machineMapping = createSpell({
           config: {
             modelName: "User",
             resourceId: {
-              selectUser: [{ var: "context" }, "id"],
+              selectUser: [{ var: ["context"] }, "id"],
             },
             resourceDefaults: {},
           },
           content: [
-            { type: "p", text: `user id: <<<JSON_LOGIC('{"selectUser":[{"var":"context"},"id"]}')>>>` },
+            { type: "p", text: `user id: <<<JSON_LOGIC('{"selectUser":[{"var":["context"]},"id"]}')>>>` },
             {
               type: "input",
               inputType: "text",
@@ -180,8 +182,8 @@ export const machineMapping = createSpell({
                 // prettier-ignore
                 // if: 1st statement is eval, 2nd is if true, 3rd is if false
                 "if": [
-                  { "!=": [{ var: "context.resources.Pet" }, null] },
-                  { var: "context.resources.Pet" },
+                  { "!=": [{ var: ["context.resources.Pet"] }, null] },
+                  { var: ["context.resources.Pet"] },
                   {},
                 ],
               },
@@ -194,12 +196,12 @@ export const machineMapping = createSpell({
               config: {
                 modelName: "Pet",
                 resourceId: {
-                  var: "content.node.id",
+                  var: ["content.node.id"],
                 },
                 resourceDefaults: {},
               },
               content: [
-                { type: "small", text: `smaller pet id: <<<JSON_LOGIC('{"var":"content.node.id"}')>>>` },
+                { type: "small", text: `smaller pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
                 {
                   type: "row",
                   content: [
@@ -285,18 +287,18 @@ export const machineMapping = createSpell({
       on: {
         CREATE_EDIT_HOBBY: { target: "hobbyEditor" },
         DELETE_HOBBY: { actions: ["Models.Hobby.delete"] },
-        CONTINUE: "faq",
+        CONTINUE: { target: "faq" },
       },
     },
     hobbyEditor: {
-      id: ID_EXAMPLE_SPAWNED_MACHINE,
+      key: ID_EXAMPLE_SPAWNED_MACHINE,
       context: (ctx, ev) => ({
         hobbyId: ev?.data?.hobbyId,
-        states: { editor: { showDelete: true } },
+        showDelete: true,
       }),
       onDone: [
         { target: "hobbiesList", cond: (ctx, ev) => ev?.data?.finalEvent?.type === "BACK" },
-        { target: "hobbiesList", actions: ["resolveInvokedContext"] },
+        { target: "hobbiesList", actions: ["mergeEventDataResources"] },
       ],
     },
     faq: {

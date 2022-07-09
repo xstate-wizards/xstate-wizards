@@ -1,6 +1,6 @@
 {
-  "name": "@xstate-wizards/spells",
-  "version": "0.5.25",
+  "name": "@xstate-wizards/wizards-of-react",
+  "version": "0.5.23",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,23 +16,27 @@
     "test:ci": "jest --runInBand --expand"
   },
   "dependencies": {
-    "acorn": "^8.7.1",
+    "@xstate-wizards/spells": "^0.5.25",
+    "@xstate/react": "1.3.4",
     "date-fns": "^2.4.1",
-    "json-logic-js": "^2.0.2",
-    "json-schema": "^0.4.0",
     "lodash": "^4.17.20",
+    "react-player": "^2.10.1",
+    "react-use": "^17.3.2",
+    "styled-components": "^5.2.3",
+    "use-places-autocomplete": "^3.0.0",
     "uuid": "^3.3.3",
     "xstate": "^4.32.1",
-    "zustand": "^4.0.0-rc.1",
-    "zxcvbn": "^4.4.2"
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
-    "@types/json-logic-js": "^1.2.1",
-    "@types/json-schema": "^7.0.11",
     "@types/lodash": "^4.14.175",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "@types/styled-components": "^5.1.25",
     "@types/uuid": "^8.3.4",
     "jest": "^27",
+    "react": "^16.14.0",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"
   }

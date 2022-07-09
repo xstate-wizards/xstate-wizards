@@ -1,4 +1,4 @@
-import { CANCEL_STATE, createSpell, SAVE_STATE } from "@upsolve/wizards";
+import { CANCEL_STATE, createSpell, SAVE_STATE } from "@xstate-wizards/spells";
 
 export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
 
@@ -17,12 +17,8 @@ export const machineMapping = createSpell({
   schema: {
     type: "object",
     properties: {
-      states: {
-        type: "object",
-        properties: {
-          hobbyId: { type: ["integer", "null"], default: null }
-        },
-      }
+      hobbyId: { type: ["integer", "null"], default: null },
+      showDelete: { type: ["boolean", "null"], default: false },
     },
   },
   states: {

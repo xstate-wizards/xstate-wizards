@@ -1,4 +1,4 @@
-import { TWizardModelsMap } from "@upsolve/wizards";
+import { TWizardModelsMap } from "@xstate-wizards/spells";
 import { getUser } from "../models/user";
 
 export const wizardModelMap: TWizardModelsMap = {

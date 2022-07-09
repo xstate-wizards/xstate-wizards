@@ -1,4 +1,4 @@
-import { CANCEL_STATE, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@upsolve/wizards";
+import { CANCEL_STATE, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@xstate-wizards/spells";
 
 export const ID_EXAMPLE_SCREENER = "exampleScreener";
 
@@ -109,12 +109,17 @@ export const machineMapping = createSpell({
       invoke: {
         // Faking a delay to "process" with an internal serialized function (converts to be src)
         srcSerialized: {
-          function: "X_INVOKE_TIMER",
-          params: { milliseconds: 2000 },
+          jsonLogic: {
+            waitSeconds: [2],
+          },
+          transitionEventType: "WAITED",
         },
-        onDone: [{ target: "evaluationResult" }],
+        // onDone: [{ target: "evaluationResult" }],
       },
       content: [{ type: "p", text: "Determining whether you need this..." }],
+      on: {
+        WAITED: { target: "evaluationResult" },
+      },
     },
     evaluationResult: {
       content: [
