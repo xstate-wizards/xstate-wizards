@@ -17,17 +17,22 @@ export const wizardDebuggerStore = createVanilla<TWizardDebuggerStore>((set, get
 
 export const useWizardDebugger = create(wizardDebuggerStore);
 
+// TODO: console.debug/log/etc. need to sync up with spells package logging. Just gonna log everything for now
 export const logger = {
   debug: (...args) => {
-    if (wizardDebuggerStore.getState().logging) console.debug("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    // if (wizardDebuggerStore.getState().logging) console.debug("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    console.debug("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
   },
   error: (...args) => {
-    if (wizardDebuggerStore.getState().logging) console.error("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    // if (wizardDebuggerStore.getState().logging) console.error("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    console.error("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
   },
   info: (...args) => {
-    if (wizardDebuggerStore.getState().logging) console.log("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    // if (wizardDebuggerStore.getState().logging) console.log("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    console.log("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
   },
   warning: (...args) => {
-    if (wizardDebuggerStore.getState().logging) console.warn("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    // if (wizardDebuggerStore.getState().logging) console.warn("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
+    console.warn("%c[Wizard]", `color:#a246ff;font-weight:900;`, ...args);
   },
 };
