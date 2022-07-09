@@ -22,8 +22,8 @@ export const machineMapping = createSpell({
         properties: {
           isInterestedInInterview: { type: ["boolean", "null"], default: null },
           wizardScore: { type: ["number"], default: 0 },
-        }
-      }
+        },
+      },
     },
   },
   states: {
@@ -76,20 +76,18 @@ export const machineMapping = createSpell({
         { type: "button", text: "Eh, not really", event: "NO" },
       ],
       on: {
-        YES: [
-          { target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] }
-        ],
+        YES: [{ target: "evaluationProcessing", actions: ["Screener.incrementWizardScore"] }],
         NO: [
           {
             target: "lastDitchAsk",
             cond: {
               type: "jsonLogic",
               jsonLogic: {
-                "===": [{ var: "context.states.wizardScore" }, 0]
-              }
-            }
+                "===": [{ var: "context.states.wizardScore" }, 0],
+              },
+            },
           },
-          { target: "evaluationProcessing" }
+          { target: "evaluationProcessing" },
         ],
       },
     },

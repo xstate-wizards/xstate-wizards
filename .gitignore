@@ -1,4 +1,8 @@
+# node artifacts
 node_modules
+
+# build artifacts
 dist
-build
-.parcel-cache
+
+# test artifacts
+coverage/

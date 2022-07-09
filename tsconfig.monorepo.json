@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/spellbook" },
+    { "path": "./packages/spells" },
+    { "path": "./packages/wizards-of-react" },
+  ]
+}
