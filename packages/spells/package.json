@@ -1,0 +1,39 @@
+{
+  "name": "@xstate-wizards/spells",
+  "version": "0.5.24",
+  "author": "Mark Hansen",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "tsc -b tsconfig.json",
+    "prepublish": "NODE_ENV=production yarn run clean && yarn run build",
+    "major": "yarn version --major --no-git-tag-version && yarn publish",
+    "minor": "yarn version --minor --no-git-tag-version && yarn publish",
+    "patch": "yarn version --patch --no-git-tag-version && yarn publish",
+    "pre": "yarn version --prerelease --preid=$USER --no-git-tag-version && yarn publish",
+    "test": "jest --runInBand --expand",
+    "test:ci": "jest --runInBand --expand"
+  },
+  "dependencies": {
+    "acorn": "^8.7.1",
+    "date-fns": "^2.4.1",
+    "json-logic-js": "^2.0.2",
+    "json-schema": "^0.4.0",
+    "lodash": "^4.17.20",
+    "uuid": "^3.3.3",
+    "xstate": "^4.32.1",
+    "zustand": "^4.0.0-rc.1",
+    "zxcvbn": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@types/json-logic-js": "^1.2.1",
+    "@types/json-schema": "^7.0.11",
+    "@types/lodash": "^4.14.175",
+    "@types/uuid": "^8.3.4",
+    "jest": "^27",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
+  }
+}
