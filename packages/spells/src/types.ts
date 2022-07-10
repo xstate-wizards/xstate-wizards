@@ -236,13 +236,17 @@ export type TSpellEditor = {
 type TTempState = { [stateName: string]: { [stateProps: string]: TGeneralStateNodeProps } };
 
 export type TSpellInstructions = {
-  key: string; // ID for the machine that should correspond to machine map
+  key: string; // should correspond to spell/machine map
   version: string; // only necessary on questionnaire machines, but putting it everywhere
+  isActive?: boolean; // isActive tells us which of a key we should use when we have multiple versions
   config: TSpellConfig; // | ((ctx: $TSFixMe) => TSpellConfig);
   models: TSpellModelOptionsMap;
   schema: JSONSchema7;
   states: TTempState;
   editor: TSpellEditor;
+  // database related
+  id?: string | number;
+  createdAt?: string; // may exist from database?
 };
 
 export type TPrepparedSpellMapping = {
