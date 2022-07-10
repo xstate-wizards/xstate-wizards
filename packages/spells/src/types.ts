@@ -177,61 +177,6 @@ export type TWizardSerializations = {
   validations?: TValidationMap;
 };
 
-export type TWizardNavigate = (path: string, navigateOptions: $TSFixMe) => void;
-
-export type TWizardRunnerProps = {
-  configExitTo?: string;
-  configInitial?: string;
-  debugConfig?: {
-    logging: boolean;
-    skipSaves?: boolean;
-  };
-  models?: TWizardModelsMap;
-  navigate: TWizardNavigate;
-  navigationUnblockCheck?: ({ location: Location }) => boolean;
-  serializations?: TWizardSerializations;
-  spellKey?: string;
-  spellMap: TSpellMap;
-  sessionEnabled?: boolean;
-  sessionForceNew?: boolean;
-  sessionRequestCheck?: (args: { key: string; version?: string }) => TWizardSession | null;
-  sessionRequestStart?: (args: { key: string; version?: string }) => TWizardSession;
-  sessionRequestProgress?: (args: {
-    interviewSessionId: number | string;
-    machine?: $TSFixMe;
-    progressPercentage?: number;
-  }) => void;
-  onWizardContextPrep?: (preppedContext: Record<string, any>) => Record<string, any>;
-  onWizardChange?: (state: $TSFixMe) => void;
-  onWizardError?: Function;
-  onWizardFinal?: ({ finalEvent, machine }: $TSFixMe) => void; // finalEvent is just machine.event. legacy
-  onWizardProgress?: ({ progressPercentage: number, machine: $TSFixMe }) => void; // TODO: should find the right way to type xstate machine state
-  onMount?: () => void;
-  onUnmount?: () => void;
-  useNavigationBlocker?: $TSFixMe; // useBlock
-};
-
-export type TWizardStateMachineManagerProps = {
-  machine: $TSFixMe; // TODO: MachineConfig<InterviewContext, InterviewStates, InterviewEvent>??? https://github.com/davidkpiano/xstate/discussions/1719
-  spellMap?: TSpellMap;
-  serializations?: TWizardSerializations;
-  navigate: TWizardNavigate;
-  navigationUnblockCheck?: ({ location: Location }) => boolean;
-  onMachineChange?: TWizardRunnerProps["onWizardChange"];
-  onMachineFinal?: TWizardRunnerProps["onWizardFinal"];
-  onMachineProgress?: TWizardRunnerProps["onWizardProgress"];
-  useNavigationBlocker?: $TSFixMe;
-};
-
-export type TWizardStateViewer = {
-  machineMeta: any;
-  meta: any;
-  state: any;
-  transition: any;
-  serializations?: TWizardSerializations;
-  navigate: TWizardNavigate;
-};
-
 export type TContentNodeValidationMap = {
   [valuePath: string]: {
     dirty: boolean;
@@ -291,13 +236,17 @@ export type TSpellEditor = {
 type TTempState = { [stateName: string]: { [stateProps: string]: TGeneralStateNodeProps } };
 
 export type TSpellInstructions = {
-  key: string; // ID for the machine that should correspond to machine map
+  key: string; // should correspond to spell/machine map
   version: string; // only necessary on questionnaire machines, but putting it everywhere
+  isActive?: boolean; // isActive tells us which of a key we should use when we have multiple versions
   config: TSpellConfig; // | ((ctx: $TSFixMe) => TSpellConfig);
   models: TSpellModelOptionsMap;
   schema: JSONSchema7;
   states: TTempState;
   editor: TSpellEditor;
+  // database related
+  id?: string | number;
+  createdAt?: string; // may exist from database?
 };
 
 export type TPrepparedSpellMapping = {

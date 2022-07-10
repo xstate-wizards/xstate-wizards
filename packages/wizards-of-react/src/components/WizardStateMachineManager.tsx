@@ -1,12 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
 import { Interpreter } from "xstate";
 import { useMachine, useService } from "@xstate/react";
-import { TWizardStateMachineManagerProps } from "@xstate-wizards/spells";
 import { ID_GENERAL } from "@xstate-wizards/spells";
 
 import { WizardStateViewer } from "./WizardStateViewer";
 import { WizardWrapDefault } from "./wizardLayout/WizardWrapper";
 import { logger } from "../wizardDebugger";
+import { TWizardStateMachineManagerProps } from "../types";
 
 /**
  * WizardStateMachineManager

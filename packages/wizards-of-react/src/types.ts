@@ -1,11 +1,6 @@
-import {
-  $TSFixMe,
-  TSpellMap,
-  TWizardModelsMap,
-  TWizardNavigate,
-  TWizardSerializations,
-  TWizardSession,
-} from "@xstate-wizards/spells";
+import { $TSFixMe, TSpellMap, TWizardModelsMap, TWizardSerializations, TWizardSession } from "@xstate-wizards/spells";
+
+export type TWizardNavigate = (path: string, navigateOptions: $TSFixMe) => void;
 
 export type TWizardRunnerProps = {
   configExitTo?: string;
@@ -49,4 +44,13 @@ export type TWizardStateMachineManagerProps = {
   onMachineFinal?: TWizardRunnerProps["onWizardFinal"];
   onMachineProgress?: TWizardRunnerProps["onWizardProgress"];
   useNavigationBlocker?: $TSFixMe;
+};
+
+export type TWizardStateViewerProps = {
+  machineMeta: any;
+  meta: any;
+  state: any;
+  transition: any;
+  serializations?: TWizardSerializations;
+  navigate: TWizardNavigate;
 };

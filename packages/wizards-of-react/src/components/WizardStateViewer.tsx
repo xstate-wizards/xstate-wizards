@@ -1,6 +1,6 @@
 import { cloneDeep, get, throttle } from "lodash";
 import React, { Fragment, useEffect, useState } from "react";
-import { $TSFixMe, TWizardStateViewer } from "@xstate-wizards/spells";
+import { $TSFixMe } from "@xstate-wizards/spells";
 import {
   applyResourceInputToContext,
   CONTENT_NODE_BACK,
@@ -12,6 +12,7 @@ import {
   resolveAssignId,
 } from "@xstate-wizards/spells";
 
+import { TWizardStateViewerProps } from "../types";
 import { ContentNode } from "./ContentNode";
 import { WizardNavigationPanel } from "./wizardLayout/WizardNavigationPanel";
 import { logger } from "../wizardDebugger";
@@ -35,7 +36,7 @@ const clickBackButton = throttle(
  * Is run by the interview components and primarily lays out ContentNodes.
  * It also handles validation updates, and listens for browser back button clicks to transition BACK
  */
-export const WizardStateViewer: React.FC<TWizardStateViewer> = ({
+export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   serializations,
   machineMeta,
   meta,
