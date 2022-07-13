@@ -9,3 +9,6 @@ dist
 
 # test artifacts
 coverage/
+
+# system misc
+.DS_Store
