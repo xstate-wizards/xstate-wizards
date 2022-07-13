@@ -1,0 +1,36 @@
+{
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@xstate-wizards/spellbook": "link:../../packages/spellbook/dist",
+    "@xstate-wizards/spells": "link:../../packages/spells/dist",
+    "@xstate-wizards/wizards-of-react": "link:../../packages/wizards-of-react/dist",
+    "lodash": "^4.17.21",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
+    "uuid": "^3.4.0",
+    "xstate": "^4.32.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@vitejs/plugin-react-refresh": "^1.3.1",
+    "parcel": "^2.6.2",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.7"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "src/*"
+    ],
+    "delay": 2500
+  }
+}
