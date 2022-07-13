@@ -26,7 +26,7 @@
     "styled-components": "^5.2.3",
     "use-places-autocomplete": "^3.0.0",
     "uuid": "^3.3.3",
-    "xstate": "^4.32.1",
+    "xstate": "4.25.0",
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {

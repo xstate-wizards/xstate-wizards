@@ -24,7 +24,7 @@
     "pretty-print-json": "^1.2.5",
     "react": "^17.0.0",
     "styled-components": "^5.2.3",
-    "xstate": "^4.32.1",
+    "xstate": "4.25.0",
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
