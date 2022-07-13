@@ -5,13 +5,18 @@ export enum REORDER_DIRECTION {
   DOWN = "down",
 }
 
-export const castStatesToList = (states) =>
-  Array.isArray(states)
+export const castStatesToList = (states) => {
+  if (!states) return [];
+  const transformed = Array.isArray(states)
     ? states
-    : Object.keys(states).map((stateName) => ({
-        stateName,
-        state: states[stateName],
-      }));
+    : Object.keys(states ?? {}).map((stateName) => {
+        return {
+          stateName,
+          state: states[stateName],
+        };
+      });
+  return transformed;
+};
 
 export const castStatesToMap = (states) =>
   Array.isArray(states)
@@ -22,7 +27,7 @@ export const castStatesToMap = (states) =>
         }),
         {}
       )
-    : states;
+    : states ?? {};
 
 export const reorderArrayItem = (arrayToReOrder: any[], indexOfItem: number, direction: REORDER_DIRECTION) => {
   return arrayToReOrder.reduce((arr, c, ci) => {

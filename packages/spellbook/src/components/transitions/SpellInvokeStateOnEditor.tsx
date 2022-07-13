@@ -29,7 +29,7 @@ export const SpellInvokeStateOnEditor: React.FC<TSpellInvokeStateOnEditorProps> 
   spellsStatic,
 }) => {
   const invokedSchema = (
-    spellsStatic?.[state.key] ?? Object.values(spells).find((s) => s.isActive && s.key === state.key)
+    spellsStatic?.[state.key] ?? Object.values(spells ?? {}).find((s) => s.isActive && s.key === state.key)
   )?.schema;
   // RENDER
   return (

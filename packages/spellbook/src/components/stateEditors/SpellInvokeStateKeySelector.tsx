@@ -48,7 +48,7 @@ export const SpellInvokeStateKeySelector: React.FC<TSpellInvokeStateKeySelectorP
             <option value=""></option>
             <optgroup label="Spells Editable (aka State Machines)">
               {orderBy(
-                Object.values(spells).filter((s) => s.isActive),
+                Object.values(spells ?? {}).filter((s) => s.isActive),
                 ["key"]
               ).map(({ key }) => (
                 <option key={key} value={key}>

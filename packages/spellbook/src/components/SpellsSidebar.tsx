@@ -164,10 +164,10 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
   // SETUP
   const editor = useEditor();
   const sidebar = useSidebar();
-  const spellVersionMap: TSpellVersionMap = useMemo(() => groupBy(Object.values(spells), "key"), [spells]);
+  const spellVersionMap: TSpellVersionMap = useMemo(() => groupBy(Object.values(spells ?? {}), "key"), [spells]);
   const spellDirectoryMap: TSpellDirectoryMap = useMemo<$TSFixMe>(
     () =>
-      orderBy(Object.values(spells), ["id"], ["desc"]).reduce((dir: $TSFixMe, spell: $TSFixMe) => {
+      orderBy(Object.values(spells ?? {}), ["id"], ["desc"]).reduce((dir: $TSFixMe, spell: $TSFixMe) => {
         if (!dir[spell.key]) return { ...dir, [spell.key]: spell.editor?.directory };
         return dir;
       }, {}),
@@ -197,13 +197,16 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
   // --- spell SELECT
   // 1) Set spell 2) update params 3) auto-focus to whats marked active
   const selectSpellKey = (spellKey: string) => {
+    console.log("selectSpellKey", spellKey);
     const autoFocusedSpell =
-      Object.values(spells).find((s) => s.key === spellKey && s.isActive) ||
+      Object.values(spells ?? {}).find((s) => s.key === spellKey && s.isActive) ||
       orderBy(
-        Object.values(spells).filter((s) => s.key === spellKey),
+        Object.values(spells ?? {}).filter((s) => s.key === spellKey),
         ["createdAt"]
       )?.[0];
-    editor.setFocusedSpellId(autoFocusedSpell.id);
+    if (autoFocusedSpell) {
+      editor.setFocusedSpellId(autoFocusedSpell.id);
+    }
     editor.setFocusedSpellKey(spellKey);
     editor.setFocusedSpellVersion(undefined);
     searchParamSet(SPELLBOOK_SEARCH_PARAMS.SPELL_KEY, spellKey);
@@ -215,11 +218,6 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
   }, []);
 
   // RENDER
-  // TODO: got rid of overlay, so sidebar can be visible while working. helps with conceptualizing invoked machines
-  // <StyledSpellsSidebarBackground
-  //   isCollapsed={sidebar.isCollapsed && editor.focusedSpellKey != null}
-  //   onClick={() => sidebar.setIsCollapsed(true)}
-  // ></StyledSpellsSidebarBackground>
   return (
     <StyledSpellsSidebar isCollapsed={sidebar.isCollapsed && editor.focusedSpellKey != null}>
       <aside className="spells-list">
@@ -247,22 +245,6 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
     </StyledSpellsSidebar>
   );
 };
-
-const StyledSpellsSidebarBackground = styled.div<{ isCollapsed: boolean }>`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10;
-  ${({ isCollapsed }) =>
-    isCollapsed &&
-    css`
-      display: none;
-      pointer-events: none;
-    `}
-`;
 
 const StyledSpellsSidebar = styled.div<{ isCollapsed?: boolean; isSkinny?: boolean }>`
   // position: fixed;

@@ -6,12 +6,12 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "build": "tsc -b tsconfig.json",
+    "build": "yarn clean && tsc -b tsconfig.json",
     "prepublish": "NODE_ENV=production yarn run clean && yarn run build",
     "major": "yarn version --major --no-git-tag-version && yarn publish",
     "minor": "yarn version --minor --no-git-tag-version && yarn publish",
     "patch": "yarn version --patch --no-git-tag-version && yarn publish",
-    "pre": "yarn version --prerelease --preid=$USER --no-git-tag-version && yarn publish",
+    "pre": "yarn install && yalc publish",
     "test": "jest --runInBand --expand",
     "test:ci": "jest --runInBand --expand"
   },
@@ -22,6 +22,7 @@
     "framer-motion": "^6.4.3",
     "lodash": "^4.17.20",
     "pretty-print-json": "^1.2.5",
+    "react": "^17.0.0",
     "styled-components": "^5.2.3",
     "xstate": "^4.32.1",
     "zustand": "^4.0.0-rc.1"
@@ -33,8 +34,7 @@
     "@types/react-dom": "^18.0.4",
     "@types/styled-components": "^5.1.25",
     "jest": "^27",
-    "react": "^16.14.0",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.4.2"
+    "typescript": "^4.6.4"
   }
 }

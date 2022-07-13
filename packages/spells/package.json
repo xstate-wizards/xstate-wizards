@@ -6,12 +6,12 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "build": "tsc -b tsconfig.json",
+    "build": "yarn clean && tsc -b tsconfig.json",
     "prepublish": "NODE_ENV=production yarn run clean && yarn run build",
     "major": "yarn version --major --no-git-tag-version && yarn publish",
     "minor": "yarn version --minor --no-git-tag-version && yarn publish",
     "patch": "yarn version --patch --no-git-tag-version && yarn publish",
-    "pre": "yarn version --prerelease --preid=$USER --no-git-tag-version && yarn publish",
+    "pre": "yarn install && yalc publish",
     "test": "jest --runInBand --expand",
     "test:ci": "jest --runInBand --expand"
   },
@@ -34,6 +34,6 @@
     "@types/uuid": "^8.3.4",
     "jest": "^27",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.4.2"
+    "typescript": "^4.6.4"
   }
 }

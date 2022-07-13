@@ -29,7 +29,8 @@ export const SpellInvokeStateContextEditor: React.FC<TSpellInvokeStateContextEdi
 }) => {
   // OPTIMIZE this look up feels super inefficient
   const targetSpellProps = useMemo(() => {
-    const spell = spellsStatic?.[state.key] ?? Object.values(spells).find((s) => s.isActive && s.key === state.key);
+    const spell =
+      spellsStatic?.[state.key] ?? Object.values(spells ?? {}).find((s) => s.isActive && s.key === state.key);
     return Object.keys(spell?.schema?.properties ?? {});
   }, [spells, state.key]);
 
