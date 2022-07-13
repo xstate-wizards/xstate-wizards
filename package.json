@@ -2,11 +2,9 @@
   "name": "xstate-wizards",
   "private": true,
   "description": "Wizards for Complex Data Collection",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "author": "Mark Hansen <x@markthemark.com>",
   "repository": {
     "type": "git",
@@ -19,15 +17,15 @@
     "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
+    "lerna": "^5.1.8",
     "prettier": "^2.6.2",
     "typescript": "^4.6.4",
-    "typescript-eslint": "^0.0.1-alpha.0"
+    "typescript-eslint": "^0.0.1-alpha.0",
+    "yalc": "^1.0.0-pre.53"
   },
   "scripts": {
     "preinstall": "node ./scripts/ensure-yarn.js",
     "postinstall": "manypkg check",
-    "clean:packages": "yarn workspaces run clean",
-    "build": "tsc -b ./tsconfig.monorepo.json",
-    "test": "jest"
+    "clean:packages": "yarn workspaces run clean"
   }
 }
