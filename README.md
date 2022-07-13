@@ -6,9 +6,9 @@ Handle incredibly complex questionnaires with ease. A WIP set of libraries that 
 
 In Root:
 
-- npx lerna run pre
+- `yarn build:local`
 
-In Example Dir:
+In Example Dir After Making Changes:
 
-- npx yalc link <package>
-- npx yalc update <package>
+- `npx yalc link <package>`
+- `npx yalc update` or `npx yalc update <package>`
