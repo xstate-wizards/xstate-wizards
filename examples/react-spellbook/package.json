@@ -1,27 +1,27 @@
 {
+  "name": "xstate-wizards-examples-react-spellbook",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "dependencies": {
-    "@xstate-wizards/spells": "^0.5.25",
-    "@xstate-wizards/wizards-of-react": "^0.5.23",
+    "@xstate-wizards/spellbook": "^0.5.22",
+    "@xstate-wizards/spells": "^0.5.28",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5",
+    "uuid": "^3.4.0",
     "xstate": "^4.32.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@vitejs/plugin-react-refresh": "^1.3.1",
-    "typescript": "^4.3.2",
-    "vite": "^2.3.7"
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.3.2"
   }
 }

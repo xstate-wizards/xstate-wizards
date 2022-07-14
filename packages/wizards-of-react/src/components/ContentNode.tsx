@@ -1558,7 +1558,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   }
   if (node.type === ContentNodeType.BUTTON_LINK) {
     // if a button link has an event payload, fire it off (ex: may want to mark off an article "read")
-    function onButtonLinkClick() {
+    const onButtonLinkClick = () => {
       logger.info("onButtonLinkClick:", { event: node.event });
       if (typeof node.event === "string") {
         transition({ type: node.event, history: state.history });
@@ -1569,7 +1569,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           history: state.history,
         });
       }
-    }
+    };
 
     return (node.href || "")[0] !== "/" || node?.attrs?.target === "_blank" ? (
       <ButtonLink
@@ -1607,7 +1607,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     const buttonDisabledByHandler = typeof node.disabled === "function" && node.disabled(state.context);
     const buttonDisabledByFreshDelay = node.disabledByFreshDelay && isFresh;
     const buttonIsDisabled = buttonDisabledByFreshDelay || buttonDisabledByHandler;
-    function onButtonClick(e) {
+    const onButtonClick = (e) => {
       // Prevent native form submission attempts (form disconnection warnings)
       if (e?.preventDefault) e.preventDefault();
       // Guard from transitions if inputs failing validation
@@ -1666,7 +1666,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           logger.error('State transition attempted without event "type".');
         }
       }
-    }
+    };
 
     let btn;
     if (node.type === ContentNodeType.BUTTON) {

@@ -130,13 +130,6 @@ export const SpellStatesEditor = ({
       });
     }
   };
-  // --- handlers: duplicate
-  const cloneStateHandler = (copyingStateName) => {
-    const stateName = prompt("Whats the state name?");
-    if (stateName) {
-      onStatesUpdate(statesList.concat({ stateName, state: statesObj[copyingStateName] }));
-    }
-  };
 
   // RENDER
   return (

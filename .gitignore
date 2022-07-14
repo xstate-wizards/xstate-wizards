@@ -1,8 +1,14 @@
 # node artifacts
 node_modules
+.yalc
+yalc.lock
 
 # build artifacts
 dist
+.cache
 
 # test artifacts
 coverage/
+
+# system misc
+.DS_Store

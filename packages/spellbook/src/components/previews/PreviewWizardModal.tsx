@@ -45,14 +45,16 @@ export const PreviewWizardModal: React.FC<TPreviewWizardModalProps> = ({
   // TODO: Need to fix typings for what we pass into WizardRunner
   const { foundSpell, preppedSpellMap }: $TSFixMe = useMemo(() => {
     const preppedSpellMap = keyBy(
-      Object.values(spells)
+      Object.values(spells ?? {})
         .filter((s) => s.isActive === true)
         .map(createSpell),
       "key"
     );
     // ... with requested spell id
     const foundSpell = createSpell(
-      Object.values(spells).find((s) => s.key === editor.focusedSpellKey && s.version === editor.focusedSpellVersion)
+      Object.values(spells ?? {}).find(
+        (s) => s.key === editor.focusedSpellKey && s.version === editor.focusedSpellVersion
+      )
     );
     // TODO: Allow selection of multiple spells to run
     return {
