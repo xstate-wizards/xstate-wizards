@@ -3,34 +3,39 @@ import { SpellBook } from "@xstate-wizards/spellbook";
 import { $TSFixMe } from "@xstate-wizards/spells";
 import { createSpellLocalStorage } from "./storage/createSpellLocalStorage";
 import { getSpellsLocalStorage } from "./storage/getSpellsLocalStorage";
+import { publishSpellLocalStorage } from "./storage/publishSpellLocalStorage";
+import { activeSpellLocalStorage } from "./storage/activateSpellLocalStorage";
 
 export const ExampleSpellBook = () => {
   const [spells, setSpells] = useState<$TSFixMe>(getSpellsLocalStorage());
-  const refreshSeplls = () => {
+  const refreshSpells = () => {
     setSpells(getSpellsLocalStorage());
   };
-  console.log("spells", spells);
+
+  // RENDER
   return (
     <SpellBook
       models={{}}
       serializations={{
         functions: {},
+        guards: {},
       }}
       spells={spells}
       spellsStatic={{}}
       onSpellCreate={(spell) => {
         createSpellLocalStorage(spell);
-        refreshSeplls();
+        refreshSpells();
       }}
       onSpellPublish={async ({ increment, spell }) => {
-        // TODO
-        refreshSeplls();
+        const publishedSpell = publishSpellLocalStorage({ increment, spell });
+        refreshSpells();
+        return publishedSpell;
       }}
       onSpellSetActive={({ id, isActive }) => {
-        // TODO
-        refreshSeplls();
+        activeSpellLocalStorage({ id, isActive });
+        refreshSpells();
       }}
-      onSpellRefetch={() => refreshSeplls()}
+      onSpellRefetch={() => refreshSpells()}
       user={{
         id: 1,
         name: "Test User",

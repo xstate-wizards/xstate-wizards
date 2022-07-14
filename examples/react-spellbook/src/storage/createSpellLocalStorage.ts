@@ -5,6 +5,11 @@ import { localeStorageSet, localeStorageGet, SPELLBOOK_LOCALE_STORAGE_KEY_SPELLS
 export const createSpellLocalStorage = (spell: $TSFixMe) => {
   localeStorageSet(
     SPELLBOOK_LOCALE_STORAGE_KEY_SPELLS,
-    (localeStorageGet(SPELLBOOK_LOCALE_STORAGE_KEY_SPELLS) ?? []).concat({ id: v4(), ...spell })
+    (localeStorageGet(SPELLBOOK_LOCALE_STORAGE_KEY_SPELLS) ?? []).concat({
+      id: v4(),
+      version: "0.1",
+      createdAt: new Date(),
+      ...spell,
+    })
   );
 };
