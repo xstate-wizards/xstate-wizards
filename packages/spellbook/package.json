@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/spellbook",
-  "version": "0.5.22",
+  "version": "0.5.23",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
