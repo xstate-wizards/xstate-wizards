@@ -2,6 +2,13 @@ import { $TSFixMe } from "@xstate-wizards/spells";
 import React, { useRef } from "react";
 import styled, { css } from "styled-components";
 
+// TODO: Replace these w/ some other styling config/option
+const THEME_COLOR_RED = "#E5145A";
+const THEME_COLOR_WHITE_OFF = "#F0F1F2";
+const THEME_COLOR_GRAY = "#4D555B";
+const THEME_COLOR_BLUE_900 = "#FAFBFF";
+const THEME_COLOR_BLUE_800 = "#EBEFFF";
+
 export const SpellBookWizardWrap = ({
   children,
   title,
@@ -115,7 +122,7 @@ const SharedSpellBookWizardCSS = css`
   }
   .content-node__input__required-tick {
     margin-left: 3px;
-    color: ${(props) => props.theme.colors.red[500]};
+    color: ${THEME_COLOR_RED};
   }
   .content-node__input__label {
     font-weight: 500;
@@ -145,7 +152,7 @@ const SharedSpellBookWizardCSS = css`
     }
     &.validation-error {
       .content-node__input__validation-message {
-        color: ${(props) => props.theme.colors.red[500]};
+        color: ${THEME_COLOR_RED};
       }
     }
     & > label,
@@ -169,7 +176,7 @@ const SharedSpellBookWizardCSS = css`
     &.json-array {
       margin-bottom: 0.5em;
       .json-panel {
-        border: 1px solid ${(p) => p.theme.colors.white[500]};
+        border: 1px solid ${THEME_COLOR_WHITE_OFF};
         padding: 1em;
         margin-bottom: 1em;
         border-radius: 4px;
@@ -281,9 +288,9 @@ const StyledSpellBookWizardWrap = styled.div`
       &:disabled {
         opacity: 1;
         background: white;
-        border: 2px solid ${(props) => props.theme.colors.brand[800]};
+        border: 2px solid ${THEME_COLOR_BLUE_800};
         cursor: pointer;
-        color: ${(props) => props.theme.colors.gray[500]};
+        color: ${THEME_COLOR_GRAY};
       }
       &::before {
         content: "← Back";
@@ -305,17 +312,17 @@ const StyledSpellBookWizardWrap = styled.div`
       &:hover {
         opacity: 1;
         background: white;
-        border: 2px solid ${(props) => props.theme.colors.brand[800]};
+        border: 2px solid ${THEME_COLOR_BLUE_800};
         border-radius: 4px;
         cursor: pointer;
-        color: ${(props) => props.theme.colors.gray[500]};
+        color: ${THEME_COLOR_GRAY};
       }
       svg {
         height: 18px;
         width: 18px;
         path {
-          fill: ${(props) => props.theme.colors.gray[500]};
-          stroke: ${(props) => props.theme.colors.gray[500]};
+          fill: ${THEME_COLOR_GRAY};
+          stroke: ${THEME_COLOR_GRAY};
         }
       }
     }
@@ -325,9 +332,9 @@ const StyledSpellBookWizardWrap = styled.div`
       left: 1.3em;
       z-index: 0;
       padding: 0.5em;
-      background: ${(props) => props.theme.colors.brand[900]};
+      background: ${THEME_COLOR_BLUE_900};
       border-radius: 4px;
-      box-shadow: ${(props) => props.theme.effects.shadow[350]};
+      box-shadow: 0 4px 16px 0 rgba(228,228,230,1);
       button,
       button:disabled,
       button:hover {
@@ -337,10 +344,10 @@ const StyledSpellBookWizardWrap = styled.div`
         justify-content: flex-start;
         opacity: 1;
         background: white;
-        border: 2px solid ${(props) => props.theme.colors.brand[800]};
+        border: 2px solid ${THEME_COLOR_BLUE_800};
         border-radius: 4px;
         cursor: pointer;
-        color: ${(props) => props.theme.colors.gray[500]};
+        color: ${THEME_COLOR_GRAY};
       }
     }
   }
