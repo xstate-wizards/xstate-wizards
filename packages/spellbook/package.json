@@ -7,13 +7,14 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "build": "yarn clean && tsc -b tsconfig.json",
-    "build:local": "yalc update && yalc publish",
     "prepublish": "NODE_ENV=production yarn run clean && yarn run build",
     "major": "yarn version --major --no-git-tag-version && yarn publish",
     "minor": "yarn version --minor --no-git-tag-version && yarn publish",
     "patch": "yarn version --patch --no-git-tag-version && yarn publish",
     "test": "jest --runInBand --expand",
-    "test:ci": "jest --runInBand --expand"
+    "test:ci": "jest --runInBand --expand",
+    "yalcpush": "yarn build && yalc push",
+    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react"
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.5.28",

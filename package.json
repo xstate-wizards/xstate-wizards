@@ -29,6 +29,7 @@
     "postinstall": "manypkg check",
     "clean:packages": "yarn workspaces run clean",
     "build": "lerna run build",
-    "build:local": "lerna run build:local"
+    "yalclink": "lerna run yalclink",
+    "yalcpush": "lerna run yalcpush"
   }
 }
