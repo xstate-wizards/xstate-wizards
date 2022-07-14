@@ -35,6 +35,7 @@ import { SelectWithOther } from "./contentNodes/SelectWithOther";
 import { VideoHolder } from "./styled/VideoHolder.div";
 import { Card } from "./styled/Card.div";
 import { ConfirmButton } from "./contentNodes/ConfirmButton";
+import { defaultTheme } from "../theme";
 
 declare global {
   interface Window {
@@ -1720,7 +1721,7 @@ const StyledInlineButtonWrapper = styled.div`
   & > div {
     align-self: flex-end;
   }
-  @media (max-width: ${(p) => p.theme.breakpoints[500]}) {
+  @media (max-width: ${defaultTheme.breakpoints[500]}) {
     margin: 0.6em 0;
   }
 `;
@@ -1738,7 +1739,7 @@ const StyledCheckboxButton = styled.div<{ ButtonCSS: $TSFixMe; disabled?: boolea
       height: 18px;
       width: 18px;
       border-radius: 4px;
-      border: 1px solid ${(props) => props.theme.colors.brand[500]};
+      border: 1px solid ${defaultTheme.colors.brand[500]};
       &.radio {
         border-radius: 9px;
       }
@@ -1763,7 +1764,7 @@ const StyledImageWrapper = styled.div<{ shadow?: boolean }>`
   img {
     max-width: 100%;
     ${(props) => {
-      if (props.shadow) return `box-shadow: ${props.theme.effects.shadow[350]}`;
+      if (props.shadow) return `box-shadow: ${defaultTheme.effects.shadow[350]}`;
     }}
   }
 `;
@@ -1779,8 +1780,8 @@ const StyledIllustrationWrapper = styled.div`
   svg {
     height: 100%;
     margin: 0 auto;
-    min-height: ${(p) => p.style?.maxHeight || "320px"};
-    max-height: ${(p) => p.style?.maxWidth || "320px"};
+    min-height: ${(props) => props.style?.maxHeight || "320px"};
+    max-height: ${(props) => props.style?.maxWidth || "320px"};
   }
 `;
 
@@ -1788,7 +1789,7 @@ const StyledAddressSuggestionsBox = styled.div`
   margin-top: -0.25em;
   margin-bottom: 0.5em;
   padding: 0.25em 0;
-  background: ${(props) => props.theme.colors.brand[900]};
+  background: ${defaultTheme.colors.brand[900]};
   width: 100%;
   border-radius: 0 0 24px 24px;
   // For some reason, the autocomplete library requires a map be mounted/rendered. This throw away div is for that
@@ -1815,28 +1816,28 @@ const StyledAddressSuggestionsBox = styled.div`
     }
   }
   .address-suggestions__place {
-    background: ${(props) => props.theme.colors.brand[900]};
-    border: 1px solid ${(props) => props.theme.colors.brand[800]};
-    border-bottom: 2px solid ${(props) => props.theme.colors.brand[700]};
-    color: ${(props) => props.theme.colors.brand[500]};
+    background: ${defaultTheme.colors.brand[900]};
+    border: 1px solid ${defaultTheme.colors.brand[800]};
+    border-bottom: 2px solid ${defaultTheme.colors.brand[700]};
+    color: ${defaultTheme.colors.brand[500]};
   }
   .address-suggestions__close {
     text-align: center;
     text-decoration: underline;
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
   }
 `;
 
 const StyledResourcesList = styled.div`
   &.empty {
-    background: ${(p) => p.theme.colors.white[900]};
-    border: 2px dashed ${(props) => props.theme.colors.brand[800]};
+    background: ${defaultTheme.colors.white[900]};
+    border: 2px dashed ${defaultTheme.colors.brand[800]};
     border-radius: 6px;
     padding: 1em;
     margin: 0.5em 0;
     text-align: center;
     small {
-      color: ${(p) => p.theme.colors.brand[600]};
+      color: ${defaultTheme.colors.brand[600]};
     }
   }
 `;
