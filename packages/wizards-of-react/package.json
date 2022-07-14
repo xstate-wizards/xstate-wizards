@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/wizards-of-react",
-  "version": "0.5.25",
+  "version": "0.5.26",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

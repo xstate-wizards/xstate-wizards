@@ -8,7 +8,6 @@
   "dependencies": {
     "@xstate-wizards/spellbook": "^0.5.22",
     "@xstate-wizards/spells": "^0.5.28",
-    "@xstate-wizards/wizards-of-react": "^0.5.25",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
