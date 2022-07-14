@@ -1,13 +1,13 @@
 import { $TSFixMe } from "@xstate-wizards/spells";
 import React, { useRef } from "react";
 import styled, { css } from "styled-components";
-
-// TODO: Replace these w/ some other styling config/option
-const THEME_COLOR_RED = "#E5145A";
-const THEME_COLOR_WHITE_OFF = "#F0F1F2";
-const THEME_COLOR_GRAY = "#4D555B";
-const THEME_COLOR_BLUE_900 = "#FAFBFF";
-const THEME_COLOR_BLUE_800 = "#EBEFFF";
+import {
+  THEME_COLOR_BLUE_800,
+  THEME_COLOR_BLUE_900,
+  THEME_COLOR_GRAY,
+  THEME_COLOR_RED,
+  THEME_COLOR_WHITE_OFF,
+} from "../theme";
 
 export const SpellBookWizardWrap = ({
   children,

@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import styled from "styled-components";
+import { defaultTheme } from "../../theme";
 import { CurrencyInput } from "./CurrencyInput";
 
 const OTHER_VALUE = "__OTHER__";
@@ -52,7 +53,7 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
 
 const Container = styled.div`
   display: flex;
-  @media (max-width: ${(props) => props.theme.breakpoints[500]}) {
+  @media (max-width: ${(props) => defaultTheme.breakpoints[500]}) {
     flex-direction: column;
   }
   & > *:first-child {
@@ -62,7 +63,7 @@ const Container = styled.div`
   & > *:nth-child(2) {
     flex-grow: 1;
 
-    @media (min-width: ${(props) => props.theme.breakpoints[500]}) {
+    @media (min-width: ${(props) => defaultTheme.breakpoints[500]}) {
       margin-left: 20px;
     }
   }

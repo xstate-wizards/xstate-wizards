@@ -2,8 +2,9 @@
   "name": "xstate-wizards-examples-react-spellbook",
   "version": "0.0.1",
   "scripts": {
+    "build": "parcel build index.html",
     "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/spellbook"
   },
   "dependencies": {
     "@xstate-wizards/spellbook": "^0.5.22",

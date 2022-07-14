@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useInterval } from "react-use";
 import styled from "styled-components";
 import { TWizardSerializations } from "@xstate-wizards/spells";
+import { defaultTheme } from "../../theme";
 
 const FULL_DASH_ARRAY = 283;
 const COUNTDOWN_INTERVAL = 1000;
@@ -94,15 +95,15 @@ const StyledCountdownTimer = styled.div`
 
   .countdown__path-elapsed {
     stroke-width: 7px;
-    stroke: ${(props) => props.theme.colors.brand[900]};
+    stroke: ${defaultTheme.colors.brand[900]};
     transition: 1s linear all;
   }
   .countdown__path-elapsed.done {
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
     stroke: currentColor;
   }
   .countdown__path-elapsed.progressing {
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
   }
 
   .countdown__path-remaining {
@@ -115,10 +116,10 @@ const StyledCountdownTimer = styled.div`
     stroke: currentColor;
   }
   .countdown__path-remaining.done {
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
   }
   .countdown__path-remaining.progressing {
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
   }
 
   .countdown__label {
@@ -131,12 +132,12 @@ const StyledCountdownTimer = styled.div`
     justify-content: center;
     font-size: 24px;
     font-weight: 700;
-    color: ${(props) => props.theme.colors.brand[500]};
+    color: ${defaultTheme.colors.brand[500]};
     svg {
       height: 24px;
       width: 24px;
       path {
-        fill: ${(props) => props.theme.colors.brand[500]};
+        fill: ${defaultTheme.colors.brand[500]};
       }
     }
   }

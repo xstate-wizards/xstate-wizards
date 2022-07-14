@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { $TSFixMe } from "@xstate-wizards/spells";
+import { defaultTheme } from "../../theme";
 
 const FallbackInput = styled.input``;
 
@@ -44,7 +45,7 @@ const StyledCurrencyInput = styled.div`
     padding-left: 1.4em;
   }
   span {
-    color: ${(props) => props.theme.colors.gray[900]};
+    color: ${(props) => defaultTheme.colors.gray[900]};
   }
 `;
 

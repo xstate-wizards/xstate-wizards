@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { defaultTheme } from "../../theme";
 
 export const Card = styled.div`
   display: flex;
@@ -7,8 +8,8 @@ export const Card = styled.div`
   border-radius: 4px;
   margin: 1em 0;
   box-shadow: none;
-  border: 1px solid ${(props) => props.theme.colors.white[500]};
-  border-bottom: 3px solid ${(props) => props.theme.colors.white[500]};
-  background: ${(p) => p.theme.colors.white[900]};
+  border: 1px solid ${(props) => defaultTheme.colors.white[500]};
+  border-bottom: 3px solid ${(props) => defaultTheme.colors.white[500]};
+  background: ${(props) => defaultTheme.colors.white[900]};
   padding: 1em 2em;
 `;
