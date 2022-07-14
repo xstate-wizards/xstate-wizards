@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     color: #4D555B;
     font-size: 1em;
     line-height: 150%;
-    font-family: san-serif;
+    font-family: sans-serif;
     font-weight: 300;
   }
   body {
