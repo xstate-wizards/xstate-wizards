@@ -8,7 +8,7 @@ export const activeSpellLocalStorage = ({ id, isActive }: { id: number | string;
           ...spell,
           isActive,
         }
-      : spell
+      : { ...spell, isActive: false }
   );
   localeStorageSet(SPELLBOOK_LOCALE_STORAGE_KEY_SPELLS, updatedSpells);
   return updatedSpells;
