@@ -294,6 +294,7 @@ const OPERATORS = {
     "lodash.concat",
     "lodash.get",
     "lodash.fill",
+    "lodash.includes",
     "lodash.isNil",
     "lodash.keys",
     "lodash.range",
