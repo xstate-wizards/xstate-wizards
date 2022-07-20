@@ -204,15 +204,15 @@ const OPERATORS = {
   ],
   // --- Logic and Boolean Operations
   "[JSL] Logic": [
-    "if",
     // "==",
     "===",
     // "!=",
     "!==",
     // "!",
     // "!!",
-    "or",
     "and",
+    "or",
+    "if", // this is being treated by new users as ===
   ],
   // --- Numeric Operations
   "[JSL] Numeric": [
@@ -220,8 +220,6 @@ const OPERATORS = {
     ">=",
     "<",
     "<=",
-    // "max", // AKA "Math.max"?
-    // "min",  // AKA "Math.min"?
     "+",
     "-",
     "*",
@@ -230,37 +228,43 @@ const OPERATORS = {
   ],
   // --- Array Operations
   "[JSL] Array": [
-    "map",
-    // "reduce",
-    "filter",
     "all",
     "some",
     "none",
-    // "merge",
+    // "reduce",
+    "map",
+    "filter",
+    "merge",
     // "in",
   ],
-  // --- String Operations
-  // "JSL - String": [
-  //   "in",
-  //   "cat",
-  //   "substr",
-  // ],
-  "[Date]": [
-    "Date.now",
+  "[lodash]": [
+    "lodash.castArray",
+    "lodash.concat",
+    "lodash.fill",
+    "lodash.get",
+    "lodash.head",
+    "lodash.includes",
+    "lodash.isNil",
+    "lodash.keys",
+    "lodash.range",
+    "lodash.rangeRight",
+    "lodash.reverse",
+    "lodash.size",
+    "lodash.toNumber",
+    "lodash.toString",
+    "lodash.values",
     // ???
   ],
-  // Deferring to _.values/_.keys bc it won't throw an error if null/undefined is passed in
-  // "[Object]": [
-  //   "Object.keys",
-  //   "Object.values",
-  //   // ???
-  // ],
   "[Math]": [
     "Math.ceil",
     "Math.floor",
     "Math.max",
     "Math.min",
     "Math.random",
+    // ???
+  ],
+  "[Date]": [
+    "Date.now",
     // ???
   ],
   "[date-fns]": [
@@ -287,23 +291,6 @@ const OPERATORS = {
     "date-fns.subMonths",
     "date-fns.subWeeks",
     "date-fns.subYears",
-    // ???
-  ],
-  "[lodash]": [
-    "lodash.castArray",
-    "lodash.concat",
-    "lodash.get",
-    "lodash.fill",
-    "lodash.includes",
-    "lodash.isNil",
-    "lodash.keys",
-    "lodash.range",
-    "lodash.rangeRight",
-    "lodash.reverse",
-    "lodash.size",
-    "lodash.toNumber",
-    "lodash.toString",
-    "lodash.values",
     // ???
   ],
 };
