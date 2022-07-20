@@ -475,7 +475,9 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
           </div>
         )}
         {/* --- CALLOUT/ROW --- */}
-        {[ContentNodeType.CALLOUT, ContentNodeType.ROW].includes(contentNode.type) && (
+        {[ContentNodeType.CALLOUT, ContentNodeType.ROW, ContentNodeType.OL, ContentNodeType.UL].includes(
+          contentNode.type
+        ) && (
           <div className="spell-state__content-nodes--nested">
             {contentNode.content?.map((node, nodeIndex) => (
               <ContentNodeEditor

@@ -517,9 +517,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     );
   // --- Lists
   if ([ContentNodeType.OL, ContentNodeType.UL].includes(node.type)) {
+    if (node.items) {
+      logger.debug("DEPRECATED: For ol/ul content nodes, use 'content' instead of 'items'");
+    }
     return (
       <node.type {...node.attrs}>
-        {node.items.map((item, itemIndex) => (
+        {(node.content ?? node.items ?? []).map((item, itemIndex) => (
           <li key={itemIndex}>
             <ContentNode {...props} node={item} serializations={serializations} />
           </li>
