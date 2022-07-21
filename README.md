@@ -6,7 +6,7 @@ Handle incredibly complex questionnaires with ease. A WIP set of libraries that 
 
 In Root:
 
-- `yarn build:local`
+- `yarn build`
 
 In Example Dir After Making Changes:
 

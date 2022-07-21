@@ -6,7 +6,15 @@ import { Dialog } from "../overlays/Dialog";
 import { JsonLogicBuilder } from "../logic/JsonLogicBuilder";
 import { $TSFixMe } from "@xstate-wizards/spells";
 
-export const ContentNodeEventEditor = ({ contentTree, event, models, schema, serializations, state, onChange }) => {
+export const ContentNodeEventEditor = ({
+  contentNodeStack,
+  event,
+  models,
+  schema,
+  serializations,
+  state,
+  onChange,
+}) => {
   return (
     <Dialog trigger={<button onClick={console.log}>💥 Event: {event?.type}</button>}>
       <StyledContentNodeEventEditor>
@@ -49,7 +57,7 @@ export const ContentNodeEventEditor = ({ contentTree, event, models, schema, ser
                       </div>
                       {value?.type === "jsonLogic" ? (
                         <JsonLogicBuilder
-                          contentTree={contentTree}
+                          contentNodeStack={contentNodeStack}
                           functions={serializations?.functions ?? {}}
                           jsonLogic={value.jsonLogic}
                           models={models}

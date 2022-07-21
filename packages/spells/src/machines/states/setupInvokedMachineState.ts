@@ -20,7 +20,7 @@ type TSetupInvokedMachineStateProps = {
 };
 
 export function setupInvokedMachineState({
-  context,
+  context, //TODO: we need to call this something else
   entry,
   initial,
   key,
@@ -49,21 +49,27 @@ export function setupInvokedMachineState({
         if (event.type === "xstate.init") {
           return Promise.resolve({ finalEvent: { type: "BACK" } });
         }
-        // --- invoke machine (json-logic one layer deep)
-        const contextFromFn = typeof context === "function" ? context?.(ctx, event) ?? {} : {};
-        const contextFromJsonLogic =
-          Object.keys(context ?? {})?.reduce((obj, key) => {
-            if (isJsonLogic(context[key])) {
-              obj[key] = evalJsonLogic(context[key], { context: ctx, event });
-            }
-            return obj;
-          }, {}) ?? {};
+
+        const getContextFromJsonLogic = (context) => {
+          return (
+            Object.keys(context ?? {})?.reduce((obj, key) => {
+              if (isJsonLogic(context[key])) {
+                obj[key] = evalJsonLogic(context[key], { context: ctx, event });
+              } else if (typeof context[key] === "object") {
+                obj[key] = getContextFromJsonLogic(context[key]);
+              }
+              return obj;
+            }, {}) ?? {}
+          );
+        };
+
+        const invokedContext = typeof context === "function" ? context?.(ctx, event) : getContextFromJsonLogic(context);
+
         return spellMap[key].createMachine(
           {
             resources: cloneDeep(ctx.resources),
             resourcesUpdates: cloneDeep(ctx.resourcesUpdates),
-            ...contextFromFn,
-            ...contextFromJsonLogic,
+            ...(invokedContext ?? {}),
           },
           { initial, spellMap, serializations, meta }
         );

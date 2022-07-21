@@ -172,7 +172,6 @@ export const JsonSchemaBuilder: React.FC<TJsonSchemaBuilderProps> = ({ schema, o
                     onUpdateHandler(property, {
                       type: ["object", "null"],
                       properties,
-                      default: {},
                     });
                   }}
                 />

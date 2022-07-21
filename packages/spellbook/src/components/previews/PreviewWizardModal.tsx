@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {
   $TSFixMe,
   createSpell,
+  logger,
   TPrepparedSpellMapping,
   TSpellInstructions,
   TWizardSerializations,
@@ -15,7 +16,9 @@ import { PreviewHistoryItemInspector, TPreviewHistoryError, TPreviewHistoryItem 
 
 // Wrap machine to ensure errors don't blow up UI
 export class PreviewWizardErrorBoundary extends React.Component {
-  componentDidCatch(error, errorInfo) {}
+  componentDidCatch(error, errorInfo) {
+    console.error("PreviewWizardErrorBoudnary: ", error, errorInfo);
+  }
   render() {
     // @ts-ignore
     return this.props.children;

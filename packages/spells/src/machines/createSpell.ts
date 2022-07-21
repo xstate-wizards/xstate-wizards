@@ -26,24 +26,29 @@ export const createSpell = ({
     schema,
     createMachine: (context, extras) => {
       const { initial, spellMap, serializations, session } = extras ?? {};
+
+      const preppedMachineContextWithResources = prepMachineContextWithResources(models, {});
+      const jsonSchemaDefaults = getJsonSchemaDefaults(schema);
+
+      const defaultMachineContext = merge(
+        {
+          ...preppedMachineContextWithResources, //why do we prep resources only to override them with cloned resources?
+          ...jsonSchemaDefaults,
+        },
+        { states: context.states ?? {} }
+      );
+
       const machineContext = session?.machineContext || {
-        // default machine context with resources/schema
-        ...merge(
-          {
-            ...prepMachineContextWithResources(models, {}),
-            ...getJsonSchemaDefaults(schema),
-          },
-          { states: context.states ?? {} }
-        ),
-        // allow any variables to get passed through, but ensure resources/states are not modified unexpectedly
-        ...(context ?? {}),
+        ...merge(defaultMachineContext, context ?? {}),
         resources: cloneDeep(context.resources),
         resourcesUpdates: cloneDeep(context.resourcesUpdates),
       };
+
       const machineMeta = {
         ...config,
         ...setupMetaSession(session),
       };
+
       const machineStates = wizardStatesPrepper({
         config,
         states,
@@ -51,6 +56,7 @@ export const createSpell = ({
         serializations,
         meta: machineMeta,
       });
+
       return createMachine(
         {
           id: key,

@@ -15,6 +15,7 @@ export { createSpell } from "./machines/createSpell";
 // --- context
 export * from "./machines/context/contextHelpers";
 export { mergeEventDataResources } from "./machines/context/mergeEventDataResources";
+export { initializeResourceEditor } from "./machines/context/initializeResourceEditor";
 // --- functions
 export { evalJsonLogic, isJsonLogic, setJsonLogicOperation } from "./machines/functions/evalJsonLogic";
 export { internalGuards } from "./machines/functions/internalGuards";

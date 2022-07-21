@@ -1,4 +1,4 @@
-import { cloneDeep, difference, omit, startCase } from "lodash";
+import { cloneDeep, difference, omit, set, startCase } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import {
@@ -20,7 +20,7 @@ import { InputAssign } from "../logic/InputAssign";
 type TContentNodeEditorProps = {
   contentNode: $TSFixMe;
   contentNodeIndex: $TSFixMe;
-  contentTree?: $TSFixMe;
+  contentNodeStack?: $TSFixMe;
   models: $TSFixMe;
   modelsConfigs: $TSFixMe;
   schema: $TSFixMe;
@@ -34,7 +34,7 @@ type TContentNodeEditorProps = {
 export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
   contentNode,
   contentNodeIndex,
-  contentTree,
+  contentNodeStack,
   models,
   modelsConfigs,
   schema,
@@ -46,7 +46,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
 }) => {
   const contentNodeUpdateHandler = (key, value) => {
     const newContentNode = cloneDeep(contentNode);
-    newContentNode[key] = value;
+    set(newContentNode, key, value);
     onUpdate(newContentNode);
   };
 
@@ -103,7 +103,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
               )}
               {contentNode.event?.type != null ? (
                 <ContentNodeEventEditor
-                  contentTree={contentTree}
+                  contentNodeStack={contentNodeStack}
                   event={contentNode.event}
                   models={models}
                   schema={schema}
@@ -116,7 +116,11 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                   <small>💥 Event:</small>
                   <select
                     value={contentNode.event?.type}
-                    onChange={(e) => contentNodeUpdateHandler("event", { type: e.target.value })}
+                    onChange={(e) =>
+                      contentNodeUpdateHandler("event", {
+                        type: e.target.value,
+                      })
+                    }
                     style={{ display: "flex", maxWidth: "120px" }}
                   >
                     <option value=""></option>
@@ -161,7 +165,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                   </td>
                   <td>
                     <JsonLogicBuilder
-                      contentTree={contentTree}
+                      contentNodeStack={contentNodeStack}
                       functions={serializations?.functions ?? {}}
                       jsonLogic={contentNode.conditional}
                       onUpdate={(jsonLogic) => contentNodeUpdateHandler("conditional", jsonLogic)}
@@ -184,7 +188,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                             key={`${node.value}-${node.type}-${nodeIndex}`}
                             contentNode={node}
                             contentNodeIndex={nodeIndex}
-                            contentTree={{ node: { ...contentTree } }}
+                            contentNodeStack={[contentNode, ...contentNodeStack]}
                             models={models}
                             modelsConfigs={modelsConfigs}
                             schema={schema}
@@ -234,7 +238,10 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       onClick={() => {
                         const newCondition = prompt("Condition value:");
                         if (newCondition)
-                          contentNodeUpdateHandler("options", { ...contentNode.options, [newCondition]: [] });
+                          contentNodeUpdateHandler("options", {
+                            ...contentNode.options,
+                            [newCondition]: [],
+                          });
                       }}
                     >
                       + Option
@@ -321,7 +328,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       typeof contentNode.items === "object" &&
                       !Array.isArray(contentNode.items) && (
                         <JsonLogicBuilder
-                          contentTree={contentTree}
+                          contentNodeStack={contentNodeStack}
                           functions={serializations?.functions ?? {}}
                           jsonLogic={contentNode.items}
                           onUpdate={(jsonLogic) => contentNodeUpdateHandler("items", jsonLogic)}
@@ -343,7 +350,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                           key={`${node.value}-${node.type}-${nodeIndex}`}
                           contentNode={node}
                           contentNodeIndex={nodeIndex}
-                          contentTree={{ node: { ...contentTree } }}
+                          contentNodeStack={[contentNode, ...contentNodeStack]}
                           models={models}
                           modelsConfigs={modelsConfigs}
                           schema={schema}
@@ -474,7 +481,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                   </td>
                   <td>
                     <InputAssign
-                      contentTree={contentTree}
+                      contentNodeStack={contentNodeStack}
                       functions={serializations?.functions ?? {}}
                       models={models}
                       modelsConfigs={modelsConfigs}
@@ -511,7 +518,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                 key={`${node.value}-${node.type}-${nodeIndex}`}
                 contentNode={node}
                 contentNodeIndex={nodeIndex}
-                contentTree={{ node: { ...contentTree } }}
+                contentNodeStack={[contentNode, ...contentNodeStack]}
                 models={models}
                 modelsConfigs={modelsConfigs}
                 schema={schema}
@@ -688,7 +695,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       typeof contentNode.options === "object" &&
                       !Array.isArray(contentNode.options) && (
                         <JsonLogicBuilder
-                          contentTree={contentTree}
+                          contentNodeStack={contentNodeStack}
                           functions={serializations?.functions ?? {}}
                           jsonLogic={contentNode.options}
                           onUpdate={(jsonLogic) => contentNodeUpdateHandler("options", jsonLogic)}
@@ -705,7 +712,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                   </td>
                   <td>
                     <InputAssign
-                      contentTree={contentTree}
+                      contentNodeStack={contentNodeStack}
                       functions={serializations?.functions ?? {}}
                       models={models}
                       modelsConfigs={modelsConfigs}

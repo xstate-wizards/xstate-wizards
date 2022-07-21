@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { SpellBook } from "@xstate-wizards/spellbook";
-import { $TSFixMe } from "@xstate-wizards/spells";
+import { $TSFixMe, createLocalId, initializeResourceEditor } from "@xstate-wizards/spells";
 import { createSpellLocalStorage } from "./storage/createSpellLocalStorage";
 import { getSpellsLocalStorage } from "./storage/getSpellsLocalStorage";
 import { publishSpellLocalStorage } from "./storage/publishSpellLocalStorage";
 import { activeSpellLocalStorage } from "./storage/activateSpellLocalStorage";
+import { exampleModels } from "./exampleModels";
 
 export const ExampleSpellBook = () => {
   const [spells, setSpells] = useState<$TSFixMe>(getSpellsLocalStorage());
@@ -15,10 +16,29 @@ export const ExampleSpellBook = () => {
   // RENDER
   return (
     <SpellBook
-      models={{}}
+      models={exampleModels}
       serializations={{
-        functions: {},
+        functions: {
+          getNewestResource: (resources) => {
+            {
+              const modelArray = Object.values(resources);
+              if (modelArray.length === 1) {
+                return modelArray[0];
+              }
+
+              // @ts-expect-error
+              return modelArray.sort((modelA, modelB) => parseInt(modelA?.id) - parseInt(modelB?.id))?.[0];
+            }
+          },
+
+          getIdOfResource: (resource) => {
+            {
+              return resource.id;
+            }
+          },
+        },
         guards: {},
+        actions: { initializeResourceEditor },
       }}
       spells={spells}
       spellsStatic={{}}
