@@ -30,6 +30,7 @@
     "clean:packages": "yarn workspaces run clean",
     "build": "lerna run build",
     "yalclink": "lerna run yalclink",
-    "yalcpush": "lerna run yalcpush"
+    "yalcpush": "lerna run yalcpush",
+    "yalcpush-since": "lerna run yalcpush --since main"
   }
 }
