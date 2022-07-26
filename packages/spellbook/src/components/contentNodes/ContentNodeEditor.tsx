@@ -421,26 +421,51 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       onChange={(e) => contentNodeUpdateHandler("inputType", e.target.value)}
                     >
                       <option value=""></option>
-                      {Object.values(ContentNodeInputType).map((type) => (
-                        <option key={type} value={type}>
-                          {startCase(type)}
-                        </option>
-                      ))}
+                      {Object.values(ContentNodeInputType)
+                        .filter((type) => !["calendar"].includes(type))
+                        .map((type) => (
+                          <option key={type} value={type}>
+                            {startCase(type)}
+                          </option>
+                        ))}
                     </select>
                   </td>
                 </tr>
-                <tr>
-                  <td className="stack-label">
-                    <small>Placeholder: </small>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      value={contentNode.placeholder}
-                      onChange={(e) => contentNodeUpdateHandler("placeholder", e.target.value)}
-                    />
-                  </td>
-                </tr>
+                {!["age", "date"].includes(contentNode.inputType) && (
+                  <tr>
+                    <td className="stack-label">
+                      <small>Placeholder: </small>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={contentNode.placeholder}
+                        onChange={(e) => contentNodeUpdateHandler("placeholder", e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                )}
+                {["date"].includes(contentNode.inputType) && (
+                  <>
+                    <tr>
+                      <td className="stack-label">
+                        <small>Start/End Dates: </small>
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          value={contentNode.dateStart}
+                          onChange={(e) => contentNodeUpdateHandler("dateStart", e.target.value)}
+                        />
+                        <input
+                          type="date"
+                          value={contentNode.dateEnd}
+                          onChange={(e) => contentNodeUpdateHandler("dateEnd", e.target.value)}
+                        />
+                      </td>
+                    </tr>
+                  </>
+                )}
                 <tr>
                   <td className="stack-label">
                     <small>Assign: </small>
