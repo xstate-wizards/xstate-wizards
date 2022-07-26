@@ -1,3 +1,4 @@
+import { addYears, subYears } from "date-fns";
 import { CANCEL_STATE, createSpell, SAVE_STATE } from "@xstate-wizards/spells";
 
 export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
@@ -50,6 +51,10 @@ export const machineMapping = createSpell({
               label: "When did you start?",
               assign: { path: "startedAt" },
               validations: ["required"],
+              dateStart: subYears(new Date(), 5),
+              // dateEnd: addYears(new Date(), 5),
+              // dateStart: "2017-01-01",
+              // dateEnd: "2028-01-01",
             },
           ],
         },
