@@ -9,7 +9,8 @@ export const machineMapping = createSpell({
   id: ID_EXAMPLE_INTERVIEW,
   version: "1",
   config: {
-    initial: INTERVIEW_INTRO_STATE,
+    // initial: INTERVIEW_INTRO_STATE,
+    initial: "hobbiesList",
     title: "Example Interview",
     exitTo: "/",
     sectionsBar: [],
