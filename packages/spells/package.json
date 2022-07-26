@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/spells",
-  "version": "0.5.28",
+  "version": "0.5.31",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

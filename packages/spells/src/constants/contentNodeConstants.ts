@@ -44,7 +44,6 @@ export enum ContentNodeType {
 
 export enum ContentNodeInputType {
   AGE = "age",
-  CALENDAR = "calendar",
   CHECKBOX = "checkbox",
   CURRENCY = "currency",
   DATE = "date",
