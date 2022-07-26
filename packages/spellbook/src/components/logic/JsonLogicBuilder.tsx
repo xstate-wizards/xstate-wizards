@@ -200,7 +200,7 @@ const OPERATORS = {
     // "missing_some",
   ],
   "[Extras] Var": [
-    "return", // added an operation for dumb returns of first arg
+    "return", // Not JSL, added an operation for dumb returns of first arg
   ],
   // --- Logic and Boolean Operations
   "[JSL] Logic": [
@@ -225,6 +225,12 @@ const OPERATORS = {
     "*",
     "/",
     // "%",
+  ],
+  // --- String Operations
+  "[JSL] String": [
+    // "in",
+    "cat",
+    "substr",
   ],
   // --- Array Operations
   "[JSL] Array": [
