@@ -1,16 +1,28 @@
-import { getDate, getDaysInMonth, getMonth, getYear, isAfter } from "date-fns";
+import {
+  differenceInYears,
+  getDate,
+  getDaysInMonth,
+  getMonth,
+  getYear,
+  isAfter,
+  isBefore,
+  isValid,
+  subYears,
+} from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, formatDate, parseDate } from "@xstate-wizards/spells";
 import { logger } from "../../wizardDebugger";
 
 type TSelectDatePickerProps = {
-  dateDisabled: ({ date: Date }) => boolean;
   disabled?: boolean;
   value: Date;
   size?: string;
   onChange: (date: Date) => void;
   serializations: TWizardSerializations;
+  dateDisabled: ({ date: Date }) => boolean;
+  dateStart?: Date | string;
+  dateEnd?: Date | string;
 };
 
 const FallbackSelect = styled.select``;
@@ -20,7 +32,6 @@ const FallbackSelect = styled.select``;
  * Simpler date picking dropdowns
  */
 export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
-  dateDisabled,
   disabled,
   onChange,
   size = "sm",
@@ -31,8 +42,20 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   // Styled/Component Refs
   const Select: $TSFixMe = serializations?.components?.Select ?? FallbackSelect;
   // State
-  const currentYear = getYear(new Date());
-  const isSelectDisabled = useCallback(dateDisabled ?? (({ date }) => isAfter(date, new Date())), []);
+  const dateStart: Date = isValid(parseDate(props.dateStart)) ? parseDate(props.dateStart) : subYears(new Date(), 100);
+  const dateEnd: Date = isValid(parseDate(props.dateEnd)) ? parseDate(props.dateEnd) : new Date();
+  const endYear = getYear(dateEnd);
+
+  const isSelectDisabled = useCallback(
+    props.dateDisabled ??
+      (({ date }) => {
+        // if an end date exists that is beyond today, then allow selecting anything
+        if (isAfter(dateEnd, new Date())) return false;
+        // otherwise disable any date after today
+        return isAfter(date, dateEnd) || isBefore(date, dateStart);
+      }),
+    []
+  );
   const [day, setDay] = useState(value ? getDate(parseDate(value)) : undefined);
   const [monthIndex, setMonthIndex] = useState(value ? getMonth(parseDate(value)) : undefined);
   const [year, setYear] = useState(value ? getYear(parseDate(value)) : undefined);
@@ -46,6 +69,7 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   };
 
   useEffect(() => {
+    logger.debug("SelectDatePicker: ", { dateStart, dateEnd, endYear });
     // Check if initial value is selectable (will clear bad data automatically)
     if (value && isSelectDisabled({ date: parseDate(value) })) {
       setDay(undefined);
@@ -67,8 +91,8 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
           setMonthIndex(newMonthIndex);
           // Reset day if beyond whats in month or whats allowed
           if (
-            day > getDaysInMonth(new Date(year ?? currentYear, newMonthIndex)) ||
-            isSelectDisabled({ date: new Date(year ?? currentYear, newMonthIndex, day) })
+            day > getDaysInMonth(new Date(year ?? endYear, newMonthIndex)) ||
+            isSelectDisabled({ date: new Date(year ?? endYear, newMonthIndex, day) })
           ) {
             logger.info("Day is outside month selected range or not allowed to be selected, clearing its value.");
             setDay(undefined);
@@ -83,7 +107,7 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
           .fill(0)
           .map((zero, i) => (
             <option key={i} value={i} disabled={year !== undefined && isSelectDisabled({ date: new Date(year, i) })}>
-              {formatDate(new Date(currentYear, i), "MMMM")}
+              {formatDate(new Date(endYear, i), "MMMM")}
             </option>
           ))}
       </Select>
@@ -98,7 +122,7 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
         }}
       >
         <option value="">-- Day --</option>
-        {Array(monthIndex !== undefined ? getDaysInMonth(new Date(year ?? currentYear, monthIndex ?? 0)) : 0)
+        {Array(monthIndex !== undefined ? getDaysInMonth(new Date(year ?? endYear, monthIndex ?? 0)) : 0)
           .fill(0)
           .map((zero, i) => (
             <option
@@ -125,15 +149,15 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
         }}
       >
         <option value="">-- Year --</option>
-        {Array(100)
+        {Array(Math.max(0, differenceInYears(dateEnd, dateStart) + 1))
           .fill(0)
           .map((zero, i) => (
             <option
-              key={currentYear - i}
-              value={currentYear - i}
-              disabled={isSelectDisabled({ date: new Date(currentYear - i, monthIndex ?? 0, day ?? 1) })}
+              key={endYear - i}
+              value={endYear - i}
+              // disabled={isSelectDisabled({ date: new Date(endYear - i, monthIndex ?? 0, day ?? 1) })}
             >
-              {currentYear - i}
+              {endYear - i}
             </option>
           ))}
       </Select>

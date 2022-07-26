@@ -170,8 +170,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       value = e.target.value.replace(/[^0-9\.\-]+/g, "");
     } else if (node.inputType === ContentNodeInputType.DATE) {
       value = e?.toISOString();
-    } else if (node.inputType === ContentNodeInputType.CALENDAR) {
-      value = e?.toISOString();
     } else if (node.inputType === ContentNodeInputType.NUMBER) {
       // NOTE: when <select><option value="">Select...</option></select>
       //       is selected, we should treat this as a null value
@@ -727,7 +725,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.DATE) {
         innerInput = (
           <SelectDatePicker
-            {...(node?.config || {})}
             data-test-label={node.label}
             disabled={inputDisabled}
             size={node.attrs?.size}
@@ -737,21 +734,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               if (typeof node._onChange === "function") node._onChange(date);
             }}
             serializations={serializations}
-          />
-        );
-      } else if (node.inputType === ContentNodeInputType.CALENDAR) {
-        innerInput = (
-          <CalendarDatePicker
-            {...(node?.config || {})}
-            data-test-label={node.label}
-            disabled={inputDisabled}
-            size={node.attrs?.size}
-            placeholder={node.placeholder}
-            value={inputValue}
-            onChange={(date) => {
-              inputOnChange(date);
-              if (typeof node._onChange === "function") node._onChange(date);
-            }}
+            dateStart={node.dateStart}
+            dateEnd={node.dateEnd}
+            dateDisabled={node.dateDisabled}
           />
         );
       } else {
