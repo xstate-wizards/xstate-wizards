@@ -395,7 +395,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
           </>
         )}
         {/* --- INPUT --- */}
-        {[ContentNodeType.INPUT].includes(contentNode.type) && (
+        {[ContentNodeType.INPUT, ContentNodeType.TEXTAREA].includes(contentNode.type) && (
           <div className="content-node__config__stack">
             <table>
               <tbody>
@@ -411,26 +411,28 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     />
                   </td>
                 </tr>
-                <tr>
-                  <td className="stack-label">
-                    <small>Input Type: </small>
-                  </td>
-                  <td>
-                    <select
-                      value={contentNode.inputType}
-                      onChange={(e) => contentNodeUpdateHandler("inputType", e.target.value)}
-                    >
-                      <option value=""></option>
-                      {Object.values(ContentNodeInputType)
-                        .filter((type) => !["calendar"].includes(type))
-                        .map((type) => (
-                          <option key={type} value={type}>
-                            {startCase(type)}
-                          </option>
-                        ))}
-                    </select>
-                  </td>
-                </tr>
+                {![ContentNodeType.TEXTAREA].includes(contentNode.type) && (
+                  <tr>
+                    <td className="stack-label">
+                      <small>Input Type: </small>
+                    </td>
+                    <td>
+                      <select
+                        value={contentNode.inputType}
+                        onChange={(e) => contentNodeUpdateHandler("inputType", e.target.value)}
+                      >
+                        <option value=""></option>
+                        {Object.values(ContentNodeInputType)
+                          .filter((type) => !["calendar"].includes(type))
+                          .map((type) => (
+                            <option key={type} value={type}>
+                              {startCase(type)}
+                            </option>
+                          ))}
+                      </select>
+                    </td>
+                  </tr>
+                )}
                 {!["age", "date"].includes(contentNode.inputType) && (
                   <tr>
                     <td className="stack-label">
@@ -734,7 +736,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         {CONTENT_NODE_OPTIONS_TEXT.includes(contentNode.type) && (
           <>
             {/* If a paragraph tag, use a textarea since there will prob be more writing */}
-            {[ContentNodeType.P, ContentNodeType.TEXTAREA].includes(contentNode.type) ? (
+            {[ContentNodeType.P].includes(contentNode.type) ? (
               <textarea
                 value={contentNode.text}
                 rows={3}
