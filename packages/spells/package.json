@@ -1,10 +1,6 @@
 {
   "name": "@xstate-wizards/spells",
-<<<<<<< HEAD
-  "version": "0.5.31",
-=======
   "version": "0.8.0",
->>>>>>> feat: resource editor support
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
