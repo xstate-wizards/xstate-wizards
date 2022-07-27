@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { JsonLogicBuilder } from "./JsonLogicBuilder";
 import { VariableSelector } from "./VariableSelector";
 
-export const InputAssign = ({ contentTree, functions, models, modelsConfigs, onChange, schema, state, value }) => {
+export const InputAssign = ({ contentNodeStack, functions, models, modelsConfigs, onChange, schema, state, value }) => {
   // RENDER
   return (
     <StyledInputAssign>
@@ -44,7 +44,7 @@ export const InputAssign = ({ contentTree, functions, models, modelsConfigs, onC
               <b>ID</b>
             </label>
             <JsonLogicBuilder
-              contentTree={contentTree}
+              contentNodeStack={contentNodeStack}
               functions={functions ?? {}}
               jsonLogic={value?.id}
               models={models}

@@ -1,5 +1,5 @@
 import { $TSFixMe, TSpellInstructions } from "@xstate-wizards/spells";
-import { groupBy, findIndex, orderBy, set } from "lodash";
+import { groupBy, findIndex, orderBy, set, sortBy } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import { useEditor } from "../stores/EditorStore";
@@ -15,7 +15,10 @@ type TSpellVersionMap = {
 
 const VersionHistory = ({ spellKey, spellVersionMap }) => {
   const editor = useEditor();
-  const orderedVersions = orderBy(spellVersionMap[spellKey], ["id"], ["desc"]);
+
+  const getMajorVersion = (value) => parseInt(value.version.split(".")?.[0]);
+  const getMinorVersion = (value) => parseInt(value.version.split(".")?.[1]);
+  const orderedVersions = orderBy(spellVersionMap[spellKey], [getMajorVersion, getMinorVersion], ["desc", "desc"]);
   const [numVersionsVisible, setNumVersionsVisible] = useState(
     Math.max(5, findIndex(orderedVersions, (v) => v.isActive === true) + 1)
   );

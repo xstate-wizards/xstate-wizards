@@ -154,7 +154,7 @@ export const ActionEditor: React.FC<TActionEditor> = ({
         <select value={action} onChange={(e) => onUpdate(e.target.value)}>
           <option value=""></option>
           <optgroup label="Serialized">
-            {Object.keys(omit(serializations.actions ?? {}, ["mergeEventDataResources"]))
+            {Object.keys(omit(serializations.actions ?? {}, ["mergeEventDataResources", "initializeResourceEditor"])) //TODO: come up with a way to doing this
               .filter((actionName) => !actionName.startsWith("Models."))
               .sort()
               .map((actionName) => (
@@ -165,9 +165,10 @@ export const ActionEditor: React.FC<TActionEditor> = ({
           </optgroup>
           <optgroup label="Common">
             <option value="mergeEventDataResources">mergeEventDataResources</option>
+            <option value="initializeResourceEditor">initializeResourceEditor</option>
           </optgroup>
           <optgroup label="Models">
-            {Object.keys(omit(serializations.actions ?? {}, ["mergeEventDataResources"]))
+            {Object.keys(omit(serializations.actions ?? {}, ["mergeEventDataResources", "initializeResourceEditor"])) //TODO: come up with a way to avoid doing this
               .filter((actionName) => actionName.startsWith("Models."))
               .sort()
               .map((actionName) => (

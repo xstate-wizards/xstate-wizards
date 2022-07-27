@@ -1,5 +1,6 @@
 const datefns = require("date-fns"); // can't seem to import *
 import jsonLogic from "json-logic-js";
+import { createLocalId } from "../../models/idHelpers";
 const lodash = require("lodash"); // import * causes runtime err
 import { $TSFixMe } from "../../types";
 import { logger } from "../../wizardDebugger";
@@ -19,6 +20,11 @@ jsonLogic.add_operation("Math", Math);
 
 // --- extra operators/methods
 jsonLogic.add_operation("return", (...args) => args?.[0]); // a dumb simple way to just return at the top of a json-logic tree
+
+// --- return a local id to be used for instantiating new models
+jsonLogic.add_operation("createLocalId", () => {
+  return createLocalId();
+});
 
 // --- TODO: passed in by user of xstate-wizards library
 

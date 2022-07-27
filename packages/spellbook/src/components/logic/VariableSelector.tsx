@@ -1,14 +1,15 @@
 import { castArray, cloneDeep, uniq } from "lodash";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { $TSFixMe, ContentNodeType } from "@xstate-wizards/spells";
 
 type TVariableSelectorProps = {
-  contentTree?: $TSFixMe;
+  contentNodeStack?: $TSFixMe;
   // need this bc input assign values don't contain the context prefix...
   //  ... but json-logic handlers need context.xyz to distinguish between event and content tree data
   invokedSchema?: $TSFixMe;
   isAssignSelector?: boolean;
   models?: $TSFixMe;
+  modelsConfigs?: $TSFixMe;
   onChange?: $TSFixMe;
   schema?: $TSFixMe;
   state?: $TSFixMe;
@@ -86,7 +87,7 @@ const getEventDataProperties = (contentNodes: any[]) =>
     .sort();
 
 export const VariableSelector: React.FC<TVariableSelectorProps> = ({
-  contentTree,
+  contentNodeStack,
   invokedSchema,
   isAssignSelector,
   models,
@@ -110,12 +111,19 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
       .flat()
   ).sort();
 
+  const defaultDisplayValue = isAssignSelector === true ? `context.${value}` : value;
+
+  const [displayValue, setDisplayValue] = useState(defaultDisplayValue);
+
+  useEffect(() => {
+    //TODO: can probably remove this. Was originally done to enforce the concept of "these things are in context",
+    //but Mark and I agree it can be removed
+    onChange(isAssignSelector === true ? displayValue.replace("context.", "") : displayValue);
+  }, [displayValue]);
+
   // RENDER
   return (
-    <select
-      value={isAssignSelector === true ? `context.${value}` : value}
-      onChange={(e) => onChange(isAssignSelector === true ? e.target.value.replace("context.", "") : e.target.value)}
-    >
+    <select value={displayValue} onChange={(e) => setDisplayValue(e.target.value)}>
       <option value="">---</option>
       {/* machine context via schema */}
       <optgroup label="Context (Vars)">
@@ -136,7 +144,7 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
         </optgroup>
       )}
       {/* content node event.data or invoked machine finalCtx+schema reference */}
-      {state.invoke != null || selectableEventDataProperties?.length > 0 ? (
+      {(state.invoke != null || selectableEventDataProperties?.length > 0) && (
         <optgroup label="Event Data (from this state)">
           <option value="event.data">event.data</option>
           {selectableEventDataProperties?.map((prop) => (
@@ -145,8 +153,8 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
             </option>
           ))}
         </optgroup>
-      ) : null}
-      {states && allSelectableEventDataPrporeties?.length > 0 ? (
+      )}
+      {states && allSelectableEventDataPrporeties?.length > 0 && (
         <optgroup label="Event Data (from all states)">
           {allSelectableEventDataPrporeties.map((prop) => (
             <option key={prop} value={`event.data.${prop}`}>
@@ -154,8 +162,8 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
             </option>
           ))}
         </optgroup>
-      ) : null}
-      {state.key ? (
+      )}
+      {state.key && (
         <optgroup label="Event Data (from spawned machine)">
           {/* from invoked schema */}
           {selectableInvokedSchemaProperties?.map((prop) => (
@@ -166,15 +174,15 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
           {/* from final event */}
           <option value="event.data.finalEvent.type">event.data.finalEvent.type</option>
         </optgroup>
-      ) : null}
-      {/* TODO: content node loops */}
-      {contentTree && (
+      )}
+      {/* TODO: this is horrifying. Fix this */}
+      {/* we're using contentNodeStack here to detect if there are nested structures in spellbook
+      but the value we select is what's then used by ContentNode to grab the actual parent at runtime */}
+      {contentNodeStack && (
         <optgroup label="Content/Node Tree">
-          {contentTree?.node != null && <option value="content.node">content.node</option>}
-          {contentTree?.node?.node != null && <option value="content.node.node">content.node.node</option>}
-          {contentTree?.node?.node?.node != null && (
-            <option value="content.node.node.node">content.node.node.node</option>
-          )}
+          {contentNodeStack?.[0] != null && <option value="content.node">content.node</option>}
+          {contentNodeStack?.[1] != null && <option value="content.node.node">content.node.node</option>}
+          {contentNodeStack?.[2] != null && <option value="content.node.node.node">content.node.node.node</option>}
         </optgroup>
       )}
     </select>

@@ -5,7 +5,7 @@ import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { VariableSelector } from "./VariableSelector";
 
 type JsonLogicBuilderProps = {
-  contentTree?: $TSFixMe;
+  contentNodeStack?: $TSFixMe;
   functions: TWizardSerializations["functions"];
   jsonLogic: $TSFixMe;
   onUpdate: (jsonLogic: $TSFixMe) => void;
@@ -18,7 +18,7 @@ type JsonLogicBuilderProps = {
 
 // TODO: this is just for the sake of proof-of-concept
 export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
-  contentTree,
+  contentNodeStack,
   functions,
   jsonLogic,
   onUpdate,
@@ -92,7 +92,7 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
             {/* --- var --- */}
             {typeof arg === "string" && existingOp === "var" ? (
               <VariableSelector
-                contentTree={contentTree}
+                contentNodeStack={contentNodeStack}
                 onChange={(assign) => onUpdateArg(argIndex, assign)}
                 schema={schema}
                 invokedSchema={invokedSchema}
@@ -128,7 +128,7 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
             {arg && typeof arg === "object" ? (
               <JsonLogicBuilder
                 key={argIndex}
-                contentTree={contentTree}
+                contentNodeStack={contentNodeStack}
                 functions={functions}
                 jsonLogic={arg}
                 onUpdate={(jsonLogic) => onUpdateArg(argIndex, jsonLogic)}
@@ -260,6 +260,10 @@ const OPERATORS = {
     "lodash.toString",
     "lodash.values",
     // ???
+  ],
+  "[Resources]": [
+    "createLocalId",
+    // "getResources",
   ],
   "[Math]": [
     "Math.ceil",

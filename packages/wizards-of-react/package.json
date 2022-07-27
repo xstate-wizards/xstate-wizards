@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/wizards-of-react",
-  "version": "0.5.32",
+  "version": "0.6.1",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,7 +17,7 @@
     "yalclink": "npx yalc link @xstate-wizards/spells"
   },
   "dependencies": {
-    "@xstate-wizards/spells": "^0.5.31",
+    "@xstate-wizards/spells": "^0.8.1",
     "@xstate/react": "1.3.4",
     "date-fns": "^2.4.1",
     "lodash": "^4.17.20",
