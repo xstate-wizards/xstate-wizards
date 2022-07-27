@@ -20,21 +20,17 @@ export const ExampleSpellBook = () => {
       serializations={{
         functions: {
           getNewestResource: (resources) => {
-            {
-              const modelArray = Object.values(resources);
-              if (modelArray.length === 1) {
-                return modelArray[0];
-              }
-
-              // @ts-expect-error
-              return modelArray.sort((modelA, modelB) => parseInt(modelA?.id) - parseInt(modelB?.id))?.[0];
+            const modelArray = Object.values(resources);
+            if (modelArray.length === 1) {
+              return modelArray[0];
             }
+
+            // @ts-expect-error
+            return modelArray.sort((modelA, modelB) => parseInt(modelA?.id) - parseInt(modelB?.id))?.[0];
           },
 
           getIdOfResource: (resource) => {
-            {
-              return resource.id;
-            }
+            return resource.id;
           },
         },
         guards: {},
