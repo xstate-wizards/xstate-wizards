@@ -118,7 +118,10 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
   useEffect(() => {
     //TODO: can probably remove this. Was originally done to enforce the concept of "these things are in context",
     //but Mark and I agree it can be removed
-    onChange(isAssignSelector === true ? displayValue.replace("context.", "") : displayValue);
+    const updatedValue = isAssignSelector === true ? displayValue.replace("context.", "") : displayValue;
+    if (updatedValue != value) {
+      onChange(isAssignSelector === true ? displayValue.replace("context.", "") : displayValue);
+    }
   }, [displayValue]);
 
   // RENDER
