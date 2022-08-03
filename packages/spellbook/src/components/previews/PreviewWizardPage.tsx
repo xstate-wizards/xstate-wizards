@@ -25,7 +25,7 @@ type TPreviewWizardPage = {
   spellsStatic: {
     [key: string]: TSpellInstructions | TPrepparedSpellMapping;
   };
-  onSpellRefetch: () => void;
+  onSpellsRefetch: () => void;
 };
 
 export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
@@ -68,7 +68,7 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
   }, [props.spells, editor.focusedSpellKey, editor.focusedSpellVersion]);
   // --- selector for latest or active version
   const refetchHelper = async () => {
-    await props?.onSpellRefetch?.();
+    await props?.onSpellsRefetch?.();
     setLastFetchedAt(Date.now());
   };
   const selectNewVersion = async (selection?: string) => {
