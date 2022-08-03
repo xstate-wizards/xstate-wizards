@@ -23,7 +23,10 @@ export const InputAssign = ({ contentNodeStack, functions, models, modelsConfigs
         {typeof value === "string" || !value ? (
           <VariableSelector
             isAssignSelector
-            onChange={(assign) => onChange(assign)}
+            onChange={(assign) => {
+              console.debug("InputAssign.VariableSelector", { assign });
+              onChange(assign);
+            }}
             models={models}
             schema={schema}
             state={state}
@@ -32,7 +35,13 @@ export const InputAssign = ({ contentNodeStack, functions, models, modelsConfigs
         ) : (
           <>
             {/* <label>Model</label> */}
-            <select value={value.modelName} onChange={(e) => onChange({ modelName: e.target.value })}>
+            <select
+              value={value.modelName}
+              onChange={(e) => {
+                console.debug("InputAssign.select", { event: e });
+                onChange({ modelName: e.target.value });
+              }}
+            >
               <option value="">-Model-</option>
               {Object.keys(models).map((key) => (
                 <option key={key} value={key}>
@@ -50,10 +59,19 @@ export const InputAssign = ({ contentNodeStack, functions, models, modelsConfigs
               models={models}
               schema={schema}
               state={state}
-              onUpdate={(jsonLogic) => onChange({ ...value, id: jsonLogic })}
+              onUpdate={(jsonLogic) => {
+                console.debug("InputAssign.JsonLogicBuilder", { ...value, id: jsonLogic });
+                onChange({ ...value, id: jsonLogic });
+              }}
             />
             {/* <label>Property</label> */}
-            <select value={value.path} onChange={(e) => onChange({ ...value, path: e.target.value })}>
+            <select
+              value={value.path}
+              onChange={(e) => {
+                console.debug("InputAssign.select", { ...value, path: e.target.value });
+                onChange({ ...value, path: e.target.value });
+              }}
+            >
               <option value="">-Property-</option>
               {Object.keys(
                 (Object.entries(modelsConfigs).find(([name]) => name === value?.modelName)?.[1] as $TSFixMe)?.schema

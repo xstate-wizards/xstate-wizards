@@ -57,7 +57,10 @@ export const SpellStateEditor = ({
         <div className="spell-state__body">
           {/* ENTRY */}
           <SpellStateEntryChooseEditor
-            onUpdate={(data) => onStateUpdate(stateName, data)}
+            onUpdate={(data) => {
+              console.debug("SpellStateEditor.onUpdate: SpellStateEntryChooseEditor", data);
+              onStateUpdate(stateName, data);
+            }}
             schema={schema}
             serializations={serializations}
             stateName={stateName}
@@ -69,14 +72,20 @@ export const SpellStateEditor = ({
             <>
               {/* key */}
               <SpellInvokeStateKeySelector
-                onUpdate={(data) => onStateUpdate(stateName, data)}
+                onUpdate={(data) => {
+                  console.debug("SpellStateEditor.onUpdate: SpellInvokeStateKeySelector", data);
+                  onStateUpdate(stateName, data);
+                }}
                 state={currentState}
                 spells={spells}
                 spellsStatic={spellsStatic}
               />
               {/* context */}
               <SpellInvokeStateContextEditor
-                onUpdate={(data) => onStateUpdate(stateName, data)}
+                onUpdate={(data) => {
+                  console.debug("SpellStateEditor.onUpdate: SpellInvokeStateContextEditor", data);
+                  onStateUpdate(stateName, data);
+                }}
                 schema={schema}
                 serializations={serializations}
                 spells={spells}
@@ -91,7 +100,10 @@ export const SpellStateEditor = ({
               <SpellStateContentEditor
                 models={models}
                 modelsConfigs={modelsConfigs}
-                onUpdate={(data) => onStateUpdate(stateName, data)}
+                onUpdate={(data) => {
+                  console.debug("SpellStateEditor.onUpdate: SpellStateContentEditor", data);
+                  onStateUpdate(stateName, data);
+                }}
                 schema={schema}
                 serializations={serializations}
                 state={currentState}
@@ -99,7 +111,10 @@ export const SpellStateEditor = ({
               />
               {/* invoke (for async functions like data fetches) */}
               <SpellStateInvokeEditor
-                onUpdate={(data) => onStateUpdate(stateName, data)}
+                onUpdate={(data) => {
+                  console.debug("SpellStateEditor.onUpdate: SpellStateInvokeEditor", data);
+                  onStateUpdate(stateName, data);
+                }}
                 schema={schema}
                 serializations={serializations}
                 state={currentState}
@@ -114,7 +129,10 @@ export const SpellStateEditor = ({
           {/* onDone/onError */}
           {currentState?.key !== undefined ? (
             <SpellInvokeStateOnEditor
-              onUpdate={(data) => onStateUpdate(stateName, data)}
+              onUpdate={(data) => {
+                console.debug("SpellStateEditor.onUpdate: SpellInvokeStateOnEditor", data);
+                onStateUpdate(stateName, data);
+              }}
               schema={schema}
               serializations={serializations}
               spells={spells}
@@ -126,7 +144,10 @@ export const SpellStateEditor = ({
           ) : null}
           {/* on: ... */}
           <SpellStateEventsEditor
-            onUpdate={(data) => onStateUpdate(stateName, data)}
+            onUpdate={(data) => {
+              console.debug("SpellStateEditor.onUpdate: SpellStateEventsEditor", data);
+              onStateUpdate(stateName, data);
+            }}
             schema={schema}
             serializations={serializations}
             stateName={stateName}

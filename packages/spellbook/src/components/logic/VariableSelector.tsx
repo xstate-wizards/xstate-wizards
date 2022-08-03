@@ -111,16 +111,20 @@ export const VariableSelector: React.FC<TVariableSelectorProps> = ({
       .flat()
   ).sort();
 
-  const defaultDisplayValue = isAssignSelector === true ? `context.${value}` : value;
-
-  const [displayValue, setDisplayValue] = useState(defaultDisplayValue);
+  // TODO: if undefined gets set as a assign selector string, it can become `context.undefined`...
+  // ... which is why there's both a nullish and "undefined" string check
+  const [displayValue, setDisplayValue] = useState(
+    value == null || value === "undefined" ? undefined : isAssignSelector === true ? `context.${value}` : value
+  );
 
   useEffect(() => {
     //TODO: can probably remove this. Was originally done to enforce the concept of "these things are in context",
     //but Mark and I agree it can be removed
-    const updatedValue = isAssignSelector === true ? displayValue.replace("context.", "") : displayValue;
-    if (updatedValue != value) {
-      onChange(isAssignSelector === true ? displayValue.replace("context.", "") : displayValue);
+    const updatedValue =
+      displayValue && isAssignSelector === true ? displayValue.replace("context.", "") : displayValue;
+    // ensure we don't get an undefined cast to a string (unsure how it happened at one point)
+    if (updatedValue && updatedValue !== "undefined" && updatedValue != value) {
+      onChange(updatedValue);
     }
   }, [displayValue]);
 

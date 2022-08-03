@@ -7,7 +7,7 @@
     "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/spellbook"
   },
   "dependencies": {
-    "@xstate-wizards/spellbook": "^0.6.3",
+    "@xstate-wizards/spellbook": "^0.6.4",
     "@xstate-wizards/spells": "^0.5.28",
     "lodash": "^4.17.21",
     "react": "^17.0.0",

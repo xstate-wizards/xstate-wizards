@@ -45,6 +45,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
   onDelete,
 }) => {
   const contentNodeUpdateHandler = (key, value) => {
+    console.debug("ContentNodeEditor.contentNodeUpdateHandler", { key, value });
     const newContentNode = cloneDeep(contentNode);
     set(newContentNode, key, value);
     onUpdate(newContentNode);

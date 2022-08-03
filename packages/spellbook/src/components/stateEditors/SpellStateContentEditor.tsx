@@ -21,9 +21,7 @@ type TSpellStateContentEditorProps = {
   stateName: string;
 };
 
-export const SpellStateContentEditor: React.FC<
-  TSpellStateContentEditorProps
-> = ({
+export const SpellStateContentEditor: React.FC<TSpellStateContentEditorProps> = ({
   models,
   modelsConfigs,
   onUpdate,
@@ -41,40 +39,39 @@ export const SpellStateContentEditor: React.FC<
         </div>
       )}
       <div className="spell-state__content-nodes">
-        {sortBackButtonToTop(state.content).map(
-          (contentNode, contentNodeIndex) => (
-            <ContentNodeEditor
-              key={`${stateName}-${contentNode.type}-${contentNodeIndex}`}
-              contentNode={contentNode}
-              contentNodeIndex={contentNodeIndex}
-              contentNodeStack={[]}
-              models={models}
-              modelsConfigs={modelsConfigs}
-              schema={schema}
-              serializations={serializations}
-              state={state}
-              onUpdate={(node) => {
-                const newStateContent = cloneDeep(state.content);
-                newStateContent[contentNodeIndex] = node;
-                onUpdate({ content: newStateContent });
-              }}
-              onReorder={(direction) => {
-                onUpdate({
-                  content: reorderArrayItem(
-                    state.content,
-                    contentNodeIndex,
-                    direction
-                  ),
-                });
-              }}
-              onDelete={() => {
-                onUpdate({
-                  content: removeArrayItem(state.content, contentNodeIndex),
-                });
-              }}
-            />
-          )
-        )}
+        {sortBackButtonToTop(state.content).map((contentNode, contentNodeIndex) => (
+          <ContentNodeEditor
+            key={`${stateName}-${contentNode.type}-${contentNodeIndex}`}
+            contentNode={contentNode}
+            contentNodeIndex={contentNodeIndex}
+            contentNodeStack={[]}
+            models={models}
+            modelsConfigs={modelsConfigs}
+            schema={schema}
+            serializations={serializations}
+            state={state}
+            onUpdate={(node) => {
+              console.debug("ContentNodeEditor.onUpdate", {
+                key: `${stateName}-${contentNode.type}-${contentNodeIndex}`,
+                node,
+                state,
+              });
+              const newStateContent = cloneDeep(state.content);
+              newStateContent[contentNodeIndex] = node;
+              onUpdate({ content: newStateContent });
+            }}
+            onReorder={(direction) => {
+              onUpdate({
+                content: reorderArrayItem(state.content, contentNodeIndex, direction),
+              });
+            }}
+            onDelete={() => {
+              onUpdate({
+                content: removeArrayItem(state.content, contentNodeIndex),
+              });
+            }}
+          />
+        ))}
       </div>
       <ContentNodeAdder
         includeBackButton={isSpecialBackButtonIncluded(state.content)}
