@@ -1,3 +1,4 @@
+import { keyBy } from "lodash";
 import React, { useState } from "react";
 import { SpellBook } from "@xstate-wizards/spellbook";
 import { $TSFixMe, createLocalId, initializeResourceEditor } from "@xstate-wizards/spells";
@@ -9,8 +10,17 @@ import { exampleModels } from "./exampleModels";
 
 export const ExampleSpellBook = () => {
   const [spells, setSpells] = useState<$TSFixMe>(getSpellsLocalStorage());
-  const refreshSpells = () => {
+  const refreshSpells = (params?: { key: string }): $TSFixMe => {
     setSpells(getSpellsLocalStorage());
+    const mockFetchedSpells =
+      params?.key == null
+        ? getSpellsLocalStorage()
+        : keyBy(
+            Object.values(getSpellsLocalStorage()).filter((s) => s.key === params?.key),
+            "id"
+          );
+    console.log(mockFetchedSpells);
+    return mockFetchedSpells;
   };
 
   // RENDER
@@ -38,20 +48,11 @@ export const ExampleSpellBook = () => {
       }}
       spells={spells}
       spellsStatic={{}}
-      onSpellCreate={(spell) => {
-        createSpellLocalStorage(spell);
-        refreshSpells();
-      }}
-      onSpellPublish={async ({ increment, spell }) => {
-        const publishedSpell = publishSpellLocalStorage({ increment, spell });
-        refreshSpells();
-        return publishedSpell;
-      }}
-      onSpellSetActive={({ id, isActive }) => {
-        activeSpellLocalStorage({ id, isActive });
-        refreshSpells();
-      }}
-      onSpellRefetch={() => refreshSpells()}
+      onSpellCreate={async (spell) => createSpellLocalStorage(spell)}
+      onSpellPublish={async ({ increment, spell }) => publishSpellLocalStorage({ increment, spell })}
+      onSpellSetActive={async ({ id, isActive }) => activeSpellLocalStorage({ id, isActive })}
+      fetchSpells={() => refreshSpells()}
+      fetchSpellVersions={async ({ key }) => refreshSpells({ key })}
       user={{
         id: 1,
         name: "Test User",
