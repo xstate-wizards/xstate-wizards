@@ -57,6 +57,7 @@ export const SpellStatesEditor = ({
   const statesObj = castStatesToMap(states);
   // --- handlers: add + invoke
   const addInvokeSpellStateHandler = () => {
+    console.debug("SpellStatesEditor: addInvokeSpellStateHandler");
     const stateName = prompt("Whats the state name?");
     if (stateName) {
       onStatesUpdate(statesList.concat({ stateName, state: { key: null, onDone: [] } }));
@@ -68,6 +69,7 @@ export const SpellStatesEditor = ({
   };
   // --- handlers: add + general
   const addGeneralStateHandler = () => {
+    console.debug("SpellStatesEditor: addGeneralStateHandler");
     const stateName = prompt("Whats the state name?");
     if (stateName) {
       onStatesUpdate(statesList.concat({ stateName, state: { content: [], on: {} } }));
@@ -79,6 +81,7 @@ export const SpellStatesEditor = ({
   };
   // --- handlers: update
   const updateStateHandler = (stateName, data) => {
+    console.debug("SpellStatesEditor: updateStateHandler", { stateName, data });
     onStatesUpdate(
       statesList.map((st) => {
         if (st.stateName === stateName) {
@@ -99,6 +102,7 @@ export const SpellStatesEditor = ({
     });
   };
   const updateEditorStateHandler = (stateName, data) => {
+    console.debug("SpellStatesEditor: updateEditorStateHandler");
     onEditorUpdate({
       ...editor,
       states: {
@@ -112,6 +116,7 @@ export const SpellStatesEditor = ({
   };
   // --- handlers: delete
   const deleteStateHandler = (stateName: string) => {
+    console.debug("SpellStatesEditor: deleteStateHandler");
     onStatesUpdate(statesList.filter((st) => st.stateName !== stateName));
     onEditorUpdate({
       ...editor,
@@ -120,6 +125,7 @@ export const SpellStatesEditor = ({
   };
   // --- handlers: copy
   const addCopiedStateHandler = () => {
+    console.debug("SpellStatesEditor: addCopiedStateHandler");
     const stateName = prompt("Whats the state name?");
     const body = prompt("What's the content?");
     if (stateName && body) {
