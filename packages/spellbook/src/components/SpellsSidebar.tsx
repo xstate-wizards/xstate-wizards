@@ -198,15 +198,14 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
       onSpellCreate({ key: inputNewSpellKey, editor: { directory: (inputNewSpellDirectory || "").split(",") ?? [] } });
   };
   // --- spell SELECT
-  // 1) Set spell 2) update params 3) auto-focus to whats marked active
+  // 1) Set spell 2) update params 3) auto-focus to latest spell
   const selectSpellKey = (spellKey: string) => {
     console.log("selectSpellKey", spellKey);
-    const autoFocusedSpell =
-      Object.values(spells ?? {}).find((s) => s.key === spellKey && s.isActive) ||
-      orderBy(
-        Object.values(spells ?? {}).filter((s) => s.key === spellKey),
-        ["createdAt"]
-      )?.[0];
+    const autoFocusedSpell = orderBy(
+      Object.values(spells ?? {}).filter((s) => s.key === spellKey),
+      ["createdAt"],
+      ["desc"]
+    )?.[0];
     if (autoFocusedSpell) {
       editor.setFocusedSpellId(autoFocusedSpell.id);
     }

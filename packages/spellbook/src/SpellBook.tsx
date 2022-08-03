@@ -1,5 +1,4 @@
-import { cloneDeep } from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   $TSFixMe,
@@ -16,11 +15,13 @@ import { useEditor } from "./stores/EditorStore";
 import { PreviewWizardPage } from "./components/previews/PreviewWizardPage";
 import { SpellBookWizardWrap } from "./placeholders/SpellbookWizardWrap";
 
+type TSpellBookPropsSpells = {
+  [id: number]: TSpellInstructions;
+};
+
 type TSpellBookProps = {
   models: TWizardModelsMap;
-  spells: {
-    [id: number]: TSpellInstructions;
-  };
+  spells: TSpellBookPropsSpells;
   spellsStatic: {
     [key: string]: TSpellInstructions | TPrepparedSpellMapping;
   };
@@ -28,7 +29,8 @@ type TSpellBookProps = {
   onSpellCreate: (params: $TSFixMe) => $TSFixMe;
   onSpellSetActive: (params: $TSFixMe) => $TSFixMe;
   onSpellPublish: (params: $TSFixMe) => $TSFixMe;
-  onSpellRefetch: () => void;
+  fetchSpells: () => TSpellBookPropsSpells;
+  fetchSpellVersions: (params: { key: string; page?: number }) => TSpellBookPropsSpells;
   user: null | {
     id?: string | number;
     name?: string;
@@ -41,14 +43,12 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
   onSpellCreate,
   onSpellSetActive,
   onSpellPublish,
-  onSpellRefetch,
+  fetchSpells,
+  fetchSpellVersions,
   serializations,
   spellsStatic = {},
   ...props
 }) => {
-  const editor = useEditor();
-  const preview = usePreview();
-  const spells = cloneDeep(props.spells); // cloning so break refs and prevent mutating app data from external application
   const preppedSerializations: TWizardSerializations = {
     ...serializations,
     components: {
@@ -56,6 +56,17 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
       // @ts-ignore
       WizardWrap: SpellBookWizardWrap,
     },
+  };
+  const editor = useEditor();
+  const preview = usePreview();
+  const [spells, setSpells] = useState<TSpellBookPropsSpells>(props.spells);
+  const refetchSpells = async () => {
+    const refetchedSpells = await fetchSpells();
+    setSpells((spellsById) => ({ ...spellsById, ...refetchedSpells }));
+  };
+  const refetchSpellVersions = async ({ key, page }: { key: string; page?: number }) => {
+    const refetchedSpellVersions = await fetchSpellVersions({ key, page });
+    setSpells((spellsById) => ({ ...spellsById, ...refetchedSpellVersions }));
   };
 
   // RENDER --- Preview Dedicated
@@ -66,7 +77,7 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
         serializations={preppedSerializations}
         spells={spells}
         spellsStatic={spellsStatic}
-        onSpellRefetch={onSpellRefetch}
+        onSpellsRefetch={async () => refetchSpells()}
       />
     );
   }
@@ -87,7 +98,15 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
       {/* EDITOR */}
       <StyledSpellBook>
         {/* EDITOR -- SIDEBAR */}
-        <SpellsSidebar onSpellCreate={(spell) => onSpellCreate(spell)} spells={spells} />
+        <SpellsSidebar
+          onSpellCreate={async (spell) => {
+            // --- create
+            await onSpellCreate(spell);
+            // --- refetch
+            await refetchSpellVersions({ key: spell.key });
+          }}
+          spells={spells}
+        />
         {/* EDITOR -- SPELL */}
         <main className="spell-editor">
           {editor.focusedSpellId && spells[editor.focusedSpellId] && (
@@ -95,13 +114,21 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
               key={`${editor.focusedSpellKey}-${editor.focusedSpellVersion}-${spells[editor.focusedSpellId]?.isActive}`}
               serializations={preppedSerializations}
               models={models}
-              onActive={(id, isActive) => onSpellSetActive({ id, isActive })}
+              onActive={async (id, isActive) => {
+                // --- active
+                await onSpellSetActive({ id, isActive });
+                // --- refetch
+                await refetchSpellVersions({ key: spells[id].key });
+              }}
               onPublish={async (spellPayload, increment) => {
+                // --- publish
                 const newSpell = await onSpellPublish({
                   increment,
                   spell: { ...spells[editor.focusedSpellId!], ...spellPayload },
                 });
                 editor.setFocusedSpellId(newSpell.id);
+                // --- refetch
+                await refetchSpellVersions({ key: newSpell.key });
               }}
               spell={spells[editor.focusedSpellId]}
               spells={spells}

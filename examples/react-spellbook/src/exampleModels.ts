@@ -63,4 +63,24 @@ export const exampleModels: TWizardModelsMap = {
       });
     },
   },
+  Supplement: {
+    modelName: "Supplement",
+    schema: {
+      type: "object",
+      properties: {
+        type: { type: ["string"], enum: ["payStub", "taxReturn", "driversLicense"] },
+        year: { type: ["integer", "null"], minimum: 1900, maximum: 2100 },
+        missing: { type: ["boolean", "null"] },
+        missingReason: { type: ["string", "null"] },
+        missingReasonExplanation: { type: ["string", "null"] },
+        createdAt: { type: ["string"], format: "date-time" },
+        updatedAt: { type: ["string", "null"], format: "date-time" },
+      },
+    },
+    loader: (options) => {
+      return new Promise((resolve) => {
+        resolve([]);
+      });
+    },
+  },
 };
