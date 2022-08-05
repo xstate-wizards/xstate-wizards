@@ -1,4 +1,4 @@
-import { difference, startCase } from "lodash";
+import { difference, intersection, startCase } from "lodash";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { $TSFixMe, ContentNodeType, CONTENT_NODE_BACK } from "@xstate-wizards/spells";
@@ -13,10 +13,16 @@ export const sortBackButtonToTop = (content: $TSFixMe[]) => content?.sort((a, b)
 type TContentNodeAdder = {
   excludeGroups?: string[];
   includeBackButton?: boolean;
+  includeTypes?: string[];
   onAdd: (node: $TSFixMe) => void;
 };
 
-export const ContentNodeAdder: React.FC<TContentNodeAdder> = ({ excludeGroups, includeBackButton, onAdd }) => {
+export const ContentNodeAdder: React.FC<TContentNodeAdder> = ({
+  excludeGroups,
+  includeBackButton,
+  includeTypes,
+  onAdd,
+}) => {
   const [addContentNodeType, setAddContentNodeType] = useState("");
   return (
     <StyledContentNodeAdder>
@@ -29,7 +35,10 @@ export const ContentNodeAdder: React.FC<TContentNodeAdder> = ({ excludeGroups, i
                 Back Button
               </option>
             ) : null}
-            {CONTENT_NODE_OPTIONS[label]?.map((type) => (
+            {(Array.isArray(includeTypes)
+              ? intersection(CONTENT_NODE_OPTIONS[label], includeTypes)
+              : CONTENT_NODE_OPTIONS[label]
+            )?.map((type) => (
               <option key={type} value={type}>
                 {startCase(type)}
               </option>
