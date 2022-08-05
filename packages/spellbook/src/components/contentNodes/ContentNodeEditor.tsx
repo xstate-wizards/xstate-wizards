@@ -498,7 +498,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                                     <button
                                       onClick={() =>
                                         contentNodeUpdateHandler("config", {
-                                          ...contentNode.config,
+                                          ...(contentNode.config ?? {}),
                                           schema: omit(contentNode.config?.schema ?? {}, propertyName),
                                         })
                                       }
@@ -522,7 +522,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                                       state={state}
                                       onUpdate={(updatedNode) =>
                                         contentNodeUpdateHandler("config", {
-                                          ...contentNode.config,
+                                          ...(contentNode.config ?? {}),
                                           schema: {
                                             ...(contentNode.config?.schema ?? {}),
                                             [propertyName]: updatedNode,
@@ -532,7 +532,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                                       onReorder={() => null}
                                       onDelete={() =>
                                         contentNodeUpdateHandler("config", {
-                                          ...contentNode.config,
+                                          ...(contentNode.config ?? {}),
                                           schema: {
                                             ...(contentNode.config?.schema ?? {}),
                                             [propertyName]: null,
@@ -543,9 +543,10 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                                   ) : (
                                     <ContentNodeAdder
                                       excludeGroups={["Navigation"]}
+                                      includeTypes={[ContentNodeType.INPUT, ContentNodeType.SELECT]}
                                       onAdd={(node) =>
                                         contentNodeUpdateHandler("config", {
-                                          ...contentNode.config,
+                                          ...(contentNode.config ?? {}),
                                           schema: {
                                             ...(contentNode.config?.schema ?? {}),
                                             [propertyName]: node,
@@ -563,7 +564,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                                   onClick={() => {
                                     const newPropertyName = prompt("Property Name");
                                     contentNodeUpdateHandler("config", {
-                                      ...contentNode.config,
+                                      ...(contentNode.config ?? {}),
                                       schema: {
                                         ...(contentNode.config?.schema ?? {}),
                                         [newPropertyName]: null,
@@ -586,10 +587,10 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       <td>
                         <input
                           type="text"
-                          value={contentNode.config.addLabel ?? ""}
+                          value={contentNode?.config?.addLabel ?? ""}
                           onChange={(e) =>
                             contentNodeUpdateHandler("config", {
-                              ...contentNode.config,
+                              ...(contentNode.config ?? {}),
                               addLabel: e.target.value,
                             })
                           }
@@ -603,10 +604,10 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       <td style={{ display: "flex" }}>
                         <input
                           type="number"
-                          value={contentNode.config.limit ?? ""}
+                          value={contentNode?.config?.limit ?? ""}
                           onChange={(e) =>
                             contentNodeUpdateHandler("config", {
-                              ...contentNode.config,
+                              ...(contentNode.config ?? {}),
                               limit: Number(e.target.value),
                             })
                           }
@@ -614,7 +615,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                         <button
                           onClick={(e) =>
                             contentNodeUpdateHandler("config", {
-                              ...contentNode.config,
+                              ...(contentNode.config ?? {}),
                               limit: null,
                             })
                           }
