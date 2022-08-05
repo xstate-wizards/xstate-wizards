@@ -18,6 +18,8 @@ import { ContentNodeEventEditor } from "./ContentNodeEventEditor";
 import { InputAssign } from "../logic/InputAssign";
 
 type TContentNodeEditorProps = {
+  canAssign?: boolean;
+  canReorder?: boolean;
   contentNode: $TSFixMe;
   contentNodeIndex: $TSFixMe;
   contentNodeStack?: $TSFixMe;
@@ -32,6 +34,8 @@ type TContentNodeEditorProps = {
 };
 
 export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
+  canAssign = true,
+  canReorder = true,
   contentNode,
   contentNodeIndex,
   contentNodeStack,
@@ -403,7 +407,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
           </>
         )}
         {/* --- INPUT --- */}
-        {[ContentNodeType.INPUT, ContentNodeType.TEXTAREA].includes(contentNode.type) && (
+        {[ContentNodeType.INPUT, ContentNodeType.JSON_ARRAY, ContentNodeType.TEXTAREA].includes(contentNode.type) && (
           <div className="content-node__config__stack">
             <table>
               <tbody>
@@ -419,7 +423,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     />
                   </td>
                 </tr>
-                {![ContentNodeType.TEXTAREA].includes(contentNode.type) && (
+                {![ContentNodeType.JSON_ARRAY, ContentNodeType.TEXTAREA].includes(contentNode.type) && (
                   <tr>
                     <td className="stack-label">
                       <small>Input Type: </small>
@@ -441,20 +445,21 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     </td>
                   </tr>
                 )}
-                {!["age", "date"].includes(contentNode.inputType) && (
-                  <tr>
-                    <td className="stack-label">
-                      <small>Placeholder: </small>
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={contentNode.placeholder}
-                        onChange={(e) => contentNodeUpdateHandler("placeholder", e.target.value)}
-                      />
-                    </td>
-                  </tr>
-                )}
+                {![ContentNodeType.JSON_ARRAY].includes(contentNode.type) &&
+                  !["age", "date"].includes(contentNode.inputType) && (
+                    <tr>
+                      <td className="stack-label">
+                        <small>Placeholder: </small>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={contentNode.placeholder}
+                          onChange={(e) => contentNodeUpdateHandler("placeholder", e.target.value)}
+                        />
+                      </td>
+                    </tr>
+                  )}
                 {["date"].includes(contentNode.inputType) && (
                   <>
                     <tr>
@@ -476,23 +481,169 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     </tr>
                   </>
                 )}
-                <tr>
-                  <td className="stack-label">
-                    <small>Assign: </small>
-                  </td>
-                  <td>
-                    <InputAssign
-                      contentNodeStack={contentNodeStack}
-                      functions={serializations?.functions ?? {}}
-                      models={models}
-                      modelsConfigs={modelsConfigs}
-                      onChange={(assign) => contentNodeUpdateHandler("assign", assign)}
-                      schema={schema}
-                      state={state}
-                      value={contentNode.assign}
-                    />
-                  </td>
-                </tr>
+                {[ContentNodeType.JSON_ARRAY].includes(contentNode.type) && (
+                  <>
+                    <tr>
+                      <td className="stack-label">
+                        <small>Item Properties: </small>
+                      </td>
+                      <td>
+                        <table className="content-node__config__select-options">
+                          <tbody>
+                            {Object.keys(contentNode.config?.schema ?? {})?.map((propertyName) => (
+                              <tr key={propertyName}>
+                                <td className="stack-label" style={{ maxWidth: "80px" }}>
+                                  <small>
+                                    {propertyName}&ensp;
+                                    <button
+                                      onClick={() =>
+                                        contentNodeUpdateHandler("config", {
+                                          ...contentNode.config,
+                                          schema: omit(contentNode.config?.schema ?? {}, propertyName),
+                                        })
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                  </small>
+                                </td>
+                                <td>
+                                  {contentNode.config?.schema?.[propertyName] ? (
+                                    <ContentNodeEditor
+                                      canAssign={false}
+                                      canReorder={false}
+                                      contentNode={contentNode.config?.schema?.[propertyName]}
+                                      contentNodeIndex={contentNodeIndex}
+                                      contentNodeStack={[contentNode, ...contentNodeStack]}
+                                      models={models}
+                                      modelsConfigs={modelsConfigs}
+                                      schema={schema}
+                                      serializations={serializations}
+                                      state={state}
+                                      onUpdate={(updatedNode) =>
+                                        contentNodeUpdateHandler("config", {
+                                          ...contentNode.config,
+                                          schema: {
+                                            ...(contentNode.config?.schema ?? {}),
+                                            [propertyName]: updatedNode,
+                                          },
+                                        })
+                                      }
+                                      onReorder={() => null}
+                                      onDelete={() =>
+                                        contentNodeUpdateHandler("config", {
+                                          ...contentNode.config,
+                                          schema: {
+                                            ...(contentNode.config?.schema ?? {}),
+                                            [propertyName]: null,
+                                          },
+                                        })
+                                      }
+                                    />
+                                  ) : (
+                                    <ContentNodeAdder
+                                      excludeGroups={["Navigation"]}
+                                      onAdd={(node) =>
+                                        contentNodeUpdateHandler("config", {
+                                          ...contentNode.config,
+                                          schema: {
+                                            ...(contentNode.config?.schema ?? {}),
+                                            [propertyName]: node,
+                                          },
+                                        })
+                                      }
+                                    />
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                            <tr>
+                              <td colSpan={2}>
+                                <button
+                                  onClick={() => {
+                                    const newPropertyName = prompt("Property Name");
+                                    contentNodeUpdateHandler("config", {
+                                      ...contentNode.config,
+                                      schema: {
+                                        ...(contentNode.config?.schema ?? {}),
+                                        [newPropertyName]: null,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <small>+ Add Property</small>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="stack-label">
+                        <small>+ Add ____: </small>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={contentNode.config.addLabel ?? ""}
+                          onChange={(e) =>
+                            contentNodeUpdateHandler("config", {
+                              ...contentNode.config,
+                              addLabel: e.target.value,
+                            })
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="stack-label">
+                        <small>Limit: </small>
+                      </td>
+                      <td style={{ display: "flex" }}>
+                        <input
+                          type="number"
+                          value={contentNode.config.limit ?? ""}
+                          onChange={(e) =>
+                            contentNodeUpdateHandler("config", {
+                              ...contentNode.config,
+                              limit: Number(e.target.value),
+                            })
+                          }
+                        />
+                        <button
+                          onClick={(e) =>
+                            contentNodeUpdateHandler("config", {
+                              ...contentNode.config,
+                              limit: null,
+                            })
+                          }
+                        >
+                          No&nbsp;Limit
+                        </button>
+                      </td>
+                    </tr>
+                  </>
+                )}
+                {canAssign && (
+                  <tr>
+                    <td className="stack-label">
+                      <small>Assign: </small>
+                    </td>
+                    <td>
+                      <InputAssign
+                        contentNodeStack={contentNodeStack}
+                        functions={serializations?.functions ?? {}}
+                        models={models}
+                        modelsConfigs={modelsConfigs}
+                        onChange={(assign) => contentNodeUpdateHandler("assign", assign)}
+                        schema={schema}
+                        state={state}
+                        value={contentNode.assign}
+                      />
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td className="stack-label">
                     <small>Validations:</small>
@@ -707,23 +858,25 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       )}
                   </td>
                 </tr>
-                <tr>
-                  <td className="stack-label">
-                    <small>Assign: </small>
-                  </td>
-                  <td>
-                    <InputAssign
-                      contentNodeStack={contentNodeStack}
-                      functions={serializations?.functions ?? {}}
-                      models={models}
-                      modelsConfigs={modelsConfigs}
-                      onChange={(assign) => contentNodeUpdateHandler("assign", assign)}
-                      schema={schema}
-                      state={state}
-                      value={contentNode.assign}
-                    />
-                  </td>
-                </tr>
+                {canAssign && (
+                  <tr>
+                    <td className="stack-label">
+                      <small>Assign: </small>
+                    </td>
+                    <td>
+                      <InputAssign
+                        contentNodeStack={contentNodeStack}
+                        functions={serializations?.functions ?? {}}
+                        models={models}
+                        modelsConfigs={modelsConfigs}
+                        onChange={(assign) => contentNodeUpdateHandler("assign", assign)}
+                        schema={schema}
+                        state={state}
+                        value={contentNode.assign}
+                      />
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td className="stack-label">
                     <small>Validations:</small>
@@ -781,22 +934,24 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
 
       {/* REORDERING */}
       <div className="content-node__reorder-handle">
-        <div style={{ display: "flex", flexDirection: "column", maxWidth: "30px" }}>
-          <button
-            disabled={contentNodeIndex === 0}
-            onClick={() => onReorder(REORDER_DIRECTION.UP)}
-            style={{ maxHeight: "13px" }}
-          >
-            ⬆︎
-          </button>
-          <button
-            disabled={contentNodeIndex === state.content.length - 1}
-            onClick={() => onReorder(REORDER_DIRECTION.DOWN)}
-            style={{ maxHeight: "13px" }}
-          >
-            ⬇︎
-          </button>
-        </div>
+        {canReorder && (
+          <div style={{ display: "flex", flexDirection: "column", maxWidth: "30px" }}>
+            <button
+              disabled={contentNodeIndex === 0}
+              onClick={() => onReorder(REORDER_DIRECTION.UP)}
+              style={{ maxHeight: "13px" }}
+            >
+              ⬆︎
+            </button>
+            <button
+              disabled={contentNodeIndex === state.content.length - 1}
+              onClick={() => onReorder(REORDER_DIRECTION.DOWN)}
+              style={{ maxHeight: "13px" }}
+            >
+              ⬇︎
+            </button>
+          </div>
+        )}
         <button onClick={onDelete}>❌</button>
       </div>
     </StyledContentNodeEditor>

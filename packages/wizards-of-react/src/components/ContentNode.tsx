@@ -1156,7 +1156,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </div>
             </div>
           ))}
-          {(!node.limit || jsonArrayValue.length < node.limit) && (
+          {(!node?.config?.limit || jsonArrayValue.length < node?.config?.limit) && (
             <div className="json-array-add">
               <Button
                 type="button"
