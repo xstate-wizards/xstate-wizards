@@ -1175,13 +1175,13 @@
   resolved "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz#80224a6919272f405b87913ca13b92929bdf3c4d"
   integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
-"@xstate-wizards/spellbook@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.npmjs.org/@xstate-wizards/spellbook/-/spellbook-0.6.4.tgz#fe0450ccc67331e486e6744487b433c04b2135f7"
-  integrity sha512-dMnZS2PNP/SabHbH70a+BPKlVtr31H5GKVyA7wpabB7Z3Rt2Sbjr7bsw7HtFAxzfOi6L9i0NYyv69IlHTQ+TIA==
+"@xstate-wizards/spellbook@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.npmjs.org/@xstate-wizards/spellbook/-/spellbook-0.6.5.tgz#8184c2bee0648fb2a0e1075fd8af5f3a3024fc4b"
+  integrity sha512-2H3GQz7dIXZdlZ5akF67JtKsL3sbFAkFsZl6tbY4vh7NDgaJDRbvWH+RWVeVo2gOJt57NRc2cNYMVngCXEB6nw==
   dependencies:
     "@xstate-wizards/spells" "^0.8.1"
-    "@xstate-wizards/wizards-of-react" "^0.6.1"
+    "@xstate-wizards/wizards-of-react" "^0.6.2"
     date-fns "^2.4.1"
     framer-motion "^6.4.3"
     lodash "^4.17.20"
@@ -1220,10 +1220,10 @@
     zustand "^4.0.0-rc.1"
     zxcvbn "^4.4.2"
 
-"@xstate-wizards/wizards-of-react@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.1.tgz#7f0dcca6b745cf4119bdb9e1521f09473bf85eeb"
-  integrity sha512-as4hJloKGmHaSmaIvUjgo3TdxnXArqdAF++g07BqPlPk8lH44Dcg/AF054riAmKOUStxHUS8Su5EGkw41PYwqw==
+"@xstate-wizards/wizards-of-react@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.2.tgz#11c6ddf86831ff6d82d7e31c6522b218694c7685"
+  integrity sha512-prhN2cVUyIx0f/ZqBM6ds+398edFCnMJkZGCFsJB1PAMLwaR8Q+pKJ3xAYn3q6sDdb2mWlGK6S0pycmHquqX8Q==
   dependencies:
     "@xstate-wizards/spells" "^0.8.1"
     "@xstate/react" "1.3.4"
