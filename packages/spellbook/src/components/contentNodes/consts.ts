@@ -26,6 +26,7 @@ export const CONTENT_NODE_OPTIONS = {
     ContentNodeType.RADIO_SELECT,
     ContentNodeType.SELECT,
     ContentNodeType.TEXTAREA,
+    ContentNodeType.JSON_ARRAY,
   ],
   Layout: [
     ContentNodeType.BR,
