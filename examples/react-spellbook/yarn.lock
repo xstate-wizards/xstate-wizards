@@ -1175,10 +1175,17 @@
   resolved "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz#80224a6919272f405b87913ca13b92929bdf3c4d"
   integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
+<<<<<<< HEAD
 "@xstate-wizards/spellbook@^0.6.6":
   version "0.6.6"
   resolved "https://registry.npmjs.org/@xstate-wizards/spellbook/-/spellbook-0.6.6.tgz#ab6befe83df4008959a59a877991ebdbb6a6a016"
   integrity sha512-f5CZb7rwPpKyaSsWMAXUvlNg4ofQtapEQyXTfeP++rr1dhlcQbYn38divk2kNUXmlwEjXCilIO/Tqv14oBpQww==
+=======
+"@xstate-wizards/spellbook@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.npmjs.org/@xstate-wizards/spellbook/-/spellbook-0.6.5.tgz#8184c2bee0648fb2a0e1075fd8af5f3a3024fc4b"
+  integrity sha512-2H3GQz7dIXZdlZ5akF67JtKsL3sbFAkFsZl6tbY4vh7NDgaJDRbvWH+RWVeVo2gOJt57NRc2cNYMVngCXEB6nw==
+>>>>>>> main
   dependencies:
     "@xstate-wizards/spells" "^0.8.1"
     "@xstate-wizards/wizards-of-react" "^0.6.2"
