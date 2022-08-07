@@ -239,11 +239,12 @@ const OPERATORS = {
     "none",
     // "reduce",
     "map",
-    "filter",
+    // "filter", // use lodash.without, you can't select variables other than array items
     "merge",
     // "in",
   ],
   "[lodash]": [
+    "lodash.capitalize",
     "lodash.castArray",
     "lodash.concat",
     "lodash.fill",
@@ -252,13 +253,17 @@ const OPERATORS = {
     "lodash.includes",
     "lodash.isNil",
     "lodash.keys",
+    "lodash.orderBy",
     "lodash.range",
     "lodash.rangeRight",
     "lodash.reverse",
+    "lodash.round",
     "lodash.size",
     "lodash.toNumber",
     "lodash.toString",
+    "lodash.uniq",
     "lodash.values",
+    "lodash.without",
     // ???
   ],
   "[Resources]": [

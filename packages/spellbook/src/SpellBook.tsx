@@ -149,8 +149,19 @@ const StyledSpellBook = styled.div`
   right: 0;
   left: 0;
   bottom: 0;
-  // overflow: hidden;
 
+  // SCROLLBARS
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  // SPELL EDITOR
   .spell-editor {
     width: 100%;
     max-width: 100vw;
