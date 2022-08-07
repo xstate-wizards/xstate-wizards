@@ -239,7 +239,7 @@ const OPERATORS = {
     "none",
     // "reduce",
     "map",
-    "filter",
+    // "filter", // use lodash.without, you can't select variables other than array items
     "merge",
     // "in",
   ],
