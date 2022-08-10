@@ -202,7 +202,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
         ? null
         : contentNodes.map((node, ni) => (
             <ContentNode
-              key={`${state.value}-${ni}`}
+              key={`${state.value}-${node.type}-${ni}`}
               node={
                 node?.attrs?.className === CONTENT_NODE_PAUSE_AND_EXIT_TO.attrs.className
                   ? { ...node, onClick: () => triggerExitTo(node.exitTo, node.exitState || {}) }

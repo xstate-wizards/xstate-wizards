@@ -4,7 +4,13 @@ import { getUser } from "../models/user";
 export const wizardModelMap: TWizardModelsMap = {
   Hobby: {
     modelName: "Hobby",
-    schema: {},
+    schema: {
+      type: "object",
+      properties: {
+        description: { type: ["string"] },
+        startedAt: { type: ["string"] },
+      },
+    },
     loader: async () => [],
   },
   Pet: {
