@@ -1,4 +1,4 @@
-import { addYears, subYears } from "date-fns";
+import { subYears } from "date-fns";
 import { CANCEL_STATE, createSpell, SAVE_STATE } from "@xstate-wizards/spells";
 
 export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
@@ -25,11 +25,13 @@ export const machineMapping = createSpell({
   states: {
     editor: {
       content: (ctx) => [
+        { type: "h4", text: "Hobby Editor" },
         {
-          type: "h4",
+          type: "small",
           text: "This is a sub-machine, spawned in isolation from the prior interview. These machines pass messages and data from one another, allowing them to modify data as needed as they pass it onto the next. In complex cases, you may spawn several machines which each handle related data models.",
         },
-        { type: "p", text: "Hobby" },
+        { type: "hr" },
+        // Example modifying a resource via resourceEditor wrapper node
         {
           type: "resourceEditor",
           config: {
@@ -58,6 +60,15 @@ export const machineMapping = createSpell({
             },
           ],
         },
+        // Example modifying an object property via dot notation path syntax
+        {
+          type: "input",
+          inputType: "text",
+          label: "Collaborator Name (Optional)",
+          assign: { modelName: "Hobby", id: ctx.hobbyId, path: "collaborator.name" },
+          validations: ["required"],
+        },
+        { type: "hr" },
         { type: "button", buttonType: "submit", text: "Save", event: "SAVE" },
         { type: "button", text: "Cancel", event: "CANCEL" },
       ],

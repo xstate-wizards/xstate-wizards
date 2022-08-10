@@ -7,8 +7,9 @@
     "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react"
   },
   "dependencies": {
-    "@xstate-wizards/spells": "^0.5.29",
-    "@xstate-wizards/wizards-of-react": "^0.5.31",
+    "@xstate-wizards/spellbook": "^0.6.9",
+    "@xstate-wizards/spells": "^0.8.2",
+    "@xstate-wizards/wizards-of-react": "^0.6.4",
     "date-fns": "^2.29.1",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
