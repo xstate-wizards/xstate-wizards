@@ -75,7 +75,7 @@ export type TContentDefinition = {
   validations?: string[];
   onClick?: Function; // standard onClick override
   event?: string | Record<string, any>; // machine transition config
-  assign?: Function; // context assignment handling
+  assign?: Function | string; // context assignment handling
   attrs?: Record<string, any>; // Pass values like data-ids, style, disabled checking fn, other attributes
   disabled?: Function; // can't destructure like other attributes
   selected?: Function; // mostly for inputCheckboxButton so we can invert/change color when selected
@@ -233,7 +233,7 @@ export type TSpellEditor = {
   };
 };
 
-type TTempState = { [stateName: string]: { [stateProps: string]: TGeneralStateNodeProps } };
+type TTempState = { [stateName: string]: TGeneralStateNodeProps };
 
 export type TSpellInstructions = {
   key: string; // should correspond to spell/machine map
