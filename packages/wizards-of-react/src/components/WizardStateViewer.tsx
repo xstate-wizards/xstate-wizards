@@ -178,7 +178,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   // --- used primarily for CONTENT_NODE_PAUSE_AND_EXIT_TO
   const triggerExitTo = (exitTo?: string, state?: $TSFixMe) => {
     logger.info("EXIT Triggered (via ContentNode)");
-    navigate(exitTo || machineMeta?.exitTo || "/journey", { state: { ...(state ?? {}), skipConfirm: true } });
+    navigate(exitTo || machineMeta?.exitTo, { state: { ...(state ?? {}), skipConfirm: true } });
   };
 
   // RENDER
