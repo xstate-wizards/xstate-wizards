@@ -589,7 +589,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Panels
   if (node.type === ContentNodeType.COLLAPSIBLE_PANEL) {
     return (
-      <CollapsiblePanel title={node.title} svg={node.svg} {...node.attrs}>
+      <CollapsiblePanel headerTitle={node.headerTitle} headerIconSVG={node.headerIconSVG} {...node.attrs}>
         {(node.content || []).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
