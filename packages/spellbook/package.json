@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/spellbook",
-  "version": "0.6.12",
+  "version": "0.6.13",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,8 +17,8 @@
     "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react"
   },
   "dependencies": {
-    "@xstate-wizards/spells": "^0.8.6",
-    "@xstate-wizards/wizards-of-react": "^0.6.11",
+    "@xstate-wizards/spells": "^0.8.7",
+    "@xstate-wizards/wizards-of-react": "^0.6.12",
     "date-fns": "^2.4.1",
     "framer-motion": "^6.4.3",
     "lodash": "^4.17.20",

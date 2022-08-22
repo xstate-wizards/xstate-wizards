@@ -48,8 +48,8 @@ export const createSpell = ({
         // ... first, use the spell config as meta
         ...config,
         // ... second, merge any machine meta passed in via createMachine (gives exitTo/initial)
-        initial: createMachineMeta.initial ?? config.initial,
-        exitTo: createMachineMeta.exitTo ?? config.exitTo,
+        initial: createMachineMeta?.initial ?? config?.initial,
+        exitTo: createMachineMeta?.exitTo ?? config?.exitTo,
         // ... lastly, setup our session
         ...setupMetaSession(session),
       };
