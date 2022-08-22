@@ -130,7 +130,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
 
   // ON MOUNT (aka every state.value change)
   useEffect(() => {
-    logger.info(`STATE: ${state.value}`, cloneDeep({ context: state.context, contextOnEntry }));
+    logger.info(`STATE: ${state.value}`, cloneDeep({ context: state.context, contextOnEntry, meta, machineMeta }));
     // - Scroll to top
     if (typeof window !== "undefined") window.scroll(0, 0);
     // - Go through content nodes and setup any resources
@@ -182,7 +182,6 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   };
 
   // RENDER
-  // TODO: Add meta notes for admins logged in as user
   return (
     <Fragment key={state.value}>
       {/* Top navigation options panel */}

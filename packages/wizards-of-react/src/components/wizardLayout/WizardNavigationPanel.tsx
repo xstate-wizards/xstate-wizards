@@ -30,7 +30,7 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
     onBack();
   };
   const triggerExitTo = () => {
-    logger.info("EXIT Triggered (via navigation panel)");
+    logger.info("EXIT Triggered (via navigation panel)", JSON.parse(JSON.stringify({ exitTo, machineMeta })));
     navigate(exitTo, { state: { skipConfirm: true } });
   };
   const triggerStartOver = () => {
