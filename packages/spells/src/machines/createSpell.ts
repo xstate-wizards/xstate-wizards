@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from "lodash";
+import { cloneDeep, merge, omit } from "lodash";
 import { createMachine } from "xstate";
 import { INTERVIEW_INTRO_STATE } from "../constants/stateTargets";
 import { TSpellInstructions, TPrepparedSpellMapping } from "../types";
@@ -25,7 +25,7 @@ export const createSpell = ({
     models,
     schema,
     createMachine: (context, extras) => {
-      const { initial, spellMap, serializations, session } = extras ?? {};
+      const { initial, spellMap, serializations, session, meta: createMachineMeta } = extras ?? {};
 
       const preppedMachineContextWithResources = prepMachineContextWithResources(models, {});
       const jsonSchemaDefaults = getJsonSchemaDefaults(schema);
@@ -45,7 +45,12 @@ export const createSpell = ({
       };
 
       const machineMeta = {
+        // ... first, use the spell config as meta
         ...config,
+        // ... second, merge any machine meta passed in via createMachine (gives exitTo/initial)
+        initial: createMachineMeta.initial ?? config.initial,
+        exitTo: createMachineMeta.exitTo ?? config.exitTo,
+        // ... lastly, setup our session
         ...setupMetaSession(session),
       };
 
