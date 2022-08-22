@@ -52,7 +52,6 @@ export type TGeneralStateNodeProps = {
   entry?: any; // Allow machines to entry states that can be setup based on the machine factory function context (ex: missing context data can trigger BACK event immediately)
   invoke?: Record<string, any> | Function;
   nodeType?: string; // Default to ID_GENERAL
-  notes?: TNote[]; // DEPRECATE
   on: Record<string, any>;
   progress?: number;
   showValidateErrorsAtEntry?: boolean; // DEPRECATE: I think?

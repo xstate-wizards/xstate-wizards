@@ -182,7 +182,6 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   };
 
   // RENDER
-  // TODO: Add meta notes for admins logged in as user
   return (
     <Fragment key={state.value}>
       {/* Top navigation options panel */}

@@ -13,7 +13,6 @@ export function setupGeneralState(
     entry,
     invoke,
     nodeType = ID_GENERAL,
-    notes = [],
     on,
     always,
     progress,
@@ -29,7 +28,6 @@ export function setupGeneralState(
   constructedState.meta = {
     content,
     nodeType,
-    notes,
     progress,
     test: test || (() => null),
     showValidateErrorsAtEntry,
