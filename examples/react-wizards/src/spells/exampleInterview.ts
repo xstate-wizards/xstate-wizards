@@ -12,7 +12,7 @@ export const machineMapping = createSpell({
     // initial: INTERVIEW_INTRO_STATE,
     initial: "hobbiesList",
     title: "Example Interview",
-    exitTo: "/",
+    // exitTo: "/",
     sectionsBar: [],
   },
   models: {

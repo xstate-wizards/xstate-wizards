@@ -19,6 +19,7 @@ export const Interview = () => {
   return (
     <form>
       <WizardRunner
+        configExitTo="/"
         debugConfig={{
           logging: true,
           skipSaves: true,
@@ -31,7 +32,7 @@ export const Interview = () => {
         sessionEnabled={false}
         onWizardFinal={({ machine }) => {
           // When done, send back to base route w/ screener
-          navigate("/");
+          // navigate("/");
         }}
       />
     </form>
