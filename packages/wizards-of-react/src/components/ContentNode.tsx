@@ -836,7 +836,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {...omit(nodeAttrs, "canInputOther")}
           serializations={serializations}
         >
-          <option value="">Select...</option>
+          <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
           {selectOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.text}
@@ -1099,7 +1099,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                               inputOnChange(set(cloneDeep(jsonArrayValue), `[${jsonI}].${key}`, e.target.value))
                             }
                           >
-                            <option value="">Select...</option>
+                            <option value="">--- Select ---</option>
                             {node.config.schema[key].options.map((option) => (
                               <option key={option.value} value={option.value}>
                                 {option.text}
