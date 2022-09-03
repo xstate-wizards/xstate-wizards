@@ -1125,12 +1125,27 @@
     zustand "^4.0.0-rc.1"
     zxcvbn "^4.4.2"
 
-"@xstate-wizards/wizards-of-react@^0.6.11":
-  version "0.6.11"
-  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.11.tgz#cf008d724857caba31b40cf32d0c3fe5f0999d14"
-  integrity sha512-lMZVlMyHFIlerhQc+pjvt4th3ouKzaKl4yO3YXgh+6iD7rlM1a5tAhbPnP4CBDQJerISI2hAGqsbJ2oNr1w8Sg==
+"@xstate-wizards/spells@^0.8.7":
+  version "0.8.7"
+  resolved "https://registry.npmjs.org/@xstate-wizards/spells/-/spells-0.8.7.tgz#1ef8a40221d483e72a0c92fcbf8a22c44fb0304f"
+  integrity sha512-boT51Xp0s6GgjCXLdl6WTcd4TlbNsxqWWe5TrjX7fX9vJ1nQ9O3Jai878B/PzRC/XrsKjti43UNaQOTO+e4WuA==
   dependencies:
-    "@xstate-wizards/spells" "^0.8.6"
+    acorn "^8.7.1"
+    date-fns "^2.4.1"
+    json-logic-js "^2.0.2"
+    json-schema "^0.4.0"
+    lodash "^4.17.20"
+    uuid "^3.3.3"
+    xstate "4.25.0"
+    zustand "^4.0.0-rc.1"
+    zxcvbn "^4.4.2"
+
+"@xstate-wizards/wizards-of-react@^0.6.14":
+  version "0.6.14"
+  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.14.tgz#91632310126c5537342f6dcf8dfbca64c2b24e4b"
+  integrity sha512-f6h1nZSKQU3ElidQnT21qvOIfGtFJBgll6y3Y1wLgz9NG0hVHrM8x8t9h08vb6yzNQUjMswB6rkio1EdzSDTLA==
+  dependencies:
+    "@xstate-wizards/spells" "^0.8.7"
     "@xstate/react" "1.3.4"
     date-fns "^2.4.1"
     lodash "^4.17.20"

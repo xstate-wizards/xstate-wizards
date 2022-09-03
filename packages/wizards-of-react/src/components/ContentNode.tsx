@@ -1236,13 +1236,25 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     });
     return (
       <>
+        {node.config?.attention?.enabled === true && (
+          <ContentNode
+            {...extendAddressChildNode(props, {
+              childKey: "attention",
+              label: node.config?.attention?.label || "Attention",
+              onChangeHandler: (e) => setPlacesAutocompleteValue(e.target.value),
+              validations: node.config?.attention?.validations ?? [],
+            })}
+            validationMap={validationMap}
+            serializations={serializations}
+          />
+        )}
         {node.config?.street1?.enabled !== false && (
           <ContentNode
             {...extendAddressChildNode(props, {
               childKey: "street1",
-              label: node.config?.street1?.label || "Street 1",
+              label: node.config?.street1?.label ?? "Street 1",
               onChangeHandler: (e) => setPlacesAutocompleteValue(e.target.value),
-              validations: get(node, "config.street1.validations") || ["required"],
+              validations: node.config?.street1?.validations ?? ["required"],
             })}
             validationMap={validationMap}
             serializations={serializations}
@@ -1357,15 +1369,30 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           </StyledAddressSuggestionsBox>
         )}
         {node.config?.street2?.enabled !== false && (
-          <ContentNode
-            {...extendAddressChildNode(props, {
-              childKey: "street2",
-              label: "Street 2",
-              validations: get(node, "config.street2.validations") || [],
-            })}
-            validationMap={validationMap}
-            serializations={serializations}
-          />
+          <div className="content-node__row">
+            {node.config?.unit?.enabled === true && (
+              <ContentNode
+                {...extendAddressChildNode(props, {
+                  childKey: "unit",
+                  label: node.config?.unit?.label ?? "Unit",
+                  nodeType: node.config?.unit?.nodeType ?? "select",
+                  options: node.config?.unit?.options,
+                  validations: node.config?.unit?.validations ?? [],
+                })}
+                validationMap={validationMap}
+                serializations={serializations}
+              />
+            )}
+            <ContentNode
+              {...extendAddressChildNode(props, {
+                childKey: "street2",
+                label: node.config?.street2?.label ?? "Street 2",
+                validations: node.config?.street2?.validations ?? [],
+              })}
+              validationMap={validationMap}
+              serializations={serializations}
+            />
+          </div>
         )}
         {node.config?.notStable?.enabled === true && (
           <ContentNode
@@ -1397,8 +1424,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <ContentNode
             {...extendAddressChildNode(props, {
               childKey: "city",
-              label: "City",
-              validations: get(node, "config.city.validations") || ["required"],
+              label: node.config?.city?.label ?? "City",
+              validations: node.config?.city?.validations ?? ["required"],
             })}
             validationMap={validationMap}
             serializations={serializations}
@@ -1408,8 +1435,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <ContentNode
             {...extendAddressChildNode(props, {
               childKey: "county",
-              label: "County",
-              validations: get(node, "config.county.validations") || [],
+              label: node.config?.county?.label ?? "County",
+              validations: node.config?.county?.validations ?? [],
             })}
             validationMap={validationMap}
             serializations={serializations}
@@ -1420,11 +1447,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             <ContentNode
               {...extendAddressChildNode(props, {
                 childKey: "state",
-                label: "State",
-                nodeType: "select",
+                label: node.config?.state?.label ?? "State",
+                nodeType: node.config?.state?.nodeType ?? "select",
                 options:
                   node.config?.state?.options || Object.keys(STATES_US).map((s) => ({ value: s, text: STATES_US[s] })),
-                validations: get(node, "config.state.validations") || ["required"],
+                validations: node.config?.state?.validations ?? ["required"],
               })}
               validationMap={validationMap}
               serializations={serializations}
@@ -1434,8 +1461,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             <ContentNode
               {...extendAddressChildNode(props, {
                 childKey: "zipcode",
-                label: "Zipcode",
-                validations: get(node, "config.zipcode.validations") || ["required"],
+                label: node.config?.zipcode?.label ?? "Zipcode",
+                validations: node.config?.zipcode?.validations ?? ["required"],
               })}
               validationMap={validationMap}
               serializations={serializations}
@@ -1446,10 +1473,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <ContentNode
             {...extendAddressChildNode(props, {
               childKey: "country",
-              label: "Country",
+              label: node.config?.country?.label ?? "Country",
               nodeType: "select",
               options: Object.keys(COUNTRIES).map((c) => ({ value: c, text: COUNTRIES[c] })),
-              validations: get(node, "config.country.validations") || [],
+              validations: node.config?.country?.validations ?? [],
             })}
             validationMap={validationMap}
             serializations={serializations}

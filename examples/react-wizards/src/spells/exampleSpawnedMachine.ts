@@ -4,7 +4,7 @@ import { CANCEL_STATE, createSpell, SAVE_STATE } from "@xstate-wizards/spells";
 export const ID_EXAMPLE_SPAWNED_MACHINE = "exampleSpawnedMachine";
 
 export const machineMapping = createSpell({
-  id: ID_EXAMPLE_SPAWNED_MACHINE,
+  key: ID_EXAMPLE_SPAWNED_MACHINE,
   version: "1",
   config: {
     initial: "editor",
@@ -22,6 +22,7 @@ export const machineMapping = createSpell({
       showDelete: { type: ["boolean", "null"], default: false },
     },
   },
+  editor: {},
   states: {
     editor: {
       content: (ctx) => [
@@ -68,6 +69,30 @@ export const machineMapping = createSpell({
           assign: { modelName: "Hobby", id: ctx.hobbyId, path: "collaborator.name" },
           validations: ["required"],
         },
+        // example of address
+        { type: "h5", text: "Where do you do this hobby?" },
+        {
+          type: "address",
+          assign: { modelName: "Hobby", id: ctx.hobbyId, path: "address" },
+          config: {
+            attention: { enabled: true, label: "In Care of Name (if any)" },
+            // Configs check for defaults above, before falling back to true
+            street1: { enabled: true, validations: ["required"] },
+            street2: { enabled: true, validations: [] },
+            unit: { enabled: true, options: [{ value: "APT", text: "APT" }] },
+            notStable: { enabled: false },
+            city: { enabled: true, validations: ["required"] },
+            county: { enabled: true, validations: [] },
+            state: { enabled: true, validations: ["required"], nodeType: "input" },
+            zipcode: {
+              enabled: true,
+              validations: ["required"],
+            },
+            country: { enabled: true, validations: ["required"] },
+          },
+          attrs: { size: "sm" },
+        },
+
         { type: "hr" },
         { type: "button", buttonType: "submit", text: "Save", event: "SAVE" },
         { type: "button", text: "Cancel", event: "CANCEL" },

@@ -6,7 +6,7 @@ import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 
 export const machineMapping = createSpell({
-  id: ID_EXAMPLE_INTERVIEW,
+  key: ID_EXAMPLE_INTERVIEW,
   version: "1",
   config: {
     // initial: INTERVIEW_INTRO_STATE,
