@@ -30,6 +30,7 @@ import { renderWizardML } from "./contentNodes/renderWizardML";
 import { AgeInput } from "./contentNodes/AgeInput";
 import { CountdownTimer } from "./contentNodes/CountdownTimer";
 import { CurrencyInput } from "./contentNodes/CurrencyInput";
+import { InputPhoneNumber } from "./contentNodes/InputPhoneNumber";
 import { SelectDatePicker } from "./contentNodes/SelectDatePicker";
 import { SelectWithOther } from "./contentNodes/SelectWithOther";
 import { VideoHolder } from "./styled/VideoHolder.div";
@@ -184,7 +185,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     } else if (node.inputType === ContentNodeInputType.CHECKBOX) {
       value = e.target.checked;
     } else if (node.inputType === ContentNodeInputType.TEL) {
-      value = (e.target.value || "").trim();
+      value = e; // InputPhoneNumber preps as E164 format
     } else if (node.inputType === ContentNodeInputType.TEXT || node.inputType === ContentNodeInputType.PASSWORD) {
       value = e.target.value;
     } else if (node.assign?.path && typeof node.assign?.value === "function") {
@@ -673,7 +674,23 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     // - Input
     if (node.type === ContentNodeType.INPUT) {
       let innerInput;
-      if (node.inputType === ContentNodeInputType.CHECKBOX) {
+      if (node.inputType === ContentNodeInputType.AGE) {
+        innerInput = (
+          <AgeInput
+            data-test-label={node.label}
+            size={node.attrs?.size}
+            disabled={inputDisabled}
+            value={inputValue != null ? inputValue : ""}
+            isValid={!showInputAsInvalid}
+            onChange={(e) => {
+              inputOnChange(e);
+              // On change so far is just for the address
+              if (typeof node._onChange === "function") node._onChange(e);
+            }}
+            serializations={serializations}
+          />
+        );
+      } else if (node.inputType === ContentNodeInputType.CHECKBOX) {
         innerInput = (
           <Input
             {...node.attrs}
@@ -706,22 +723,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             serializations={serializations}
           />
         );
-      } else if (node.inputType === ContentNodeInputType.AGE) {
-        innerInput = (
-          <AgeInput
-            data-test-label={node.label}
-            size={node.attrs?.size}
-            disabled={inputDisabled}
-            value={inputValue != null ? inputValue : ""}
-            isValid={!showInputAsInvalid}
-            onChange={(e) => {
-              inputOnChange(e);
-              // On change so far is just for the address
-              if (typeof node._onChange === "function") node._onChange(e);
-            }}
-            serializations={serializations}
-          />
-        );
       } else if (node.inputType === ContentNodeInputType.DATE) {
         innerInput = (
           <SelectDatePicker
@@ -739,6 +740,21 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             dateDisabled={node.dateDisabled}
           />
         );
+      } else if (node.inputType === ContentNodeInputType.TEL) {
+        innerInput = (
+          <InputPhoneNumber
+            data-test-label={node.label}
+            disabled={inputDisabled}
+            size={node.attrs?.size}
+            value={inputValue}
+            isValid={!showInputAsInvalid}
+            onChange={(phoneNumber) => {
+              inputOnChange(phoneNumber);
+              if (typeof node._onChange === "function") node._onChange(phoneNumber);
+            }}
+            serializations={serializations}
+          />
+        )
       } else {
         innerInput = (
           <Input
@@ -800,7 +816,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         </div>
       );
     }
-
     // - Select
     if (node.type === ContentNodeType.SELECT) {
       const SelectComponent = node.attrs?.canInputOther ? SelectWithOther : Select;

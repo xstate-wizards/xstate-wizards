@@ -10,7 +10,7 @@ export const machineMapping = createSpell({
   version: "1",
   config: {
     // initial: INTERVIEW_INTRO_STATE,
-    initial: "hobbiesList",
+    initial: "userName",
     title: "Example Interview",
     // exitTo: "/",
     sectionsBar: [],
@@ -129,6 +129,13 @@ export const machineMapping = createSpell({
               assign: { path: "age" },
               validations: ["required"],
             },
+            {
+              type: "input",
+              inputType: "tel",
+              label: "Your Phone Number",
+              assign: { path: "phoneNumber" },
+              validations: ["required", "validPhoneNumber"]
+            }
           ],
         },
         { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
