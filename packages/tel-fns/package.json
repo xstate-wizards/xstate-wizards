@@ -1,0 +1,28 @@
+{
+  "name": "tel-fns",
+  "version": "0.0.1",
+  "author": "Mark Hansen",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "yarn clean && tsc -b tsconfig.json",
+    "prepublish": "NODE_ENV=production yarn run clean && yarn run build",
+    "major": "yarn version --major --no-git-tag-version && yarn publish",
+    "minor": "yarn version --minor --no-git-tag-version && yarn publish",
+    "patch": "yarn version --patch --no-git-tag-version && yarn publish",
+    "test": "jest --runInBand --expand",
+    "test:ci": "jest --runInBand --expand",
+    "yalcpush": "yarn build && yalc push",
+    "yalclink": "echo 'No Links'"
+  },
+  "dependencies": {
+    "google-libphonenumber": "^3.2.30"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "jest": "^27",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.6.4"
+  }
+}
