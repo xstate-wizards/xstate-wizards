@@ -113,6 +113,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   const H6 = serializations?.components?.H6 ?? fallbackComponents.H6;
   const HR = serializations?.components?.HR ?? fallbackComponents.HR;
   const IconCheck = serializations?.components?.IconCheck ?? fallbackComponents.IconCheck;
+  const IconX = serializations?.components?.IconCheck ?? fallbackComponents.IconX;
   const Input: $TSFixMe = serializations?.components?.Input ?? fallbackComponents.Input;
   const Select = serializations?.components?.Select ?? fallbackComponents.Select;
   const Small = serializations?.components?.Small ?? fallbackComponents.Small;
@@ -955,7 +956,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     }
     // - Multi-Select
     if (node.type === ContentNodeType.MULTI_SELECT) {
+      const SelectComponent = node.attrs?.canInputOther ? SelectWithOther : Select;
+      const selectOptions = evalSelectOptions(node.options, { content: contentTree, context: state.context });
       const selections = inputValue || [];
+      const nodeAttrs = omit(node.attrs || {}, ["canInputOther"]);
       return (
         <div className={`content-node__input ${showInputAsInvalid ? "validation-error" : ""}`}>
           {node.label && (
@@ -970,52 +974,110 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
             </label>
           )}
-          {evalSelectOptions(node.options, { content: contentTree, context: state.context }).map((option) => (
-            <div key={option?.value} className="content-node__input">
-              <StyledCheckboxButton
-                ButtonCSS={ButtonCSS} // DEPRECATE
+          {node.inputType === "list" ? (
+            <div>
+              <div>
+                {selections.map((value) => (
+                  <Button
+                    key={value}
+                    {...nodeAttrs}
+                    type="button"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                    onClick={() => inputOnChange(selections.filter((v) => v !== value))}
+                  >
+                    {value} <span><IconX /></span>
+                  </Button>
+                ))}
+              </div>
+              <SelectComponent
                 data-test-label={node.label}
-                data-test-option={option.text}
-                inverted={!selections.includes(option?.value)}
-                onClick={() =>
-                  selections.includes(option?.value)
-                    ? inputOnChange(selections.filter((v) => v !== option?.value))
-                    : inputOnChange(selections.concat(option?.value))
-                }
-                {...node.attrs}
-              >
-                <div className="checkbox">
-                  {selections.includes(option?.value) ? <IconCheck /> : <div className="box" />}
-                </div>
-                <div className="label">{option.text}</div>
-              </StyledCheckboxButton>
-            </div>
-          ))}
-          {node?.attrs?.canSelectNone === true && (
-            <div className="content-node__input">
-              <StyledCheckboxButton
-                ButtonCSS={ButtonCSS} // DEPRECATE
-                data-test-label={node.label}
-                data-test-option="None of the above"
-                inverted={!(selections.length > 0 && selections.filter((str) => str).length === 0)}
-                onClick={() => {
-                  // HACK: If we set an empty array with > 0 length, 'required' validations pass
-                  const emptyArrayWithLength = [];
-                  emptyArrayWithLength.length = 1;
-                  inputOnChange(emptyArrayWithLength);
+                value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
+                disabled={inputDisabled}
+                isValid={!showInputAsInvalid}
+                onChange={(e) => {
+                  const targetValue = e.target.value;
+                  // --- CAST
+                  // If option was num/bool cast it back, otherwise return string/else
+                  let castValue;
+                  if (
+                    selectOptions.find(
+                      ({ value }) => typeof value === "number" && value === Number(targetValue) && !isNaN(Number(targetValue))
+                    ) ||
+                    node.inputType === ContentNodeInputType.NUMBER
+                  ) {
+                    castValue = Number(targetValue);
+                  } else if (
+                    selectOptions.find(({ value }) => typeof value === "boolean" && ["true", "false"].includes(targetValue))
+                  ) {
+                    castValue = Boolean(targetValue);
+                  } else {
+                    castValue = targetValue;
+                  }
+                  // --- SET
+                  inputOnChange(Array.from(new Set(selections.concat(castValue))))
                 }}
-                {...node.attrs}
+                type={node.inputType}
+                {...omit(nodeAttrs, "canInputOther")}
+                serializations={serializations}
               >
-                <div className="checkbox">
-                  {selections.length > 0 && selections.filter((str) => str).length === 0 ? (
-                    <IconCheck />
-                  ) : (
-                    <div className="box" />
-                  )}
-                </div>
-                <div className="label">None of the above</div>
-              </StyledCheckboxButton>
+                <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
+                {selectOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.text}
+                  </option>
+                ))}
+              </SelectComponent>
             </div>
+          ) : (
+            <>
+              {selectOptions.map((option) => (
+                <div key={option?.value} className="content-node__input">
+                  <StyledCheckboxButton
+                    ButtonCSS={ButtonCSS} // DEPRECATE
+                    data-test-label={node.label}
+                    data-test-option={option.text}
+                    inverted={!selections.includes(option?.value)}
+                    onClick={() =>
+                      selections.includes(option?.value)
+                        ? inputOnChange(selections.filter((v) => v !== option?.value))
+                        : inputOnChange(selections.concat(option?.value))
+                    }
+                    {...node.attrs}
+                  >
+                    <div className="checkbox">
+                      {selections.includes(option?.value) ? <IconCheck /> : <div className="box" />}
+                    </div>
+                    <div className="label">{option.text}</div>
+                  </StyledCheckboxButton>
+                </div>
+              ))}
+              {node?.attrs?.canSelectNone === true && (
+                <div className="content-node__input">
+                  <StyledCheckboxButton
+                    ButtonCSS={ButtonCSS} // DEPRECATE
+                    data-test-label={node.label}
+                    data-test-option="None of the above"
+                    inverted={!(selections.length > 0 && selections.filter((str) => str).length === 0)}
+                    onClick={() => {
+                      // HACK: If we set an empty array with > 0 length, 'required' validations pass
+                      const emptyArrayWithLength = [];
+                      emptyArrayWithLength.length = 1;
+                      inputOnChange(emptyArrayWithLength);
+                    }}
+                    {...node.attrs}
+                  >
+                    <div className="checkbox">
+                      {selections.length > 0 && selections.filter((str) => str).length === 0 ? (
+                        <IconCheck />
+                      ) : (
+                        <div className="box" />
+                      )}
+                    </div>
+                    <div className="label">None of the above</div>
+                  </StyledCheckboxButton>
+                </div>
+              )}
+            </>
           )}
           {showInputAsInvalid && (
             <Small className="content-node__input__validation-message">
@@ -1892,6 +1954,7 @@ const fallbackComponents = {
   H6: styled.h6``,
   HR: styled.hr``,
   IconCheck: styled.div``, // TODO: more icons?
+  IconX: styled.div``, // TODO: more icons?
   Input: styled.input``,
   Select: styled.select``,
   Small: styled.small``,
