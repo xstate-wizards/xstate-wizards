@@ -16,7 +16,7 @@ type TInputPhoneNumberProps = $TSFixMe | {
 const FallbackInput = styled.input``;
 const FallbackSelect = styled.select``;
 
-export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, onChange, size, value, ...props }) => {
+export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, onChange, size, value, dataTestId, ...props }) => {
   // SETUP
   // --- styled/component refs
   const Input = props.serializations?.components?.Input ?? FallbackInput;
@@ -60,6 +60,8 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, o
         placeholder="Phone Number"
         value={phoneNumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
+        data-test-id={dataTestId}
+        data-test-label={props["data-test-label"]}
       />
     </StyledInputPhoneNumber>
   );
