@@ -113,7 +113,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   const H6 = serializations?.components?.H6 ?? fallbackComponents.H6;
   const HR = serializations?.components?.HR ?? fallbackComponents.HR;
   const IconCheck = serializations?.components?.IconCheck ?? fallbackComponents.IconCheck;
-  const IconX = serializations?.components?.IconCheck ?? fallbackComponents.IconX;
+  const IconX = serializations?.components?.IconX ?? fallbackComponents.IconX;
   const Input: $TSFixMe = serializations?.components?.Input ?? fallbackComponents.Input;
   const Select = serializations?.components?.Select ?? fallbackComponents.Select;
   const Small = serializations?.components?.Small ?? fallbackComponents.Small;
@@ -981,19 +981,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           )}
           {node.inputType === "list" ? (
             <div>
-              <div>
-                {selections.map((value) => (
-                  <Button
-                    key={value}
-                    {...nodeAttrs}
-                    type="button"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                    onClick={() => inputOnChange(selections.filter((v) => v !== value))}
-                  >
-                    {value} <span><IconX /></span>
-                  </Button>
-                ))}
-              </div>
               <SelectComponent
                 data-test-label={node.label}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
@@ -1020,6 +1007,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   }
                   // --- SET
                   inputOnChange(Array.from(new Set(selections.concat(castValue))))
+                  // --- CLEAR SELECT
+                  e.target.value = "";
                 }}
                 type={node.inputType}
                 {...omit(nodeAttrs, "canInputOther")}
@@ -1032,6 +1021,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   </option>
                 ))}
               </SelectComponent>
+              <StyledMultiSelectButtonList>
+                {selections.map((value) => (
+                  <Button
+                    key={value}
+                    {...nodeAttrs}
+                    type="button"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                    onClick={() => inputOnChange(selections.filter((v) => v !== value))}
+                  >
+                    {selectOptions?.find(o => o.value === value)?.text ?? "N/A"} <span><IconX /></span>
+                  </Button>
+                ))}
+              </StyledMultiSelectButtonList>
             </div>
           ) : (
             <>
@@ -1944,6 +1946,13 @@ const StyledCountdownTimerNode = styled.div`
   justify-content: center;
   margin-top: 0.4em !important;
   margin-bottom: 0.4em !important;
+`;
+
+const StyledMultiSelectButtonList = styled.div`
+  button {
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
 `;
 
 const fallbackComponents = {
