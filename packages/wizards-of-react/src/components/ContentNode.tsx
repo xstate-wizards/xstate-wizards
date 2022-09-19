@@ -981,7 +981,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           )}
           {node.inputType === "list" ? (
             <div>
-              <div>
+              <StyledMultiSelectButtonList>
                 {selections.map((value) => (
                   <Button
                     key={value}
@@ -993,7 +993,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     {value} <span><IconX /></span>
                   </Button>
                 ))}
-              </div>
+              </StyledMultiSelectButtonList>
               <SelectComponent
                 data-test-label={node.label}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
@@ -1020,6 +1020,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   }
                   // --- SET
                   inputOnChange(Array.from(new Set(selections.concat(castValue))))
+                  // --- CLEAR SELECT
+                  e.target.value = "";
                 }}
                 type={node.inputType}
                 {...omit(nodeAttrs, "canInputOther")}
@@ -1944,6 +1946,12 @@ const StyledCountdownTimerNode = styled.div`
   justify-content: center;
   margin-top: 0.4em !important;
   margin-bottom: 0.4em !important;
+`;
+
+const StyledMultiSelectButtonList = styled.div`
+  button {
+    margin-bottom: 6px;
+  }
 `;
 
 const fallbackComponents = {
