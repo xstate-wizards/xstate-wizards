@@ -140,7 +140,7 @@ export const machineMapping = createSpell({
               type: "multiSelect",
               inputType: "list",
               label: "Favorite Colors",
-              assign: { path: "phoneNumber" },
+              assign: { path: "favoriteColors" },
               options: [
                 { text: "Red", value: "red" },
                 { text: "Blue", value: "blue" },

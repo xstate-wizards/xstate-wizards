@@ -197,6 +197,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     // Log for local dev
     logger.info("inputOnChange", pathToValue, value);
     const runValidation = (value) => {
+      logger.debug("runValidation", value);
       // - Child node validations (addresses)
       if (overrideNode && overrideNode.validations) {
         const newValidationInstruction = validateInputValue(
@@ -204,7 +205,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           value,
           serializations?.validations
         );
-        setValidationMap({
+        const newValidationMap = {
           ...validationMap,
           [validationKeyForNode(overrideNode, {
             ctx: state.context,
@@ -214,7 +215,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             dirty: true,
             validationError: newValidationInstruction,
           },
-        });
+        };
+        logger.debug("runValidation: newValidationMap", newValidationMap);
+        setValidationMap(newValidationMap);
         // - Everything else, normal node validations (jsonArray is special because child nodes might have validations)
       } else if (node.validations || node.type === ContentNodeType.JSON_ARRAY) {
         let newValidationInstruction = validateInputValue(node.validations, value, serializations?.validations);
@@ -234,10 +237,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               });
             });
         }
-        setValidationMap({
+        const newValidationMap = {
           ...validationMap,
           [pathToValue]: { dirty: true, validationError: newValidationInstruction },
-        });
+        };
+        logger.debug("runValidation: newValidationMap", newValidationMap);
+        setValidationMap(newValidationMap);
       }
     };
     runValidation(value);
