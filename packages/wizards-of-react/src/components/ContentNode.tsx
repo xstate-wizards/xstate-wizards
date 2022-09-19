@@ -981,19 +981,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           )}
           {node.inputType === "list" ? (
             <div>
-              <StyledMultiSelectButtonList>
-                {selections.map((value) => (
-                  <Button
-                    key={value}
-                    {...nodeAttrs}
-                    type="button"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                    onClick={() => inputOnChange(selections.filter((v) => v !== value))}
-                  >
-                    {value} <span><IconX /></span>
-                  </Button>
-                ))}
-              </StyledMultiSelectButtonList>
               <SelectComponent
                 data-test-label={node.label}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
@@ -1034,6 +1021,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   </option>
                 ))}
               </SelectComponent>
+              <StyledMultiSelectButtonList>
+                {selections.map((value) => (
+                  <Button
+                    key={value}
+                    {...nodeAttrs}
+                    type="button"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                    onClick={() => inputOnChange(selections.filter((v) => v !== value))}
+                  >
+                    {selectOptions?.find(o => o.value === value)?.text ?? "N/A"} <span><IconX /></span>
+                  </Button>
+                ))}
+              </StyledMultiSelectButtonList>
             </div>
           ) : (
             <>
@@ -1950,7 +1950,8 @@ const StyledCountdownTimerNode = styled.div`
 
 const StyledMultiSelectButtonList = styled.div`
   button {
-    margin-bottom: 6px;
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
 `;
 
