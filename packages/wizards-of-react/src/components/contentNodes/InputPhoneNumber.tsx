@@ -29,7 +29,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, o
     if (countryCode && phoneNumber) {
       const parsed = parseTel(`${countryCode}${phoneNumber}`);
       // --- If a valid number, push back change. Should this be looser and just use isPossibleNumber
-      if (parsed.isPossibleNumber || phoneNumber === "") {
+      if (parsed.isPossibleNumber) {
         onChange(`${countryCode}${phoneNumber}`);
         // --- otherwise clear
       } else {
