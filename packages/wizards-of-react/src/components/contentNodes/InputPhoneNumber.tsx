@@ -1,9 +1,9 @@
 // TODO: Refactor all this into its own package prob
-
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { COUNTRY_CALLING_CODES, parseTel } from "tel-fns";
 import { $TSFixMe } from "@xstate-wizards/spells";
+import { logger } from "../../wizardDebugger";
 
 type TInputPhoneNumberProps = $TSFixMe | {
   disabled?: boolean;
@@ -28,8 +28,13 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, o
   useEffect(() => {
     if (countryCode && phoneNumber) {
       const parsed = parseTel(`${countryCode}${phoneNumber}`);
-      // If a valid number, push back change. Should this be looser and just use isPossibleNumber
-      if (parsed.isPossibleNumber) onChange(`${countryCode}${phoneNumber}`);
+      // --- If a valid number, push back change. Should this be looser and just use isPossibleNumber
+      if (parsed.isPossibleNumber || phoneNumber === "") {
+        onChange(`${countryCode}${phoneNumber}`);
+        // --- otherwise clear
+      } else {
+        onChange(null);
+      }
     }
   }, [countryCode, phoneNumber]);
 
