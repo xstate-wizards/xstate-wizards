@@ -113,7 +113,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   const H6 = serializations?.components?.H6 ?? fallbackComponents.H6;
   const HR = serializations?.components?.HR ?? fallbackComponents.HR;
   const IconCheck = serializations?.components?.IconCheck ?? fallbackComponents.IconCheck;
-  const IconX = serializations?.components?.IconCheck ?? fallbackComponents.IconX;
+  const IconX = serializations?.components?.IconX ?? fallbackComponents.IconX;
   const Input: $TSFixMe = serializations?.components?.Input ?? fallbackComponents.Input;
   const Select = serializations?.components?.Select ?? fallbackComponents.Select;
   const Small = serializations?.components?.Small ?? fallbackComponents.Small;
