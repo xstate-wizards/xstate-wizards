@@ -135,6 +135,17 @@ export const machineMapping = createSpell({
               label: "Your Phone Number",
               assign: { path: "phoneNumber" },
               validations: ["required", "validPhoneNumber"]
+            },
+            {
+              type: "multiSelect",
+              inputType: "list",
+              label: "Favorite Colors",
+              assign: { path: "phoneNumber" },
+              options: [
+                { text: "Red", value: "red" },
+                { text: "Blue", value: "blue" },
+              ],
+              validations: []
             }
           ],
         },
