@@ -2,6 +2,7 @@ import { parseTel } from "tel-fns";
 import zxcvbn from "zxcvbn";
 import { TValidationMap } from "../types";
 import { ValdidationTypes } from "../constants/validationConstants";
+import { logger } from "../wizardDebugger";
 
 // VALIDATIONS METHODS
 export const baseValidations: TValidationMap = {
@@ -53,8 +54,10 @@ export const baseValidations: TValidationMap = {
   },
   [ValdidationTypes.validPhoneNumber]: (value, validations) => {
     // TODO: can be a bit smarter with this check + need to handle international?
+    const parsed = parseTel(value)
+    logger.debug("validateInputValue (validPhoneNumber):", { parsed, value });
     const validatePhoneNumber = () =>
-      (!validations.includes("required") && !value) || parseTel(value)?.isValidNumber;
+      (!validations.includes("required") && !value) || parsed?.isValidNumber;
     return !validatePhoneNumber() ? "Invalid phone number." : null;
   },
   [ValdidationTypes.isChecked]: (value) => {
