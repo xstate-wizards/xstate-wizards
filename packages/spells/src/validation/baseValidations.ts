@@ -15,7 +15,7 @@ export const baseValidations: TValidationMap = {
       // if (typeof value === 'number' && value < 0) return false;
       return true;
     };
-    return !validateRequired() ? "You need to fill this in." : null;
+    return !validateRequired() ? "Required." : null;
   },
   [ValdidationTypes.positiveNumber]: (value) => {
     const validatePositiveNumber = () => value > 0;
