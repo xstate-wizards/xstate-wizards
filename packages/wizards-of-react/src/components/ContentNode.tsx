@@ -760,7 +760,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             }}
             serializations={serializations}
           />
-        )
+        );
       } else {
         innerInput = (
           <Input
@@ -993,20 +993,23 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   let castValue;
                   if (
                     selectOptions.find(
-                      ({ value }) => typeof value === "number" && value === Number(targetValue) && !isNaN(Number(targetValue))
+                      ({ value }) =>
+                        typeof value === "number" && value === Number(targetValue) && !isNaN(Number(targetValue))
                     ) ||
                     node.inputType === ContentNodeInputType.NUMBER
                   ) {
                     castValue = Number(targetValue);
                   } else if (
-                    selectOptions.find(({ value }) => typeof value === "boolean" && ["true", "false"].includes(targetValue))
+                    selectOptions.find(
+                      ({ value }) => typeof value === "boolean" && ["true", "false"].includes(targetValue)
+                    )
                   ) {
                     castValue = Boolean(targetValue);
                   } else {
                     castValue = targetValue;
                   }
                   // --- SET
-                  inputOnChange(Array.from(new Set(selections.concat(castValue))))
+                  inputOnChange(Array.from(new Set(selections.concat(castValue))));
                   // --- CLEAR SELECT
                   e.target.value = "";
                 }}
@@ -1030,7 +1033,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     style={{ display: "flex", justifyContent: "space-between" }}
                     onClick={() => inputOnChange(selections.filter((v) => v !== value))}
                   >
-                    {selectOptions?.find(o => o.value === value)?.text ?? "N/A"} <span><IconX /></span>
+                    {selectOptions?.find((o) => o.value === value)?.text ?? "N/A"}{" "}
+                    <span>
+                      <IconX />
+                    </span>
                   </Button>
                 ))}
               </StyledMultiSelectButtonList>
@@ -1706,7 +1712,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     // Disable if...
     const buttonDisabledByHandler = typeof node.disabled === "function" && node.disabled(state.context);
     const buttonDisabledByFreshDelay = node.disabledByFreshDelay && isFresh;
-    const buttonIsDisabled = buttonDisabledByFreshDelay || buttonDisabledByHandler;
+    const buttonDisabledByInvalidation = Object.values(validationMap).some(
+      (validationObject: $TSFixMe) => validationObject.validationError != null
+    );
+    const buttonIsDisabled = buttonDisabledByFreshDelay || buttonDisabledByHandler || buttonDisabledByInvalidation;
     const onButtonClick = (e) => {
       // Prevent native form submission attempts (form disconnection warnings)
       if (e?.preventDefault) e.preventDefault();
