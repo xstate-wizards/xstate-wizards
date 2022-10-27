@@ -107,6 +107,7 @@ export const machineMapping = createSpell({
           assign: "states.humanTestYear",
           validations: ["required", "isCurrentYear"],
         },
+        { type: "button", text: "Back", event: "BACK" },
         { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
       ],
       on: {
