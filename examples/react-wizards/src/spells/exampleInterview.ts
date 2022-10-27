@@ -1,4 +1,6 @@
 import { createLocalId, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@xstate-wizards/spells";
+import _ from "lodash";
+import { assign } from "xstate";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES } from "../models/pet";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
@@ -9,8 +11,8 @@ export const machineMapping = createSpell({
   key: ID_EXAMPLE_INTERVIEW,
   version: "1",
   config: {
-    // initial: INTERVIEW_INTRO_STATE,
-    initial: "userName",
+    initial: INTERVIEW_INTRO_STATE,
+    //initial: "userName",
     title: "Example Interview",
     // exitTo: "/",
     sectionsBar: [],
@@ -23,7 +25,12 @@ export const machineMapping = createSpell({
   schema: {
     type: "object",
     properties: {
-      states: {},
+      states: {
+        type: "object",
+        properties: {
+          showPiTest: { type: ["boolean"], default: false },
+        },
+      },
     },
   },
   states: {
@@ -36,16 +43,35 @@ export const machineMapping = createSpell({
         SUBMIT: "humanTestPi",
       },
     },
+    // broken example showing how if you have an invoke with a timeout that shows an input but doesn't change the total number of nodes, validation won't run
     humanTestPi: {
+      invoke: () => (transition: any) => setTimeout(() => transition({ type: "SHOW_INPUT_TIMEOUT" }), 1000),
       content: [
         { type: "h4", text: "First up are custom validations on inputs! Here's an odd one below." },
         { type: "p", text: "What are the starting digits of Pi?" },
+
         {
-          type: "input",
-          inputType: "text",
-          label: "Pi",
-          assign: "states.humanTestPi",
-          validations: ["required", "startOfPi"],
+          type: "conditional",
+          description: "swap 2 things",
+          conditional: (ctx) => ctx?.states?.showPiTest ?? false,
+          options: {
+            false: [
+              {
+                type: "button",
+                text: "show pi input",
+                event: "CLICKED_PI_BUTTON",
+              },
+            ],
+            true: [
+              {
+                type: "input",
+                inputType: "text",
+                label: "Pi",
+                assign: "states.humanTestPi",
+                validations: ["required", "startOfPi"],
+              },
+            ],
+          },
         },
         { type: "small", text: `HINT: It is not <<<JSON_LOGIC('{"Math.random":[]}')>>>` },
         { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
@@ -53,6 +79,8 @@ export const machineMapping = createSpell({
       on: {
         BACK: INTERVIEW_INTRO_STATE,
         SUBMIT: "humanTestYear",
+        CLICKED_PI_BUTTON: { actions: [assign((ctx: any) => _.set(ctx, "states.showPiTest", true))] },
+        SHOW_INPUT_TIMEOUT: { actions: [assign((ctx: any) => _.set(ctx, "states.showPiTest", true))] },
       },
     },
     humanTestYear: {
@@ -134,7 +162,7 @@ export const machineMapping = createSpell({
               inputType: "tel",
               label: "Your Phone Number",
               assign: { path: "phoneNumber" },
-              validations: ["required", "validPhoneNumber"]
+              validations: ["required", "validPhoneNumber"],
             },
             {
               type: "multiSelect",
@@ -145,8 +173,8 @@ export const machineMapping = createSpell({
                 { text: "Red", value: "red" },
                 { text: "Blue", value: "blue" },
               ],
-              validations: []
-            }
+              validations: [],
+            },
           ],
         },
         { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
