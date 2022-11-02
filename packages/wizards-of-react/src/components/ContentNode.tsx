@@ -134,18 +134,17 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Handler resources, resourcesUpdates value changes
   const transitionResourcesContextWithAssignConfig = (ctx, assignConfig, value?) => {
     const { resources, resourcesUpdates } = applyResourceInputToContext(ctx, assignConfig, value);
-    transition({ type: "ASSIGN_CONTEXT", resources, resourcesUpdates });
+    transition({ type: "ASSIGN_CONTEXT", assignConfig, assignValue: value, resources, resourcesUpdates });
     return { resources, resourcesUpdates };
   };
   // --- Handler direct writes to context (helpful for largely machine state/ui conditionals)
   const transitionContextWithAssignConfig = (ctx, assignConfig) => {
+    const value = typeof assignConfig.value === "function" ? assignConfig.value(ctx) : assignConfig.value;
     transition({
       type: "ASSIGN_CONTEXT",
-      ...set(
-        cloneDeep(ctx),
-        assignConfig.path,
-        typeof assignConfig.value === "function" ? assignConfig.value(ctx) : assignConfig.value
-      ),
+      assignConfig,
+      assignValue: value,
+      ...set(cloneDeep(ctx), assignConfig.path, value),
     });
   };
 
