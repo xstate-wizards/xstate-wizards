@@ -1,7 +1,8 @@
-type TLocalPetModel = {
-  id?: string;
+export type TLocalPetModel = {
+  id: string | number;
   type?: string;
   name?: string;
+  isFavorite?: boolean;
 };
 
 export const PET_TYPES = ["cat", "dog", "hawk", "plant"];

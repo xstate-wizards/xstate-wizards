@@ -72,9 +72,10 @@ export function upsertResourceOnContext(
       throw new Error(`Resource modelName is missing from machine context: '${modelName}'. Cannot setup resource.`);
     }
     const hasResource = ctx.resources?.[modelName]?.[id] != null;
-
+    logger.info("hellooooooo");
     // If a local id & resource is not found
     if (isIdLocal(id)) {
+      logger.info("before local update:", ctx);
       // -- Create resource + resource update CRUD create (and include the relation if exists)
       ctx.resources[modelName][id] = merge(cloneDeep({ id, ...props }), cloneDeep(ctx.resources[modelName][id] || {}));
       ctx.resourcesUpdates[modelName].create = ctx.resourcesUpdates[modelName].create.some((c) => c.id === id)
@@ -82,6 +83,8 @@ export function upsertResourceOnContext(
             c.id === id ? merge(cloneDeep(omitBy(props, omitByRemoveNulls)), c) : c
           )
         : ctx.resourcesUpdates[modelName].create.concat({ id, ...omitBy(props, omitByRemoveNulls) });
+
+      logger.info("after local update: ", ctx);
     } else if (hasResource) {
       // -- Stamp the relation on the resource if it doesn't already have it. Will go on update route as opposed to create
       // -- FILTER NULL values that are machine defaults so they don't linger in resourceUpdates update calls and clear values that may exist but just weren't updated

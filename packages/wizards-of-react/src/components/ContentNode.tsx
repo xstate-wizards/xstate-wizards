@@ -132,6 +132,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // TRANSITION RESOURCES UPDATES
   // ===================
   // --- Handler resources, resourcesUpdates value changes
+  //TODO: change assignConfig to lastAssignConfig, same w value, and push it
   const transitionResourcesContextWithAssignConfig = (ctx, assignConfig, value?) => {
     const { resources, resourcesUpdates } = applyResourceInputToContext(ctx, assignConfig, value);
     transition({ type: "ASSIGN_CONTEXT", assignConfig, assignValue: value, resources, resourcesUpdates });
