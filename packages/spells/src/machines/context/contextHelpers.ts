@@ -72,7 +72,6 @@ export function upsertResourceOnContext(
       throw new Error(`Resource modelName is missing from machine context: '${modelName}'. Cannot setup resource.`);
     }
     const hasResource = ctx.resources?.[modelName]?.[id] != null;
-
     // If a local id & resource is not found
     if (isIdLocal(id)) {
       // -- Create resource + resource update CRUD create (and include the relation if exists)
