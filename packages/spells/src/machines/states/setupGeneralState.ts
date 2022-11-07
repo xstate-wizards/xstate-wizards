@@ -11,6 +11,7 @@ export function setupGeneralState(
   {
     content,
     entry,
+    exit,
     invoke,
     nodeType = ID_GENERAL,
     on,
@@ -47,6 +48,7 @@ export function setupGeneralState(
   // Ex) A user reloads, meaning we're in a state w/o event data that determines an invoked machine's state. The factory function then creates a send('BACK) for the entry when its otherwise null
   // Ex) Look to FilerAddressEditingMachine
   constructedState.entry = entry;
+  constructedState.exit = exit;
 
   constructedState.always = always;
 
@@ -77,6 +79,8 @@ export function setupGeneralState(
   // Deserialize
   // traverse entry/on actions and handle assign templates/json-logic
   if (constructedState.entry) constructedState.entry = deserializeTransitions(constructedState.entry);
+  if (constructedState.exit) constructedState.exit = deserializeTransitions(constructedState.exit);
+
   if (constructedState.on) constructedState.on = deserializeTransitions(constructedState.on);
 
   return constructedState;

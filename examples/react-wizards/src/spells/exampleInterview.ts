@@ -223,6 +223,8 @@ export const machineMapping = createSpell({
       },
     },
     petsEditor: {
+      entry: (ctx, ev) => console.log("entry action"),
+      exit: (ctx, ev) => console.log("exit action"),
       content: [
         {
           type: "h4",
