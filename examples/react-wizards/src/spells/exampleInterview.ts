@@ -1,4 +1,10 @@
-import { createLocalId, createSpell, INTERVIEW_INTRO_STATE, SAVE_STATE } from "@xstate-wizards/spells";
+import {
+  createLocalId,
+  createSpell,
+  INTERVIEW_INTRO_STATE,
+  SAVE_STATE,
+  upsertResourceOnContext,
+} from "@xstate-wizards/spells";
 import _ from "lodash";
 import { assign } from "xstate";
 import { selectHobbies } from "../models/hobby";
@@ -6,7 +12,24 @@ import { getPets, PET_TYPES } from "../models/pet";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
-
+const updateFavoritePet = () =>
+  assign((ctx, ev: any) => {
+    let curctx: any = ctx;
+    if (ev.assignConfig.modelName === "Pet" && ev.assignConfig.path === "isFavorite" && ev.assignValue === true) {
+      Object.values(curctx.resources.Pet).forEach((pet: any) => {
+        if (pet.id !== ev.assignConfig.id) {
+          curctx = upsertResourceOnContext(curctx, {
+            modelName: "Pet",
+            id: pet.id,
+            props: {
+              isFavorite: false,
+            },
+          });
+        }
+      });
+    }
+    return curctx;
+  });
 export const machineMapping = createSpell({
   key: ID_EXAMPLE_INTERVIEW,
   version: "1",
@@ -270,7 +293,7 @@ export const machineMapping = createSpell({
                       inputType: "text",
                       label: "Name",
                       assign: { path: "name" },
-                      validations: ["required"],
+                      validations: [""],
                     },
                     // TODO: { type: "button", text: "Delete", event: { type: "DELETE_PET", data: { id: item.id } } },
                   ],
@@ -285,6 +308,9 @@ export const machineMapping = createSpell({
         ADD_PET: { actions: ["Models.Pet.create"] },
         REMOVE_PET: { actions: ["Models.Pet.delete"] },
         SUBMIT: { target: "hobbiesAsk" },
+        ASSIGN_CONTEXT: {
+          actions: [updateFavoritePet()],
+        },
       },
     },
     hobbiesAsk: {
