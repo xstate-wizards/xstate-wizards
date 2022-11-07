@@ -177,10 +177,12 @@ export type TWizardSerializations = {
 };
 
 export type TContentNodeValidationMap = {
-  [valuePath: string]: {
-    dirty: boolean;
-    validationError: string | null;
-  };
+  [valuePath: string]:
+    | {
+        dirty: boolean;
+        validationError: string | null;
+      }
+    | undefined;
 };
 
 export type TContentNode = {
