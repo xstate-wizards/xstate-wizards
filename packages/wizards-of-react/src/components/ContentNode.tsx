@@ -1714,7 +1714,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     const buttonDisabledByFreshDelay = node.disabledByFreshDelay && isFresh;
     const buttonDisabledByInvalidation =
       node.buttonType === "submit" &&
-      Object.values(validationMap).some((validationObject: $TSFixMe) => validationObject.validationError != null);
+      Object.values(validationMap).some((validationObject: $TSFixMe) => validationObject?.validationError != null);
     const buttonIsDisabled = buttonDisabledByFreshDelay || buttonDisabledByHandler || buttonDisabledByInvalidation;
     const onButtonClick = (e) => {
       // Prevent native form submission attempts (form disconnection warnings)
