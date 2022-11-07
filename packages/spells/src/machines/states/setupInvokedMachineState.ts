@@ -7,7 +7,8 @@ import { deserializeTransitions } from "./deserializeTransitions";
 // TODO: Match meta, on, onDone to xstate type interfaces
 type TSetupInvokedMachineStateProps = {
   context: Function;
-  entry: $TSFixMe;
+  entry?: $TSFixMe;
+  exit?: $TSFixMe; //should be a string or action object or list of action obj
   initial?: string;
   key: string;
   meta?: $TSFixMe;
@@ -22,6 +23,7 @@ type TSetupInvokedMachineStateProps = {
 export function setupInvokedMachineState({
   context, //TODO: we need to call this something else
   entry,
+  exit,
   initial,
   key,
   meta,
@@ -41,6 +43,7 @@ export function setupInvokedMachineState({
   // SETUP
   const constructedState = {
     entry,
+    exit,
     invoke: {
       id: key,
       src: (ctx, event) => {
@@ -87,6 +90,8 @@ export function setupInvokedMachineState({
   };
   // --- Deserialize (traverse entry/on actions and handle assign templates/json-logic)
   if (constructedState.entry) constructedState.entry = deserializeTransitions(constructedState.entry);
+  if (constructedState.exit) constructedState.exit = deserializeTransitions(constructedState.exit);
+
   if (constructedState.on) constructedState.on = deserializeTransitions(constructedState.on);
   if (constructedState.invoke.onDone)
     constructedState.invoke.onDone = deserializeTransitions(constructedState.invoke.onDone);

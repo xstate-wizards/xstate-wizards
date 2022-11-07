@@ -50,6 +50,7 @@ export type TGeneralStateNodeProps = {
   always?: Record<string, any>;
   content: (TContentDefinition | Function | (TContentDefinition | Function)[])[] | Function;
   entry?: any; // Allow machines to entry states that can be setup based on the machine factory function context (ex: missing context data can trigger BACK event immediately)
+  exit?: any; //TODO: should be string or an action object or list of action objects
   invoke?: Record<string, any> | Function;
   nodeType?: string; // Default to ID_GENERAL
   on: Record<string, any>;
