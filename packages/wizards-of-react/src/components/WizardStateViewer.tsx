@@ -43,9 +43,10 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   navigate,
   state,
   transition,
+  translate,
 }) => {
   const [contextOnEntry] = useState(state.context);
-  const contentNodes = typeof meta.content === "function" ? meta.content(state.context) : meta.content || [];
+  const contentNodes = typeof meta.content === "function" ? meta.content(state.context, translate) : meta.content || [];
   const [numContentNodes, setNumContentNodes] = useState(
     countContentNodes({ contentNodes, context: state.context, functions: serializations?.functions })
   );
@@ -181,11 +182,13 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
     navigate(exitTo || machineMeta?.exitTo, { state: { ...(state ?? {}), skipConfirm: true } });
   };
 
+  const NavigationPanel = serializations?.components?.WizardNavigationPanel ?? WizardNavigationPanel;
+
   // RENDER
   return (
     <Fragment key={state.value}>
       {/* Top navigation options panel */}
-      <WizardNavigationPanel
+      <NavigationPanel
         allowStartOver={machineMeta?.allowStartOver}
         allowBack={contentNodes.some((cn) => cn?.attrs?.className === CONTENT_NODE_BACK.attrs.className)}
         exitTo={machineMeta?.exitTo}

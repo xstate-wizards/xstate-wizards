@@ -155,6 +155,17 @@ export type TValidationMap = {
   [validationKey: string]: TInterviewValidation;
 };
 
+export type TWizardNavigationPanelProps = {
+  allowBack: $TSFixMe;
+  allowStartOver: $TSFixMe;
+  exitTo: $TSFixMe;
+  machineMeta: $TSFixMe;
+  serializations: $TSFixMe;
+  navigate: $TSFixMe;
+  onBack: $TSFixMe;
+  onStartOver: $TSFixMe;
+};
+
 export type TWizardSerializations = {
   // --- serialized actions that need to be code
   actions?: Record<string, $TSFixMe>;
@@ -163,6 +174,7 @@ export type TWizardSerializations = {
     A?: React.FunctionComponent;
     SessionInactiveOverlay?: React.FunctionComponent;
     WizardWrap?: React.FunctionComponent;
+    WizardNavigationPanel?: React.FunctionComponent<TWizardNavigationPanelProps>;
     [key: string]: React.FunctionComponent;
   };
   // --- functions for serializing variables in content/conditionals/etc

@@ -10,6 +10,7 @@ import {
   parseDate,
   prepMachineContextWithResources,
   setJsonLogicOperation,
+  TPrepparedSpellMapping,
   TWizardSession,
   updateResourceOnContext,
   upsertResourceOnContext,
@@ -45,6 +46,7 @@ export const WizardRunner = ({
   sessionRequestProgress,
   spellKey,
   spellMap,
+  translate,
   useNavigationBlocker,
 }: TWizardRunnerProps) => {
   // SETUP
@@ -54,6 +56,7 @@ export const WizardRunner = ({
   const [interviewSession, setInterviewSession] = useState<TWizardSession>(null);
   const [showInterviewInactive, setShowInterviewInactive] = useState(false);
   const [initialMachineContext, setInitialMachineContext] = useState<$TSFixMe>();
+
   // --- basic checks
   if (spellMap[spellKey] == null) throw new Error(`spellMap missing spell/machine: '${spellKey}'`);
   // --- serializations
@@ -64,7 +67,7 @@ export const WizardRunner = ({
       Array.from(
         new Set([
           ...Object.values(spellMap)
-            .map((spellMap) => Object.keys(spellMap.models))
+            .map((spell) => Object.keys(spell.models))
             .flat()
             .filter((str) => str),
           ...Object.keys(models),
@@ -96,7 +99,7 @@ export const WizardRunner = ({
     serializations.guards[guardName] = internalGuards[guardName];
   }
 
-  // ON MOUNT
+  // on mount
   useEffect(() => {
     // --- setup debugger
     wizardDebugger.setLogging(debugConfig?.logging);
@@ -269,6 +272,7 @@ export const WizardRunner = ({
         )}
         spellMap={spellMap}
         serializations={serializations}
+        translate={translate}
         navigate={navigate}
         navigationUnblockCheck={navigationUnblockCheck}
         onMachineChange={(state) => {
