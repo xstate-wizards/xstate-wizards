@@ -38,7 +38,13 @@ export function setupInvokedMachineState({
   // VALIDATE
   // TODO: get these working lol
   if (!key) logger.error("Invalid invoke config: Missing 'key'");
-  if (!spellMap[key]) logger.error(`Invalid invoke config: Machine/spell doesn't exist for key '${key}'`);
+
+  const appliedSpellMap = {};
+  Object.entries(spellMap).map(
+    ([key, spell]) => (appliedSpellMap[key] = typeof spell === "function" ? spell() : spell)
+  );
+
+  if (!appliedSpellMap[key]) logger.error(`Invalid invoke config: Machine/spell doesn't exist for key '${key}'`);
 
   // SETUP
   const constructedState = {
@@ -68,13 +74,13 @@ export function setupInvokedMachineState({
 
         const invokedContext = typeof context === "function" ? context?.(ctx, event) : getContextFromJsonLogic(context);
 
-        return spellMap[key].createMachine(
+        return appliedSpellMap[key].createMachine(
           {
             resources: cloneDeep(ctx.resources),
             resourcesUpdates: cloneDeep(ctx.resourcesUpdates),
             ...(invokedContext ?? {}),
           },
-          { initial, spellMap, serializations, meta }
+          { initial, spellMap: appliedSpellMap, serializations, meta }
         );
       },
       onDone: [

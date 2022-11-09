@@ -2042,6 +2042,24 @@
   resolved "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz#80224a6919272f405b87913ca13b92929bdf3c4d"
   integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
+"@xstate-wizards/wizards-of-react@^0.6.12":
+  version "0.6.28"
+  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.28.tgz#d4fd435abc6af8264dcce7f232c7606d7fa915a3"
+  integrity sha512-OLColByxMDrN0w7tzJ+WIkaNYSOEvCpgkQS/QpanhAXMTCUx4zn2rRs4/CTkz6SFTcES4XS7RpsuNqaPzjPCUg==
+  dependencies:
+    "@xstate-wizards/spells" "^0.8.10"
+    "@xstate/react" "1.3.4"
+    date-fns "^2.4.1"
+    lodash "^4.17.20"
+    react-player "^2.10.1"
+    react-use "^17.3.2"
+    styled-components "^5.2.3"
+    tel-fns "^0.0.1"
+    use-places-autocomplete "^3.0.0"
+    uuid "^3.3.3"
+    xstate "4.25.0"
+    zustand "^4.0.0-rc.1"
+
 "@xstate/react@1.3.4":
   version "1.3.4"
   resolved "https://registry.npmjs.org/@xstate/react/-/react-1.3.4.tgz#d79126c9eecc9a1225d553e3421aaad68eb5ee5e"
@@ -6176,6 +6194,11 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-hash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz#73f97f753e7baffc0e2cc9d6e079079744ac82e9"
+  integrity sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==
 
 object-visit@^1.0.0:
   version "1.0.1"

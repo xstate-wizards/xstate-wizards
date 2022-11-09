@@ -260,5 +260,5 @@ export type TPrepparedSpellMapping = {
   createMachine: TCreateMachine;
 };
 export type TSpellMap = {
-  [spellKey: string]: TPrepparedSpellMapping;
+  [spellKey: string]: TPrepparedSpellMapping | (() => TPrepparedSpellMapping);
 };

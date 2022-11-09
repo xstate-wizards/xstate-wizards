@@ -1,6 +1,7 @@
 import { isBefore, subMinutes } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { assign } from "xstate";
+import hash from "object-hash";
 import {
   $TSFixMe,
   createLocalId,
@@ -10,6 +11,7 @@ import {
   parseDate,
   prepMachineContextWithResources,
   setJsonLogicOperation,
+  TPrepparedSpellMapping,
   TWizardSession,
   updateResourceOnContext,
   upsertResourceOnContext,
@@ -54,8 +56,16 @@ export const WizardRunner = ({
   const [interviewSession, setInterviewSession] = useState<TWizardSession>(null);
   const [showInterviewInactive, setShowInterviewInactive] = useState(false);
   const [initialMachineContext, setInitialMachineContext] = useState<$TSFixMe>();
+
+  //Is this the issue?
+  const appliedSpellMap: { [spellKey: string]: TPrepparedSpellMapping } = {};
+
+  Object.entries(spellMap).map(
+    ([key, spell]) => (appliedSpellMap[key] = typeof spell === "function" ? spell() : spell)
+  );
+
   // --- basic checks
-  if (spellMap[spellKey] == null) throw new Error(`spellMap missing spell/machine: '${spellKey}'`);
+  if (appliedSpellMap[spellKey] == null) throw new Error(`spellMap missing spell/machine: '${spellKey}'`);
   // --- serializations
   // --- serializations: actions
   // --- serializations: actions - models
@@ -63,8 +73,8 @@ export const WizardRunner = ({
     () =>
       Array.from(
         new Set([
-          ...Object.values(spellMap)
-            .map((spellMap) => Object.keys(spellMap.models))
+          ...Object.values(appliedSpellMap)
+            .map((spell) => Object.keys(spell.models))
             .flat()
             .filter((str) => str),
           ...Object.keys(models),
@@ -96,7 +106,7 @@ export const WizardRunner = ({
     serializations.guards[guardName] = internalGuards[guardName];
   }
 
-  // ON MOUNT
+  // on mount
   useEffect(() => {
     // --- setup debugger
     wizardDebugger.setLogging(debugConfig?.logging);
@@ -111,7 +121,7 @@ export const WizardRunner = ({
     if (!hydratedResources || !sessionHandled) {
       const hydrateDataAndSession = async () => {
         // 1) --- Resources/models init
-        const resources = await wizardModelsFetching(models, spellMap[spellKey]?.models);
+        const resources = await wizardModelsFetching(models, appliedSpellMap[spellKey]?.models);
         logger.info("Loaded Resources:", resources);
         // 2) --- Session Init (if we have a machine id)
         if (sessionEnabled && debugConfig?.skipSaves) {
@@ -129,7 +139,7 @@ export const WizardRunner = ({
             logger.info("Session Request: Check");
             currentSession = await sessionRequestCheck?.({
               key: spellKey,
-              version: spellMap[spellKey]?.version,
+              version: appliedSpellMap[spellKey]?.version,
             });
           }
           // 2b) --- start if missing or force starting
@@ -140,14 +150,15 @@ export const WizardRunner = ({
             logger.info("Session Request: Start");
             currentSession = await sessionRequestStart({
               key: spellKey,
-              version: spellMap[spellKey]?.version,
+              version: appliedSpellMap[spellKey]?.version,
             });
           }
           // If the session saved uses a machine version beyond our current one, force a reload of the page to get new code bundle
           if (
             currentSession?.version?.split(".")?.[0] != null &&
-            spellMap[spellKey]?.version?.split(".")?.[0] != null &&
-            Number(currentSession?.version?.split(".")?.[0]) > Number(spellMap[spellKey]?.version?.split(".")?.[0])
+            appliedSpellMap[spellKey]?.version?.split(".")?.[0] != null &&
+            Number(currentSession?.version?.split(".")?.[0]) >
+              Number(appliedSpellMap[spellKey]?.version?.split(".")?.[0])
           ) {
             // HACK:  If local machine versions are incorrectly beyond the machine version, a never ending reload cycles starts
             //For now, saving the reload time stamp so we don't keep cycling
@@ -182,7 +193,7 @@ export const WizardRunner = ({
       setInitialMachineContext(
         ((preppedContext) =>
           typeof onWizardContextPrep === "function" ? onWizardContextPrep(preppedContext) : preppedContext)(
-          prepMachineContextWithResources(spellMap[spellKey]?.models, hydratedResources)
+          prepMachineContextWithResources(appliedSpellMap[spellKey]?.models, hydratedResources)
         )
       );
     }
@@ -216,7 +227,7 @@ export const WizardRunner = ({
     // const activeInterviewSession = null;
     const activeInterviewSession = await sessionRequestCheck?.({
       key: spellKey,
-      version: spellMap[spellKey]?.version,
+      version: appliedSpellMap[spellKey]?.version,
     });
     const activeProgressAt = parseDate(activeInterviewSession?.progressAt)?.getTime();
     const cachedLastProgressAt = CACHE_SESSION_LAST_PROGRESS_AT[interviewSession.id] || null;
@@ -243,6 +254,8 @@ export const WizardRunner = ({
   // --- on window focus, check active
   useWindowFocusEffect(checkSesssionIsActive, [checkSesssionIsActive]);
 
+  // const uniqueMachineKey = hash(appliedSpellMap[spellKey]);
+
   // ==========================
   // RENDER
   // ==========================
@@ -253,13 +266,13 @@ export const WizardRunner = ({
         // ~~~~~~a) a machine already called (allows custom machine ctx, createMachine)~~~~~~ removing to simplify api
         // b) a spellMap + spellKey to grab a createMachine function from
         // @ts-ignore
-        machine={spellMap[spellKey]?.createMachine(
+        machine={appliedSpellMap[spellKey]?.createMachine(
           // --- if a on machine context prep function exists, run through that handler (ex: we need this to prep a filer 1 on about you machine)
           initialMachineContext,
           {
             session: interviewSession,
             initial: configInitial,
-            spellMap,
+            spellMap: appliedSpellMap,
             serializations,
             meta: {
               initial: configInitial,
@@ -267,7 +280,13 @@ export const WizardRunner = ({
             },
           }
         )}
-        spellMap={spellMap}
+        // //We set this key field to trigger a render of a new WizardStateMachineManager in case the spell mapping is updated.
+        // //This is necessary because useMachine inside of WizardStateMachineManager only takes in the first machine instance
+        // //passed to it but we need it to accept new instances of machines because copy may change from toggling translation
+        // //languages.
+        // //https://github.com/statelyai/xstate/issues/1101#issuecomment-619949321
+        // key={uniqueMachineKey}
+        spellMap={appliedSpellMap}
         serializations={serializations}
         navigate={navigate}
         navigationUnblockCheck={navigationUnblockCheck}

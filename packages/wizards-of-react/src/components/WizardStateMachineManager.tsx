@@ -84,8 +84,17 @@ const NestedMachineNode = (props) => {
 // <WizardStateMachineManager /> - The Key Component. Manages state changes, session API calls, communicating to <WizardRunner />
 const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManagerProps) => {
   const { useNavigationBlocker } = props;
-  const machine = useMachine(props.machine);
+  logger.info("this is the machine in state machine manager", props.machine);
+
+  //Is this the issue? do we need to lazily create the machine?
+  //useMemo or useCallback
+  const machine = useMachine(props.machine); //this doesn't detect a new machine prop. So it doesn't return a new machine?
   const [state, transition, interpreter] = machine;
+
+  //but it detects the new state I think, or at least the change in state
+  logger.info("this is the interpreter in state machine manager", interpreter);
+  logger.info("this is the state in state machine manager", state);
+
   // @ts-ignore
   const stateMeta = state.meta[Object.keys(state.meta).find((k) => k.includes(state.value))] || {};
   const machineMeta = interpreter?.machine?.meta;
