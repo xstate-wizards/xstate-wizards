@@ -198,7 +198,7 @@ const StyledSpellStates = styled.div`
     padding: 1em 0 4em;
     margin: 0 auto;
     text-align: center;
-    max-width: 960px;
+    max-width: 1120px;
     button {
       margin: 0 4px;
     }

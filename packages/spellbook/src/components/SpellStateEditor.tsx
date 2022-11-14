@@ -168,7 +168,7 @@ export const SpellStateEditor = ({
 const StyledSpellState = styled.div`
   display: flex;
   width: 100%;
-  max-width: 960px;
+  max-width: 1120px;
   margin: 0 auto;
   .spell-state {
     display: flex;

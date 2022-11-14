@@ -77,7 +77,6 @@ export const SpellStatesEditorMiniMap = ({ config, statesList, onConfigUpdate, o
 const StyledSpellStatesMiniMap = styled.div`
   position: sticky;
   top: 30px;
-  min-width: 240px;
   padding: 1em 0 0 1em;
   user-select: none;
   max-height: calc(100vh - 105px);
