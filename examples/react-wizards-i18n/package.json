@@ -1,0 +1,30 @@
+{
+  "name": "xstate-wizards-examples-react-wizards-i18n",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html",
+    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react"
+  },
+  "dependencies": {
+    "@xstate-wizards/spells": "^0.8.6",
+    "@xstate-wizards/wizards-of-react": "^0.6.20",
+    "date-fns": "^2.29.1",
+    "i18next": "^22.0.3",
+    "lodash": "^4.17.21",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-i18next": "^12.0.0",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
+    "xstate": "4.25.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.3.2"
+  }
+}

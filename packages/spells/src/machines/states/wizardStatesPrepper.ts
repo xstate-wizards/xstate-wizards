@@ -18,6 +18,9 @@ type TWizardStatesPrepper = {
   };
 };
 
+//we need an initialization of a translate function before we pass in the actual function
+export const emptyTranslateFunction = (key) => "";
+
 /**
  * wizardStatesPrepper
  */
@@ -99,7 +102,7 @@ export function wizardStatesPrepper({
     if (typeof states[key]?.meta?.content === "function" || Array.isArray(states[key]?.meta?.content)) {
       const contentNodes = Array.isArray(states[key]?.meta?.content)
         ? states[key]?.meta?.content
-        : states[key]?.meta?.content(emptyMachineContext);
+        : states[key]?.meta?.content(emptyMachineContext, emptyTranslateFunction);
       const hasBackEventNode = flattenContentNodes({
         contentNodes,
         context: emptyMachineContext,
