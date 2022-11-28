@@ -156,14 +156,15 @@ export type TValidationMap = {
 };
 
 export type TWizardNavigationPanelProps = {
-  allowBack: $TSFixMe;
-  allowStartOver: $TSFixMe;
-  exitTo: $TSFixMe;
+  allowBack: boolean;
+  allowStartOver: boolean;
+  exitTo: string;
   machineMeta: $TSFixMe;
-  serializations: $TSFixMe;
+  serializations: TWizardSerializations;
+  //TODO: this might be implicitly coupled with react router's navigate function?
   navigate: $TSFixMe;
-  onBack: $TSFixMe;
-  onStartOver: $TSFixMe;
+  onBack: () => void;
+  onStartOver: () => void;
 };
 
 export type TWizardSerializations = {
