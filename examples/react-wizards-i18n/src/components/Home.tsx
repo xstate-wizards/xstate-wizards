@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { spellMap } from "../spells/spellMap";
 import { ID_LANGUAGE_PICKER } from "../spells/languagePicker";
 import { WizardRunner } from "@xstate-wizards/wizards-of-react";
-import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
+import { $TSFixMe, TWizardNavigationPanelProps, TWizardSerializations } from "@xstate-wizards/spells";
 import { useTranslation } from "react-i18next";
 
 import styled from "styled-components";
@@ -71,17 +71,6 @@ export const ConfirmButton: React.FC<TConfirmButtonProps> = ({
       {messagePrompts[messageIndex]}
     </Button>
   );
-};
-
-type TWizardNavigationPanelProps = {
-  allowBack: $TSFixMe;
-  allowStartOver: $TSFixMe;
-  exitTo: $TSFixMe;
-  machineMeta: $TSFixMe;
-  serializations: $TSFixMe;
-  navigate: $TSFixMe;
-  onBack: $TSFixMe;
-  onStartOver: $TSFixMe;
 };
 
 export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
