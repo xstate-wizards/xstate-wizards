@@ -292,9 +292,6 @@ const StyledSpellBookWizardWrap = styled.div`
         cursor: pointer;
         color: ${THEME_COLOR_GRAY};
       }
-      &::before {
-        content: "← Back";
-      }
     }
     & > div.x-wizard__header__navigation-options {
       position: relative;
@@ -365,19 +362,9 @@ const StyledSpellBookWizardWrap = styled.div`
       padding: 2em 1em;
     }
     .x-wizard__body button.x-wizard__header-back-button {
-      // width: 40px;
-      // top: 12px;
-      // &::before {
-      //   content: "←";
-      // }
       // HACK: ON MOBILE, HIDE BACK BUTTON BUT KEEPING IT ON SCREEN FOR BACK TRANSITION HANDLER
-      width: 0;
-      height: 0;
-      top: -1px;
-      left: -1px;
-      &::before {
-        content: "";
-      }
+      // (a different back button is used instead that's inside the dropdown mobile controls)
+      display: none;
     }
     .x-wizard__body div.x-wizard__header__navigation-options {
       top: 12px;
