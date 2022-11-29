@@ -74,6 +74,7 @@ const NestedMachineNode = (props) => {
       meta={meta}
       state={state}
       transition={transition}
+      translate={props.translate}
       machineMeta={props.machineMeta}
       serializations={props.serializations}
       navigate={props.navigate}
@@ -249,6 +250,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
             machine={machine}
             machineMeta={machineMeta}
             serializations={props.serializations}
+            translate={props.translate}
             navigate={props.navigate}
             onMachineChange={props?.onMachineChange}
           />
