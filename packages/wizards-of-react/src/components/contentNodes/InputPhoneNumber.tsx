@@ -5,24 +5,34 @@ import { COUNTRY_CALLING_CODES, parseTel } from "tel-fns";
 import { $TSFixMe } from "@xstate-wizards/spells";
 import { logger } from "../../wizardDebugger";
 
-type TInputPhoneNumberProps = $TSFixMe | {
-  disabled?: boolean;
-  isValid?: boolean;
-  onChange: (value: string) => void;
-  size?: string;
-  value?: string;
-};
+type TInputPhoneNumberProps =
+  | $TSFixMe
+  | {
+      disabled?: boolean;
+      isValid?: boolean;
+      onChange: (value: string) => void;
+      size?: string;
+      value?: string;
+    };
 
 const FallbackInput = styled.input``;
 const FallbackSelect = styled.select``;
 
-export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, onChange, size, value, dataTestId, ...props }) => {
+export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
+  disabled,
+  onChange,
+  size,
+  value,
+  dataTestId,
+  ...props
+}) => {
   // SETUP
   // --- styled/component refs
   const Input = props.serializations?.components?.Input ?? FallbackInput;
   const Select = props.serializations?.components?.Select ?? FallbackSelect;
   // --- state
   const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? "1"}`);
+
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
   // --- onChange
   useEffect(() => {
@@ -38,18 +48,18 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({ disabled, o
     }
   }, [countryCode, phoneNumber]);
 
+  const uniqueCountryCodes = Array.from(new Set(Object.values(COUNTRY_CALLING_CODES)));
+
   // RENDER
   return (
     <StyledInputPhoneNumber>
       <Select disabled={disabled} size={size} value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
-        {Object.keys(COUNTRY_CALLING_CODES)
+        {uniqueCountryCodes
           .sort()
-          .sort((a) => (a === "US" ? -1 : 0))
-          .map((country) => (
-            // @ts-ignore
-            <option key={country} value={COUNTRY_CALLING_CODES[country]}>
-              {/* @ts-ignore */}
-              {country} {COUNTRY_CALLING_CODES[country]}
+          .sort((a) => (a === "+1" ? -1 : 0))
+          .map((countryCode) => (
+            <option key={countryCode} value={countryCode}>
+              {countryCode}
             </option>
           ))}
       </Select>

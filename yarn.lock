@@ -2042,23 +2042,21 @@
   resolved "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz#80224a6919272f405b87913ca13b92929bdf3c4d"
   integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
-"@xstate-wizards/wizards-of-react@^0.6.12":
-  version "0.6.28"
-  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.28.tgz#d4fd435abc6af8264dcce7f232c7606d7fa915a3"
-  integrity sha512-OLColByxMDrN0w7tzJ+WIkaNYSOEvCpgkQS/QpanhAXMTCUx4zn2rRs4/CTkz6SFTcES4XS7RpsuNqaPzjPCUg==
+"@xstate-wizards/spells@0.8.12":
+  version "0.8.12"
+  resolved "https://registry.npmjs.org/@xstate-wizards/spells/-/spells-0.8.12.tgz#1cddb15e15c04c18ca173559b4d9dba56c0bca27"
+  integrity sha512-doIcjznYlkeZOfIeoE7nHyexXbIgSwZ9nseNdb1NYeDgP5V3zfy7DWNki1LSmaOdMFD1+fVv9Kw37wabT7nZ0Q==
   dependencies:
-    "@xstate-wizards/spells" "^0.8.10"
-    "@xstate/react" "1.3.4"
+    acorn "^8.7.1"
     date-fns "^2.4.1"
+    json-logic-js "^2.0.2"
+    json-schema "^0.4.0"
     lodash "^4.17.20"
-    react-player "^2.10.1"
-    react-use "^17.3.2"
-    styled-components "^5.2.3"
     tel-fns "^0.0.1"
-    use-places-autocomplete "^3.0.0"
     uuid "^3.3.3"
     xstate "4.25.0"
     zustand "^4.0.0-rc.1"
+    zxcvbn "^4.4.2"
 
 "@xstate/react@1.3.4":
   version "1.3.4"
@@ -7630,6 +7628,13 @@ tar@^6.0.2, tar@^6.1.0, tar@^6.1.11, tar@^6.1.2:
     minizlib "^2.1.1"
     mkdirp "^1.0.3"
     yallist "^4.0.0"
+
+tel-fns@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.npmjs.org/tel-fns/-/tel-fns-0.0.1.tgz#6a3371eaf9cbd744d36f54af1057349208479fc3"
+  integrity sha512-8uGl4ChO+ddsTDeqrKX+HUdsu3NTj2aKl0x+W1isx5yDBR4i/i3N6oJUGGrCrNf9x091shgK/gfltLezNR0ZZw==
+  dependencies:
+    google-libphonenumber "^3.2.30"
 
 temp-dir@^1.0.0:
   version "1.0.0"
