@@ -69,10 +69,8 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
       const extractedCountryCode = getCountryCodeFromAnnotatedCountryCode(annotatedCountryCode);
       const cleanedPhoneNumber = `${extractedCountryCode}${phoneNumber}`;
       const parsed = parseTel(cleanedPhoneNumber);
-      console.log("cleaned phone number", cleanedPhoneNumber);
       // --- If a valid number, push back change. Should this be looser and just use isPossibleNumber
       if (parsed.isPossibleNumber) {
-        console.log("is parsed possible");
         onChange(cleanedPhoneNumber);
         // --- otherwise clear
       } else {
