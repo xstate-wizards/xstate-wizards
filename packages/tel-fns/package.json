@@ -1,6 +1,6 @@
 {
   "name": "tel-fns",
-  "version": "0.0.3",
+  "version": "0.0.4-jeff.0",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,6 +11,7 @@
     "major": "yarn version --major --no-git-tag-version && yarn publish",
     "minor": "yarn version --minor --no-git-tag-version && yarn publish",
     "patch": "yarn version --patch --no-git-tag-version && yarn publish",
+    "pre": "yarn version --prerelease --preid=$USER --no-git-tag-version && yarn publish",
     "test": "jest --runInBand --expand",
     "test:ci": "jest --runInBand --expand",
     "yalcpush": "yarn build && yalc push",

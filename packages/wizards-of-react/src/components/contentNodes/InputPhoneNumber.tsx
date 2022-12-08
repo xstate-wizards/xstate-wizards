@@ -18,6 +18,26 @@ type TInputPhoneNumberProps =
 const FallbackInput = styled.input``;
 const FallbackSelect = styled.select``;
 
+const DEFAULT_COUNTRY_CODE = "1";
+const DEFAULT_COUNTRY = "US";
+
+//if someone has +1 for example, this might non-deterministically return US or CA. But I'm considering that acceptable
+//since this only happens if someone already had already filled out this input and coming back to revisit their answer,
+//in which case if they notice the mistake they'll change it, and if they don't it's harmless
+const findCountryFromCountryCode = (countryCode: number) => {
+  return Object.keys(COUNTRY_CALLING_CODES).find((key) => COUNTRY_CALLING_CODES[key] === countryCode);
+};
+
+//("US", "1") => "US +1"
+const getAnnotatedCountryCode = (country: string, countryCode: string) => {
+  return `${country} +${countryCode}`;
+};
+
+//("US +1") => "1"
+const getCountryCodeFromAnnotatedCountryCode = (annotatedCountryCode: string) => {
+  return annotatedCountryCode.split(" ")?.[1];
+};
+
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   disabled,
   onChange,
@@ -31,37 +51,52 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   const Input = props.serializations?.components?.Input ?? FallbackInput;
   const Select = props.serializations?.components?.Select ?? FallbackSelect;
   // --- state
-  const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? "1"}`);
+
+  const prefilledCountryCode = parseTel(value).getCountryCode || DEFAULT_COUNTRY_CODE;
+
+  const prefilledCountry = findCountryFromCountryCode(prefilledCountryCode) || DEFAULT_COUNTRY;
+
+  const prefilledAnnotatedCountryCode = getAnnotatedCountryCode(prefilledCountry, prefilledCountryCode);
+
+  const [annotatedCountryCode, setAnnotatedCountryCode] = useState(prefilledAnnotatedCountryCode);
 
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
   // --- onChange
   useEffect(() => {
-    if (countryCode && phoneNumber) {
-      const parsed = parseTel(`${countryCode}${phoneNumber}`);
+    if (annotatedCountryCode && phoneNumber) {
+      const extractedCountryCode = getCountryCodeFromAnnotatedCountryCode(annotatedCountryCode);
+      const cleanedPhoneNumber = `${extractedCountryCode}${phoneNumber}`;
+      const parsed = parseTel(cleanedPhoneNumber);
       // --- If a valid number, push back change. Should this be looser and just use isPossibleNumber
       if (parsed.isPossibleNumber) {
-        onChange(`${countryCode}${phoneNumber}`);
+        onChange(cleanedPhoneNumber);
         // --- otherwise clear
       } else {
         onChange(null);
       }
     }
-  }, [countryCode, phoneNumber]);
-
-  const uniqueCountryCodes = Array.from(new Set(Object.values(COUNTRY_CALLING_CODES)));
+  }, [annotatedCountryCode, phoneNumber]);
 
   // RENDER
   return (
     <StyledInputPhoneNumber>
-      <Select disabled={disabled} size={size} value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
-        {uniqueCountryCodes
+      <Select
+        disabled={disabled}
+        size={size}
+        value={annotatedCountryCode}
+        onChange={(e) => setAnnotatedCountryCode(e.target.value)}
+      >
+        {Object.keys(COUNTRY_CALLING_CODES)
           .sort()
-          .sort((a) => (a === "+1" ? -1 : 0))
-          .map((countryCode) => (
-            <option key={countryCode} value={countryCode}>
-              {countryCode}
-            </option>
-          ))}
+          .sort((a) => (a === "US" ? -1 : 0))
+          .map((country) => {
+            const annotatedCountryCode = getAnnotatedCountryCode(country, COUNTRY_CALLING_CODES[country]);
+            return (
+              <option key={annotatedCountryCode} value={annotatedCountryCode}>
+                {annotatedCountryCode}
+              </option>
+            );
+          })}
       </Select>
       <Input
         disabled={disabled}
