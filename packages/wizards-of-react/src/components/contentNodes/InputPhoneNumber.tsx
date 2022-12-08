@@ -20,9 +20,9 @@ const FallbackSelect = styled.select``;
 
 const DEFAULT_COUNTRY_CODE = "+1";
 
-//if someone has +1 for example, this might non-deterministically return US or CA. But I'm considering that acceptable
-//since this only happens if someone already had already filled out this input and coming back to revisit their answer,
-//in which case if they notice the mistake they'll change it, and if they don't it's harmless
+// This might return the incorrect country for a country code, given that multiple countries can share the same country code.
+// But I'm considering that acceptable since this only happens if someone already had already filled out this input and coming
+// back to revisit their answer, in which case if they notice the mistake they'll change it, and if they don't it's harmless
 const findCountryFromCountryCode = (countryCode: number) => {
   return Object.keys(COUNTRY_CALLING_CODES)
     .sort()
