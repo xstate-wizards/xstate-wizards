@@ -25,7 +25,7 @@
     "react-player": "^2.10.1",
     "react-use": "^17.3.2",
     "styled-components": "^5.2.3",
-    "tel-fns": "^0.0.4-jeff.0",
+    "tel-fns": "0.0.4-jeff.1",
     "use-places-autocomplete": "^3.0.0",
     "uuid": "^3.3.3",
     "xstate": "4.25.0",

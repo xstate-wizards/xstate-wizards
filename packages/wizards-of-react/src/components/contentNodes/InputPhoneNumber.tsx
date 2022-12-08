@@ -18,22 +18,24 @@ type TInputPhoneNumberProps =
 const FallbackInput = styled.input``;
 const FallbackSelect = styled.select``;
 
-const DEFAULT_COUNTRY_CODE = "1";
-const DEFAULT_COUNTRY = "US";
+const DEFAULT_COUNTRY_CODE = "+1";
 
 //if someone has +1 for example, this might non-deterministically return US or CA. But I'm considering that acceptable
 //since this only happens if someone already had already filled out this input and coming back to revisit their answer,
 //in which case if they notice the mistake they'll change it, and if they don't it's harmless
 const findCountryFromCountryCode = (countryCode: number) => {
-  return Object.keys(COUNTRY_CALLING_CODES).find((key) => COUNTRY_CALLING_CODES[key] === countryCode);
+  return Object.keys(COUNTRY_CALLING_CODES)
+    .sort()
+    .sort((a) => (a === "US" ? -1 : 0))
+    .find((key) => COUNTRY_CALLING_CODES[key] === countryCode);
 };
 
-//("US", "1") => "US +1"
+//("US", "+1") => "US +1"
 const getAnnotatedCountryCode = (country: string, countryCode: string) => {
-  return `${country} +${countryCode}`;
+  return `${country} ${countryCode}`;
 };
 
-//("US +1") => "1"
+//("US +1") => "+1"
 const getCountryCodeFromAnnotatedCountryCode = (annotatedCountryCode: string) => {
   return annotatedCountryCode.split(" ")?.[1];
 };
@@ -54,7 +56,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
 
   const prefilledCountryCode = parseTel(value).getCountryCode || DEFAULT_COUNTRY_CODE;
 
-  const prefilledCountry = findCountryFromCountryCode(prefilledCountryCode) || DEFAULT_COUNTRY;
+  const prefilledCountry = findCountryFromCountryCode(prefilledCountryCode);
 
   const prefilledAnnotatedCountryCode = getAnnotatedCountryCode(prefilledCountry, prefilledCountryCode);
 
@@ -67,8 +69,10 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
       const extractedCountryCode = getCountryCodeFromAnnotatedCountryCode(annotatedCountryCode);
       const cleanedPhoneNumber = `${extractedCountryCode}${phoneNumber}`;
       const parsed = parseTel(cleanedPhoneNumber);
+      console.log("cleaned phone number", cleanedPhoneNumber);
       // --- If a valid number, push back change. Should this be looser and just use isPossibleNumber
       if (parsed.isPossibleNumber) {
+        console.log("is parsed possible");
         onChange(cleanedPhoneNumber);
         // --- otherwise clear
       } else {

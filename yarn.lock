@@ -2058,6 +2058,24 @@
     zustand "^4.0.0-rc.1"
     zxcvbn "^4.4.2"
 
+"@xstate-wizards/wizards-of-react@^0.6.12":
+  version "0.6.31"
+  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.31.tgz#19854bc5a14d1b920627d098d057adfe723b51ea"
+  integrity sha512-vTaCu9M91qjBrKWtwbuV98cW+Y6GVqxuSFP584xfUXSsISFRDK4xJRl8jrlifQlujN58EFMYU4EDimL0rrRm8Q==
+  dependencies:
+    "@xstate-wizards/spells" "0.8.12"
+    "@xstate/react" "1.3.4"
+    date-fns "^2.4.1"
+    lodash "^4.17.20"
+    react-player "^2.10.1"
+    react-use "^17.3.2"
+    styled-components "^5.2.3"
+    tel-fns "^0.0.3"
+    use-places-autocomplete "^3.0.0"
+    uuid "^3.3.3"
+    xstate "4.25.0"
+    zustand "^4.0.0-rc.1"
+
 "@xstate/react@1.3.4":
   version "1.3.4"
   resolved "https://registry.npmjs.org/@xstate/react/-/react-1.3.4.tgz#d79126c9eecc9a1225d553e3421aaad68eb5ee5e"
@@ -7633,6 +7651,13 @@ tel-fns@^0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/tel-fns/-/tel-fns-0.0.1.tgz#6a3371eaf9cbd744d36f54af1057349208479fc3"
   integrity sha512-8uGl4ChO+ddsTDeqrKX+HUdsu3NTj2aKl0x+W1isx5yDBR4i/i3N6oJUGGrCrNf9x091shgK/gfltLezNR0ZZw==
+  dependencies:
+    google-libphonenumber "^3.2.30"
+
+tel-fns@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/tel-fns/-/tel-fns-0.0.3.tgz#3eae07c6a6ec7b3eb640c23f8d90484089204e8c"
+  integrity sha512-ILAossBFuUt1ejBtdMzuUOlu9Ds/gukkVPttLGbz62ro2l4NJUzwIaZIoW/sRe4mm7GH/lAniH2FMIemp0O9Jw==
   dependencies:
     google-libphonenumber "^3.2.30"
 
