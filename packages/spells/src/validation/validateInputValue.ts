@@ -9,9 +9,9 @@ import { regexValidations } from "./regexValidations";
 export function validateInputValue(
   validations: TInputValidations = [],
   value?: string | number,
-  serailizedValidations?: TValidationMap
+  serializedValidations?: TValidationMap
 ): string | null {
-  logger.debug("validateInputValue:", { validations, value, serailizedValidations });
+  logger.debug("validateInputValue:", { validations, value, serializedValidations });
 
   // FUNCTIONS PASSED IN (Allows context specific, business logic driven validation err messages to sit under inputs)
   if (validations.some((v) => typeof v === "function")) {
@@ -41,9 +41,9 @@ export function validateInputValue(
 
   // CUSTOM VALIDATIONS (ex: SSN, zipcodes, business logic, etc.)
   for (const validation of validations) {
-    if (typeof validation === "string" && serailizedValidations?.[validation]) {
-      if (serailizedValidations[validation]?.(value, validations))
-        return serailizedValidations[validation](value, validations);
+    if (typeof validation === "string" && serializedValidations?.[validation]) {
+      if (serializedValidations[validation]?.(value, validations))
+        return serializedValidations[validation](value, validations);
     }
   }
 

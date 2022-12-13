@@ -1,6 +1,6 @@
 {
   "name": "tel-fns",
-  "version": "0.0.4-jeff.1",
+  "version": "0.0.5",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
