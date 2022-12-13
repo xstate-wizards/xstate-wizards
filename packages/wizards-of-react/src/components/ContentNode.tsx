@@ -27,10 +27,11 @@ import { logger } from "../wizardDebugger";
 import { COUNTRIES, STATES_US } from "../constants/geo";
 
 import { renderWizardML } from "./contentNodes/renderWizardML";
+
+//TODO: probably extract all of these out
 import { AgeInput } from "./contentNodes/AgeInput";
 import { CountdownTimer } from "./contentNodes/CountdownTimer";
 import { CurrencyInput } from "./contentNodes/CurrencyInput";
-import { InputPhoneNumber } from "./contentNodes/InputPhoneNumber";
 import { SelectDatePicker } from "./contentNodes/SelectDatePicker";
 import { SelectWithOther } from "./contentNodes/SelectWithOther";
 import { VideoHolder } from "./styled/VideoHolder.div";
@@ -127,6 +128,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   const Callout: $TSFixMe = serializations?.components?.Callout ?? fallbackComponents.Callout;
   const CalendarDatePicker = serializations?.components?.CalendarDatePicker ?? fallbackComponents.CalendarDatePicker;
   const FileUploadButton = serializations?.components?.FileUploadButton ?? fallbackComponents.FileUploadButton;
+  const InputPhoneNumber = serializations?.components?.InputPhoneNumber ?? fallbackComponents.InputPhoneNumber;
 
   // ===================
   // TRANSITION RESOURCES UPDATES
@@ -749,6 +751,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         innerInput = (
           <InputPhoneNumber
             data-test-label={node.label}
+            //@ts-ignore
             disabled={inputDisabled}
             size={node.attrs?.size}
             value={inputValue}
@@ -757,7 +760,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               inputOnChange(phoneNumber);
               if (typeof node._onChange === "function") node._onChange(phoneNumber);
             }}
-            serializations={serializations}
           />
         );
       } else {
@@ -1990,4 +1992,5 @@ const fallbackComponents = {
   Callout: styled.div``, // TODO: move into wizard core lib
   CalendarDatePicker: styled.div``, // TODO: move into wizard core lib (maybe not this 1)
   FileUploadButton: styled.div``, // TODO: move into wizard core lib (and maybe not this 1 either)
+  InputPhoneNumber: styled.div``,
 };
