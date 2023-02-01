@@ -10,6 +10,7 @@ export const IN_REVIEW_TRANSITION = {
 export const CONTENT_NODE_BACK = {
   type: "button",
   event: "BACK",
+  text: "← Back",
   attrs: { className: "x-wizard__header-back-button" },
 };
 export const CONTENT_NODE_SUBMIT = {

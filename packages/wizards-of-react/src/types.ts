@@ -24,6 +24,8 @@ export type TWizardRunnerProps = {
     machine?: $TSFixMe;
     progressPercentage?: number;
   }) => void;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  translate?: Function;
   onWizardContextPrep?: (preppedContext: Record<string, any>) => Record<string, any>;
   onWizardChange?: (state: $TSFixMe) => void;
   onWizardError?: $TSFixMe;
@@ -43,10 +45,14 @@ export type TWizardStateMachineManagerProps = {
   onMachineChange?: TWizardRunnerProps["onWizardChange"];
   onMachineFinal?: TWizardRunnerProps["onWizardFinal"];
   onMachineProgress?: TWizardRunnerProps["onWizardProgress"];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  translate: Function;
   useNavigationBlocker?: $TSFixMe;
 };
 
 export type TWizardStateViewerProps = {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  translate: Function;
   machineMeta: any;
   meta: any;
   state: any;

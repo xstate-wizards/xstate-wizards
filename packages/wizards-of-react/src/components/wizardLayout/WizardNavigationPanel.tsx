@@ -1,18 +1,7 @@
 import React, { useState } from "react";
-import { $TSFixMe } from "@xstate-wizards/spells";
+import { $TSFixMe, TWizardNavigationPanelProps } from "@xstate-wizards/spells";
 import { ConfirmButton } from "../contentNodes/ConfirmButton";
 import { logger } from "../../wizardDebugger";
-
-type TWizardNavigationPanelProps = {
-  allowBack: $TSFixMe;
-  allowStartOver: $TSFixMe;
-  exitTo: $TSFixMe;
-  machineMeta: $TSFixMe;
-  serializations: $TSFixMe;
-  navigate: $TSFixMe;
-  onBack: $TSFixMe;
-  onStartOver: $TSFixMe;
-};
 
 export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
   allowBack,

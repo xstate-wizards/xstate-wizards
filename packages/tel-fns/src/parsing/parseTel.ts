@@ -14,7 +14,7 @@ type TParseTel = {
   formatNational: string | null;
   formatOutOfCountryCallingNumberUS: string | null;
   formatOutOfCountryCallingNumber: string | null;
-  getCountryCode: $TSFixMe;
+  getCountryCode: string | null;
   getNationalNumber: $TSFixMe;
   getNumberType: $TSFixMe;
   getNumberTypeEnum: $TSFixMe;
@@ -22,7 +22,9 @@ type TParseTel = {
   inputPhoneNumber: $TSFixMe;
   inputPhoneNumberCleaned: $TSFixMe;
   inputRegionCode: $TSFixMe;
-  isPossibleNumber: boolean;
+  //there is a looser check called isPossibleNumber that's faster & looser, but IMO I advise
+  //against exposing it as we've run into problems with consistency between isPossibleNumber
+  //& isValidNumber
   isValidNumber: boolean;
   isValidNumberForRegion: boolean;
   number: $TSFixMe;
@@ -33,7 +35,7 @@ export const parseTel = (inputPhoneNumber: string, inputRegionCode?: string): TP
   const phoneNumberUtil = require("google-libphonenumber").PhoneNumberUtil.getInstance();
 
   // Evaluate results off the bat so a dev doesn't have to know which instance has which func
-  let inputPhoneNumberCleaned;
+  let inputPhoneNumberCleaned: string;
   let error = null;
   let formatE164 = null;
   let formatInOriginalFormat = null;
@@ -46,37 +48,39 @@ export const parseTel = (inputPhoneNumber: string, inputRegionCode?: string): TP
   let getNumberType = null;
   let getNumberTypeEnum = null;
   let getRegionCodeForNumber = null;
-  let isPossibleNumber = null;
   let isValidNumber = null;
   let isValidNumberForRegion = null;
-  let number: $TSFixMe = null;
+  let phoneNumber: $TSFixMe = null;
 
   // Number Instance Methods
   try {
     // --- clean up non-digits & special characters
     inputPhoneNumberCleaned = inputPhoneNumber.replace(/[^0-9|+]/g, "");
+
     // --- cast w/ lib
-    number = phoneNumberUtil.parseAndKeepRawInput(inputPhoneNumberCleaned, inputRegionCode);
+    //Note: expects country code prepended with "+" but its own getCountryCode method doesn't include the "+"
+    phoneNumber = phoneNumberUtil.parseAndKeepRawInput(inputPhoneNumberCleaned, inputRegionCode);
   } catch (e) {
     error = e;
   }
-  if (number) {
-    getCountryCode = number.getCountryCode();
-    getNationalNumber = number.getNationalNumber();
+  if (phoneNumber) {
+    //this is annoying because the package expects the "+" in front of the area code in parseAndKeepRawInput
+    //but doesn't include it in getCountryCode() by default, so we add it ourselves
+    getCountryCode = `+${phoneNumber.getCountryCode()}`;
+    getNationalNumber = phoneNumber.getNationalNumber();
     // Phone Utils Methods
-    formatE164 = phoneNumberUtil.format(number, PNF.E164);
-    formatInOriginalFormat = phoneNumberUtil.formatInOriginalFormat(number);
-    formatInternational = phoneNumberUtil.format(number, PNF.INTERNATIONAL);
-    formatNational = phoneNumberUtil.format(number, PNF.NATIONAL);
-    formatOutOfCountryCallingNumberUS = phoneNumberUtil.formatOutOfCountryCallingNumber(number, "US");
+    formatE164 = phoneNumberUtil.format(phoneNumber, PNF.E164);
+    formatInOriginalFormat = phoneNumberUtil.formatInOriginalFormat(phoneNumber);
+    formatInternational = phoneNumberUtil.format(phoneNumber, PNF.INTERNATIONAL);
+    formatNational = phoneNumberUtil.format(phoneNumber, PNF.NATIONAL);
+    formatOutOfCountryCallingNumberUS = phoneNumberUtil.formatOutOfCountryCallingNumber(phoneNumber, "US");
     formatOutOfCountryCallingNumber = (regionCode?: string) =>
-      phoneNumberUtil.formatOutOfCountryCallingNumber(number, regionCode);
-    getRegionCodeForNumber = phoneNumberUtil.getRegionCodeForNumber(number);
-    getNumberType = phoneNumberUtil.getNumberType(number);
+      phoneNumberUtil.formatOutOfCountryCallingNumber(phoneNumber, regionCode);
+    getRegionCodeForNumber = phoneNumberUtil.getRegionCodeForNumber(phoneNumber);
+    getNumberType = phoneNumberUtil.getNumberType(phoneNumber);
     getNumberTypeEnum = Object.values(PHONE_NUMBER_TYPES)[getNumberType] ?? PHONE_NUMBER_TYPES.UNKNOWN;
-    isPossibleNumber = phoneNumberUtil.isPossibleNumber(number);
-    isValidNumber = phoneNumberUtil.isValidNumber(number);
-    isValidNumberForRegion = phoneNumberUtil.isValidNumberForRegion(number);
+    isValidNumber = phoneNumberUtil.isValidNumber(phoneNumber);
+    isValidNumberForRegion = phoneNumberUtil.isValidNumberForRegion(phoneNumber);
   }
 
   // Catch all errs so we don't interrupt returning values
@@ -96,9 +100,8 @@ export const parseTel = (inputPhoneNumber: string, inputRegionCode?: string): TP
     inputPhoneNumber,
     inputPhoneNumberCleaned,
     inputRegionCode,
-    isPossibleNumber,
     isValidNumber,
     isValidNumberForRegion,
-    number,
+    number: phoneNumber,
   };
 };

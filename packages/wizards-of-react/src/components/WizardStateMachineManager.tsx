@@ -74,6 +74,7 @@ const NestedMachineNode = (props) => {
       meta={meta}
       state={state}
       transition={transition}
+      translate={props.translate}
       machineMeta={props.machineMeta}
       serializations={props.serializations}
       navigate={props.navigate}
@@ -84,8 +85,10 @@ const NestedMachineNode = (props) => {
 // <WizardStateMachineManager /> - The Key Component. Manages state changes, session API calls, communicating to <WizardRunner />
 const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManagerProps) => {
   const { useNavigationBlocker } = props;
+
   const machine = useMachine(props.machine);
   const [state, transition, interpreter] = machine;
+
   // @ts-ignore
   const stateMeta = state.meta[Object.keys(state.meta).find((k) => k.includes(state.value))] || {};
   const machineMeta = interpreter?.machine?.meta;
@@ -195,6 +198,15 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
 
   // RENDER
   const WizardWrap = props.serializations?.components?.WizardWrap ?? WizardWrapDefault;
+
+  //TODO: ideally shouldn't be handling translations here like this
+  const processedSections = sections?.map((section) =>
+    typeof section.name === "function" ? { ...section, name: section.name(props.translate) } : section
+  );
+
+  const processedTitle =
+    typeof machineMeta?.title === "function" ? machineMeta.title(props.translate) : machineMeta.title;
+
   // --- If interview node
   if (stateMeta.nodeType === ID_GENERAL) {
     return (
@@ -202,15 +214,17 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
         // @ts-expect-error
         key={state.value}
         data-test-id={state.value}
-        title={machineMeta?.title}
+        //pre-process translations
+        title={processedTitle}
+        sections={machineMeta?.sectionsBar ? processedSections : null}
         progress={Math.max(0.01, progressPercentage)}
-        sections={machineMeta?.sectionsBar ? sections : null}
         showResourcesUpdatesWarning={showResourcesUpdatesWarning}
       >
         <WizardStateViewer
           meta={stateMeta}
           state={state}
           transition={transition}
+          translate={props.translate}
           machineMeta={machineMeta}
           serializations={props.serializations}
           navigate={props.navigate}
@@ -223,8 +237,11 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     if (stateMeta.nodeType === spellKey) {
       return (
         <WizardWrap
+          // @ts-expect-error
+          key={state.value}
           data-test-id={state.value}
-          title={machineMeta?.title}
+          //TODO: should this actually be the title of the child spell?
+          title={processedTitle}
           progress={Math.max(0.01, progressPercentage)}
           sections={machineMeta?.sectionsBar ? sections : null}
           showResourcesUpdatesWarning={showResourcesUpdatesWarning}
@@ -233,6 +250,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
             machine={machine}
             machineMeta={machineMeta}
             serializations={props.serializations}
+            translate={props.translate}
             navigate={props.navigate}
             onMachineChange={props?.onMachineChange}
           />
