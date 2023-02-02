@@ -67,7 +67,7 @@ export const WizardRunner = ({
       Array.from(
         new Set([
           ...Object.values(spellMap)
-            .map((spell) => Object.keys(spell.models))
+            .map((spellMapping) => Object.keys(spellMapping.models))
             .flat()
             .filter((str) => str),
           ...Object.keys(models),

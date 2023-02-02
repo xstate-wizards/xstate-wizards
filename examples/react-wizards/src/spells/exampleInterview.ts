@@ -9,6 +9,7 @@ import _ from "lodash";
 import { assign } from "xstate";
 import { selectHobbies } from "../models/hobby";
 import { getPets, PET_TYPES } from "../models/pet";
+import { selectUser } from "../models/user";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
@@ -139,16 +140,18 @@ export const machineMapping = createSpell({
       },
     },
     userName: {
-      content: [
+      content: (ctx) => [
         { type: "h4", text: "Now let's do some editing to a **User** model/resource:" },
         { type: "p", text: "Use a 'resourceEditor' to wrap inputs so it's easier to update values." },
         {
           type: "resourceEditor",
           config: {
             modelName: "User",
-            resourceId: {
-              selectUser: [{ var: ["context"] }, "id"],
-            },
+            // TODO: fix outline mode access/referene of serialized functions
+            resourceId: selectUser(ctx)?.id,
+            // resourceId: {
+            //   selectUser: [{ var: ["context"] }, "id"],
+            // },
             resourceDefaults: {},
           },
           content: [
