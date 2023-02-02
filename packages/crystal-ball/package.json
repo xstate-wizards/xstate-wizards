@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.8.13",
-    "@xstate-wizards/wizards-of-react": "^0.6.34",
+    "@xstate-wizards/wizards-of-react": "^0.6.35",
     "@xstate/graph": "^1.4.2",
     "date-fns": "^2.4.1",
     "lodash": "^4.17.20",
