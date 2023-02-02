@@ -4,7 +4,7 @@
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html",
-    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react"
+    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/crystal-ball"
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.8.6",
