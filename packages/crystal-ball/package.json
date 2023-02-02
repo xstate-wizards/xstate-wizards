@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/crystal-ball",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,9 +21,7 @@
     "@xstate-wizards/wizards-of-react": "^0.6.34",
     "@xstate/graph": "^1.4.2",
     "date-fns": "^2.4.1",
-    "framer-motion": "^6.4.3",
     "lodash": "^4.17.20",
-    "pretty-print-json": "^1.2.5",
     "react-player": "^2.11.0",
     "styled-components": "^5.2.3",
     "xstate": "4.25.0",
