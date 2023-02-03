@@ -159,7 +159,8 @@ const StyledCrystalBallView = styled.div`
 
   .cb-view__viewer {
     width: 100%;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     background: ${wizardTheme.colors.white[600]};
   }
   .cb-view__viewer__header {
