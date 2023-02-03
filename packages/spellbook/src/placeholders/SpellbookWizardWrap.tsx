@@ -282,7 +282,7 @@ const StyledSpellBookWizardWrap = styled.div`
       &:disabled {
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};
       }
@@ -303,7 +303,7 @@ const StyledSpellBookWizardWrap = styled.div`
       &:hover {
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         border-radius: 4px;
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};
@@ -323,7 +323,7 @@ const StyledSpellBookWizardWrap = styled.div`
       left: 1.3em;
       z-index: 0;
       padding: 0.5em;
-      background: ${wizardTheme.colors.brand[900]};
+      background: ${wizardTheme.colors.blue[900]};
       border-radius: 4px;
       box-shadow: 0 4px 16px 0 rgba(228,228,230,1);
       button,
@@ -335,7 +335,7 @@ const StyledSpellBookWizardWrap = styled.div`
         justify-content: flex-start;
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         border-radius: 4px;
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};

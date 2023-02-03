@@ -101,7 +101,7 @@ export const Table = styled.table<TTableCSS>`
       return css`
         tbody > tr:hover {
           cursor: pointer;
-          color: ${wizardTheme.colors.brand[500]};
+          color: ${wizardTheme.colors.blue[500]};
           transition: 150ms;
         }
       `;

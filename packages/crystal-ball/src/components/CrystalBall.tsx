@@ -133,7 +133,7 @@ const StyledCrystalBall = styled.div`
     &.source {
       border: 2px solid #3c5dff;
       & > .node-header {
-        background: ${wizardTheme.colors.brand[500]};
+        background: ${wizardTheme.colors.blue[500]};
         color: white;
       }
     }
@@ -297,9 +297,9 @@ const StyledCrystalBall = styled.div`
   }
   div.outline__component-place-holder,
   div.outline__media-place-holder {
-    background: ${wizardTheme.colors.brand[900]};
-    border: 2px solid ${wizardTheme.colors.brand[800]};
-    color: ${wizardTheme.colors.brand[600]};
+    background: ${wizardTheme.colors.blue[900]};
+    border: 2px solid ${wizardTheme.colors.blue[800]};
+    color: ${wizardTheme.colors.blue[600]};
     border-radius: 4px;
     margin: 0.5em;
     padding: 1em;

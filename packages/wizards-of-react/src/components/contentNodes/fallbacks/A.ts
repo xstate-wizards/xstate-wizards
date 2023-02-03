@@ -7,10 +7,10 @@ export const ACSS = css`
   &,
   &:visited,
   &:active {
-    color: ${wizardTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
   &:hover {
-    color: ${wizardTheme.colors.brand[100]};
+    color: ${wizardTheme.colors.blue[100]};
     text-decoration: none;
     cursor: pointer;
   }

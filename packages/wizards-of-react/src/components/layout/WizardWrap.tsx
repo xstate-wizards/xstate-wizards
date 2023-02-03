@@ -141,7 +141,7 @@ const SharedGlobalWizardWrapCSS = css`
     padding: 0;
   }
   a {
-    color: ${wizardTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
     text-decoration: none;
   }
   &,
@@ -352,7 +352,7 @@ const StyledWizardWrap = styled.div`
     width: 100vw;
     padding: 0.6em 0.25em 0.4em;
     text-align: center;
-    background: ${wizardTheme.colors.brand[900]};
+    background: ${wizardTheme.colors.blue[900]};
     font-size: 13px;
     font-weight: 900;
     color: ${wizardTheme.colors.gray[500]};
@@ -401,7 +401,7 @@ const StyledWizardWrap = styled.div`
       &:disabled {
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};
       }
@@ -422,7 +422,7 @@ const StyledWizardWrap = styled.div`
       &:hover {
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         border-radius: 4px;
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};
@@ -442,7 +442,7 @@ const StyledWizardWrap = styled.div`
       left: 1.3em;
       z-index: ${Z_DROPDOWN_MENU};
       padding: 0.5em;
-      background: ${wizardTheme.colors.brand[900]};
+      background: ${wizardTheme.colors.blue[900]};
       border-radius: 4px;
       box-shadow: ${wizardTheme.effects.shadow[350]};
       button,
@@ -453,7 +453,7 @@ const StyledWizardWrap = styled.div`
         margin: 0.75em 0;
         opacity: 1;
         background: white;
-        border: 2px solid ${wizardTheme.colors.brand[800]};
+        border: 2px solid ${wizardTheme.colors.blue[800]};
         border-radius: 4px;
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};

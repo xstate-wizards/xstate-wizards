@@ -16,9 +16,9 @@ export const Callout = styled.div<{ onClick: Function; textAlign: TextAlign; var
   padding: 0.5em 1em;
   margin-top: 0.5em !important; // override node
   margin-bottom: 1em !important; // override node
-  background: ${wizardTheme.colors.brand[900]};
+  background: ${wizardTheme.colors.blue[900]};
   border-radius: 4px;
-  border: 1px solid ${wizardTheme.colors.brand[700]};
+  border: 1px solid ${wizardTheme.colors.blue[700]};
   box-shadow: ${wizardTheme.effects.shadow[300]};
   ${(p) => (typeof p.onClick === "function" ? "cursor: pointer;" : "")}
   small {

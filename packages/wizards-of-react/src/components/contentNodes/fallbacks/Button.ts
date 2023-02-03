@@ -5,9 +5,9 @@ import { TButtonCSS } from "./types";
 
 export const ButtonCSS = css<TButtonCSS>`
   box-sizing: border-box;
-  background: ${wizardTheme.colors.brand[500]};
-  border: 1px solid ${wizardTheme.colors.brand[500]};
-  border-bottom: 3px solid ${wizardTheme.colors.brand[300]};
+  background: ${wizardTheme.colors.blue[500]};
+  border: 1px solid ${wizardTheme.colors.blue[500]};
+  border-bottom: 3px solid ${wizardTheme.colors.blue[300]};
   color: ${wizardTheme.colors.white[900]};
   path {
     fill: ${wizardTheme.colors.white[900]};
@@ -122,16 +122,16 @@ export const ButtonCSS = css<TButtonCSS>`
         background: ${wizardTheme.colors.white[900]};
         border: 1px solid ${wizardTheme.colors.white[300]};
         border-bottom: 3px solid ${wizardTheme.colors.white[300]};
-        color: ${wizardTheme.colors.brand[500]};
+        color: ${wizardTheme.colors.blue[500]};
         &:disabled {
           border: 1px solid ${wizardTheme.colors.white[500]};
           border-bottom: 3px solid ${wizardTheme.colors.white[300]};
-          color: ${hexToRgba(wizardTheme.colors.brand[300], 0.5)};
+          color: ${hexToRgba(wizardTheme.colors.blue[300], 0.5)};
         }
         &:focus {
           outline: none;
-          border: 1px solid ${wizardTheme.colors.brand[500]};
-          border-bottom: 3px solid ${wizardTheme.colors.brand[300]};
+          border: 1px solid ${wizardTheme.colors.blue[500]};
+          border-bottom: 3px solid ${wizardTheme.colors.blue[300]};
         }
       `;
     }
@@ -232,19 +232,19 @@ export const ButtonCSS = css<TButtonCSS>`
     if (props.inverted) {
       return css`
         background: transparent;
-        border: 1px solid ${wizardTheme.colors.brand[500]};
-        color: ${wizardTheme.colors.brand[500]};
+        border: 1px solid ${wizardTheme.colors.blue[500]};
+        color: ${wizardTheme.colors.blue[500]};
         path {
-          fill: ${wizardTheme.colors.brand[500]};
+          fill: ${wizardTheme.colors.blue[500]};
         }
       `;
     }
     return css`
       &:hover {
-        background: ${wizardTheme.colors.brand[300]};
+        background: ${wizardTheme.colors.blue[300]};
       }
       &:disabled {
-        background: ${wizardTheme.colors.brand[300]};
+        background: ${wizardTheme.colors.blue[300]};
         color: ${hexToRgba(wizardTheme.colors.white[900], 0.5)};
       }
     `;

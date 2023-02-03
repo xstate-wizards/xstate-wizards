@@ -13,7 +13,7 @@ export const wizardTheme = {
     900: "1200px",
   },
   colors: {
-    brand: {
+    blue: {
       100: "#191A9B",
       200: "#2527BC",
       300: "#2C2EE0",

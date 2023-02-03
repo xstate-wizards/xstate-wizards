@@ -1897,7 +1897,7 @@ const StyledCheckboxButton = styled.div<{ ButtonCSS: $TSFixMe; disabled?: boolea
       height: 18px;
       width: 18px;
       border-radius: 4px;
-      border: 1px solid ${wizardTheme.colors.brand[500]};
+      border: 1px solid ${wizardTheme.colors.blue[500]};
       &.radio {
         border-radius: 9px;
       }
@@ -1947,7 +1947,7 @@ const StyledAddressSuggestionsBox = styled.div`
   margin-top: -0.25em;
   margin-bottom: 0.5em;
   padding: 0.25em 0;
-  background: ${wizardTheme.colors.brand[900]};
+  background: ${wizardTheme.colors.blue[900]};
   width: 100%;
   border-radius: 0 0 24px 24px;
   // For some reason, the autocomplete library requires a map be mounted/rendered. This throw away div is for that
@@ -1974,28 +1974,28 @@ const StyledAddressSuggestionsBox = styled.div`
     }
   }
   .address-suggestions__place {
-    background: ${wizardTheme.colors.brand[900]};
-    border: 1px solid ${wizardTheme.colors.brand[800]};
-    border-bottom: 2px solid ${wizardTheme.colors.brand[700]};
-    color: ${wizardTheme.colors.brand[500]};
+    background: ${wizardTheme.colors.blue[900]};
+    border: 1px solid ${wizardTheme.colors.blue[800]};
+    border-bottom: 2px solid ${wizardTheme.colors.blue[700]};
+    color: ${wizardTheme.colors.blue[500]};
   }
   .address-suggestions__close {
     text-align: center;
     text-decoration: underline;
-    color: ${wizardTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
 `;
 
 const StyledResourcesList = styled.div`
   &.empty {
     background: ${wizardTheme.colors.white[900]};
-    border: 2px dashed ${wizardTheme.colors.brand[800]};
+    border: 2px dashed ${wizardTheme.colors.blue[800]};
     border-radius: 6px;
     padding: 1em;
     margin: 0.5em 0;
     text-align: center;
     small {
-      color: ${wizardTheme.colors.brand[600]};
+      color: ${wizardTheme.colors.blue[600]};
     }
   }
 `;
