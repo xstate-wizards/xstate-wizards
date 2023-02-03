@@ -1,13 +1,7 @@
-import { $TSFixMe } from "@xstate-wizards/spells";
 import React, { useRef } from "react";
 import styled, { css } from "styled-components";
-import {
-  THEME_COLOR_BLUE_800,
-  THEME_COLOR_BLUE_900,
-  THEME_COLOR_GRAY,
-  THEME_COLOR_RED,
-  THEME_COLOR_WHITE_OFF,
-} from "../theme";
+import { $TSFixMe } from "@xstate-wizards/spells";
+import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 
 export const SpellBookWizardWrap = ({
   children,
@@ -122,7 +116,7 @@ const SharedSpellBookWizardCSS = css`
   }
   .content-node__input__required-tick {
     margin-left: 3px;
-    color: ${THEME_COLOR_RED};
+    color: ${wizardTheme.colors.red[500]};
   }
   .content-node__input__label {
     font-weight: 500;
@@ -152,7 +146,7 @@ const SharedSpellBookWizardCSS = css`
     }
     &.validation-error {
       .content-node__input__validation-message {
-        color: ${THEME_COLOR_RED};
+        color: ${wizardTheme.colors.red[500]};
       }
     }
     & > label,
@@ -176,7 +170,7 @@ const SharedSpellBookWizardCSS = css`
     &.json-array {
       margin-bottom: 0.5em;
       .json-panel {
-        border: 1px solid ${THEME_COLOR_WHITE_OFF};
+        border: 1px solid ${wizardTheme.colors.white[700]};
         padding: 1em;
         margin-bottom: 1em;
         border-radius: 4px;
@@ -288,9 +282,9 @@ const StyledSpellBookWizardWrap = styled.div`
       &:disabled {
         opacity: 1;
         background: white;
-        border: 2px solid ${THEME_COLOR_BLUE_800};
+        border: 2px solid ${wizardTheme.colors.brand[800]};
         cursor: pointer;
-        color: ${THEME_COLOR_GRAY};
+        color: ${wizardTheme.colors.gray[500]};
       }
     }
     & > div.x-wizard__header__navigation-options {
@@ -309,17 +303,17 @@ const StyledSpellBookWizardWrap = styled.div`
       &:hover {
         opacity: 1;
         background: white;
-        border: 2px solid ${THEME_COLOR_BLUE_800};
+        border: 2px solid ${wizardTheme.colors.brand[800]};
         border-radius: 4px;
         cursor: pointer;
-        color: ${THEME_COLOR_GRAY};
+        color: ${wizardTheme.colors.gray[500]};
       }
       svg {
         height: 18px;
         width: 18px;
         path {
-          fill: ${THEME_COLOR_GRAY};
-          stroke: ${THEME_COLOR_GRAY};
+          fill: ${wizardTheme.colors.gray[500]};
+          stroke: ${wizardTheme.colors.gray[500]};
         }
       }
     }
@@ -329,7 +323,7 @@ const StyledSpellBookWizardWrap = styled.div`
       left: 1.3em;
       z-index: 0;
       padding: 0.5em;
-      background: ${THEME_COLOR_BLUE_900};
+      background: ${wizardTheme.colors.brand[900]};
       border-radius: 4px;
       box-shadow: 0 4px 16px 0 rgba(228,228,230,1);
       button,
@@ -341,10 +335,10 @@ const StyledSpellBookWizardWrap = styled.div`
         justify-content: flex-start;
         opacity: 1;
         background: white;
-        border: 2px solid ${THEME_COLOR_BLUE_800};
+        border: 2px solid ${wizardTheme.colors.brand[800]};
         border-radius: 4px;
         cursor: pointer;
-        color: ${THEME_COLOR_GRAY};
+        color: ${wizardTheme.colors.gray[500]};
       }
     }
   }

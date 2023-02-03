@@ -3,26 +3,10 @@ import { Fragment } from "react";
 import styled from "styled-components";
 import { toDirectedGraph } from "@xstate/graph";
 import { emptyMachineContext, TCreateMachine, TSpellMap } from "@xstate-wizards/spells";
+import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 import { contentNodeToOutlineNode } from "./contentNodeToOutlineNode";
 import { NodeNotes } from "./NodeNotes";
 import { useOutline } from "../data/OutlineStore";
-import {
-  THEME_COLOR_BLUE_500,
-  THEME_COLOR_BLUE_600,
-  THEME_COLOR_BLUE_800,
-  THEME_COLOR_BLUE_900,
-  THEME_COLOR_GRAY_500,
-  THEME_COLOR_GRAY_900,
-  THEME_COLOR_GREEN_300,
-  THEME_COLOR_GREEN_500,
-  THEME_COLOR_RED_300,
-  THEME_COLOR_RED_500,
-  THEME_COLOR_WHITE_300,
-  THEME_COLOR_WHITE_500,
-  THEME_COLOR_WHITE_600,
-  THEME_COLOR_WHITE_700,
-  THEME_COLOR_WHITE_800,
-} from "../theme";
 
 const nodeHighlightsToClassName = (graphNodeId, nodeHighlights): string => {
   return `${nodeHighlights.sourceId === graphNodeId ? "source" : ""} ${
@@ -120,7 +104,7 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
 };
 
 const StyledCrystalBall = styled.div`
-  background: ${THEME_COLOR_WHITE_600};
+  background: ${wizardTheme.colors.white[600]};
   font-size: 12px;
   text-align: left;
   padding: 2em 0;
@@ -129,15 +113,15 @@ const StyledCrystalBall = styled.div`
     &.node {
       background: white;
       border-radius: 12px;
-      border: 2px solid ${THEME_COLOR_WHITE_600};
+      border: 2px solid ${wizardTheme.colors.white[600]};
       margin-bottom: 0.75em;
       & > .node-header {
         padding: 0 1em;
         border-radius: 8px;
-        background: ${THEME_COLOR_WHITE_300};
+        background: ${wizardTheme.colors.white[300]};
         font-size: 10px;
         font-weight: 500;
-        color: ${THEME_COLOR_GRAY_900};
+        color: ${wizardTheme.colors.gray[900]};
       }
       & > *:not(.node-header) {
         padding: 0.1em 1em;
@@ -149,7 +133,7 @@ const StyledCrystalBall = styled.div`
     &.source {
       border: 2px solid #3c5dff;
       & > .node-header {
-        background: ${THEME_COLOR_BLUE_500};
+        background: ${wizardTheme.colors.brand[500]};
         color: white;
       }
     }
@@ -159,7 +143,7 @@ const StyledCrystalBall = styled.div`
     &.target {
       border: 2px solid #17dc83;
       & > .node-header {
-        background: ${THEME_COLOR_GREEN_500};
+        background: ${wizardTheme.colors.green[500]};
         color: white;
       }
     }
@@ -186,7 +170,7 @@ const StyledCrystalBall = styled.div`
       }
     }
     .required-star {
-      color: ${THEME_COLOR_RED_500}
+      color: ${wizardTheme.colors.red[500]}
       font-size: 14px;
       margin-left: 2px;
     }
@@ -201,13 +185,13 @@ const StyledCrystalBall = styled.div`
     }
     .conditional {
       padding: 0 !important;
-      background: ${THEME_COLOR_WHITE_800}
+      background: ${wizardTheme.colors.white[800]}
       border-radius: 4px;
       .conditional__description {
         font-size: 10px;
         font-weight: 900;
-        background: ${THEME_COLOR_WHITE_500};
-        color: ${THEME_COLOR_GRAY_900};
+        background: ${wizardTheme.colors.white[500]};
+        color: ${wizardTheme.colors.gray[900]};
         padding: 2px 6px 0;
         height: 24px;
         display: flex;
@@ -225,14 +209,14 @@ const StyledCrystalBall = styled.div`
         }
       }
       .conditional__section {
-        border: 2px solid ${THEME_COLOR_WHITE_500};
+        border: 2px solid ${wizardTheme.colors.white[500]};
       }
       .conditional__section__title {
         font-size: 10px;
         font-weight: 900;
         padding: 0 6px;
-        background: ${THEME_COLOR_WHITE_500};
-        color: ${THEME_COLOR_GRAY_900};
+        background: ${wizardTheme.colors.white[500]};
+        color: ${wizardTheme.colors.gray[900]};
         display: flex;
         align-items: center;
         height: 20px;
@@ -279,14 +263,14 @@ const StyledCrystalBall = styled.div`
     border-radius: 24px;
     text-align: left;
     &.cancel.target {
-      background: ${THEME_COLOR_RED_300};
+      background: ${wizardTheme.colors.red[300]};
       color: white;
-      border: 2px solid ${THEME_COLOR_RED_300};
+      border: 2px solid ${wizardTheme.colors.red[300]};
     }
     &.save.target {
-      background: ${THEME_COLOR_GREEN_300};
+      background: ${wizardTheme.colors.green[300]};
       color: white;
-      border: 2px solid ${THEME_COLOR_GREEN_300};
+      border: 2px solid ${wizardTheme.colors.green[300]};
     }
   }
   div.node-header {
@@ -302,20 +286,20 @@ const StyledCrystalBall = styled.div`
     padding: 0.4em 1em;
     background: transparent;
     outline: none;
-    border: 1px solid ${THEME_COLOR_GRAY_900};
-    color: ${THEME_COLOR_GRAY_500}
+    border: 1px solid ${wizardTheme.colors.gray[900]};
+    color: ${wizardTheme.colors.gray[500]}
   }
   div.outline__component {
-    border: 2px solid ${THEME_COLOR_WHITE_700};
+    border: 2px solid ${wizardTheme.colors.white[700]};
     border-radius: 4px;
     margin: 0.25em;
     padding: 0.25em;
   }
   div.outline__component-place-holder,
   div.outline__media-place-holder {
-    background: ${THEME_COLOR_BLUE_900};
-    border: 2px solid ${THEME_COLOR_BLUE_800};
-    color: ${THEME_COLOR_BLUE_600};
+    background: ${wizardTheme.colors.brand[900]};
+    border: 2px solid ${wizardTheme.colors.brand[800]};
+    color: ${wizardTheme.colors.brand[600]};
     border-radius: 4px;
     margin: 0.5em;
     padding: 1em;
@@ -328,9 +312,9 @@ const StyledCrystalBall = styled.div`
     }
   }
   div.outline__media-place-holder {
-    background: ${THEME_COLOR_WHITE_800}
-    border: 2px solid ${THEME_COLOR_WHITE_700};
-    color: ${THEME_COLOR_GRAY_900};
+    background: ${wizardTheme.colors.white[800]}
+    border: 2px solid ${wizardTheme.colors.white[700]};
+    color: ${wizardTheme.colors.gray[900]};
     &::before {
       content: "Media Placeholder: ";
     }
