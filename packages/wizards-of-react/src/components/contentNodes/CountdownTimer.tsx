@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import { useInterval } from "react-use";
 import styled from "styled-components";
 import { TWizardSerializations } from "@xstate-wizards/spells";
-import { defaultTheme } from "../../theme";
+import { wizardTheme } from "../../theme";
+import { IconCheck as FallbackIconCheck } from "./fallbacks/Icons";
 
 const FULL_DASH_ARRAY = 283;
 const COUNTDOWN_INTERVAL = 1000;
-
-const FallbackIcon = styled.div``;
 
 const getRemainingPathColor = (timeLeft) => {
   if (timeLeft <= 0) {
@@ -30,7 +29,7 @@ type TCountdownTimerProps = {
 
 export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props }) => {
   // Styled/Component Refs
-  const IconCheck = props.serializations?.components?.IconCheck ?? FallbackIcon;
+  const IconCheck = props.serializations?.components?.IconCheck ?? FallbackIconCheck;
   // State
   const [timePassed, setTimePassed] = useState(COUNTDOWN_INTERVAL);
   const [timeLeft, setTimeLeft] = useState(timer - COUNTDOWN_INTERVAL);

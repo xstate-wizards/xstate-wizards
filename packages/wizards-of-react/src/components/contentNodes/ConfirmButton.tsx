@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
+import { Button as FallbackButton } from "./fallbacks/Button";
 
 type TConfirmButtonProps = {
   buttonType?: string;
@@ -12,8 +12,6 @@ type TConfirmButtonProps = {
   size?: string;
   width?: string;
 };
-
-const FallbackButton = styled.button``;
 
 export const ConfirmButton: React.FC<TConfirmButtonProps> = ({
   buttonType,

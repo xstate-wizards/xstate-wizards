@@ -26,18 +26,66 @@ import { logger } from "../wizardDebugger";
 // TODO: make text with auto suggest? the input for states to better handle other countries?
 import { COUNTRIES, STATES_US } from "../constants/geo";
 
+// COMPONENTS w/ fallbacks
 import { renderWizardML } from "./contentNodes/renderWizardML";
-
+import { wizardTheme } from "../theme";
 //TODO: probably extract all of these out
+// --- preconfigured advanced content nodes
 import { AgeInput } from "./contentNodes/AgeInput";
 import { CountdownTimer } from "./contentNodes/CountdownTimer";
 import { CurrencyInput } from "./contentNodes/CurrencyInput";
 import { SelectDatePicker } from "./contentNodes/SelectDatePicker";
 import { SelectWithOther } from "./contentNodes/SelectWithOther";
-import { VideoHolder } from "./styled/VideoHolder.div";
-import { Card } from "./styled/Card.div";
+import { VideoHolder } from "./styled/VideoHolder";
+import { Card } from "./contentNodes/Card";
 import { ConfirmButton } from "./contentNodes/ConfirmButton";
-import { defaultTheme } from "../theme";
+// --- fallbacks if no serialization provided (mostly for default stylings)
+import { A } from "./contentNodes/fallbacks/A";
+import { Button, ButtonLink, ButtonCSS } from "./contentNodes/fallbacks/Button";
+import { Callout } from "./contentNodes/fallbacks/Callout";
+import { H1, H2, H3, H4, H5, H6 } from "./contentNodes/fallbacks/H";
+import { HR } from "./contentNodes/fallbacks/HR";
+import { IconCheck, IconX } from "./contentNodes/fallbacks/Icons";
+import { Input } from "./contentNodes/fallbacks/Input";
+import { P } from "./contentNodes/fallbacks/P";
+import { Select } from "./contentNodes/fallbacks/Select";
+import { Small } from "./contentNodes/fallbacks/Small";
+import { Table } from "./contentNodes/fallbacks/Table";
+import { Textarea } from "./contentNodes/fallbacks/Textarea";
+import { InputPhoneNumber } from "./contentNodes/InputPhoneNumber";
+
+const fallbackComponents = {
+  // styled
+  A,
+  P,
+  Button,
+  ButtonLink,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  HR,
+  Input,
+  Select,
+  Small,
+  Table,
+  Textarea,
+  // icons
+  IconCheck, // TODO: more icons?
+  IconX, // TODO: more icons?
+  // advanced components
+  Callout,
+  InputPhoneNumber,
+  // TODO: advanced components
+  ResourcePanel: styled.div``, // TODO: move into wizard core lib (might want to go off of model loader schemas/configs)
+  CollapsiblePanel: styled.div``, // TODO: move into wizard core lib
+  CalendarDatePicker: styled.div``, // TODO: move into wizard core lib (maybe not this 1)
+  FileUploadButton: styled.input``, // TODO: move into wizard core lib (and maybe not this 1 either)
+  // DEPRECATE
+  ButtonCSS,
+};
 
 declare global {
   interface Window {
@@ -1964,33 +2012,3 @@ const StyledMultiSelectButtonList = styled.div`
     margin-bottom: 3px;
   }
 `;
-
-const fallbackComponents = {
-  A: styled.a``,
-  P: styled.p``,
-  Button: styled.button``,
-  ButtonLink: styled.a``,
-  H1: styled.h1``,
-  H2: styled.h2``,
-  H3: styled.h3``,
-  H4: styled.h4``,
-  H5: styled.h5``,
-  H6: styled.h6``,
-  HR: styled.hr``,
-  IconCheck: styled.div``, // TODO: more icons?
-  IconX: styled.div``, // TODO: more icons?
-  Input: styled.input``,
-  Select: styled.select``,
-  Small: styled.small``,
-  Table: styled.table``,
-  Textarea: styled.textarea``,
-  // TODO: weave these components more elegantly into the wizard lib
-  // DEPRECATE THIS ButtonCSS. Doing it to get by for checkboxes
-  ButtonCSS: css``,
-  ResourcePanel: styled.div``, // TODO: move into wizard core lib (might want to go off of model loader schemas/configs)
-  CollapsiblePanel: styled.div``, // TODO: move into wizard core lib
-  Callout: styled.div``, // TODO: move into wizard core lib
-  CalendarDatePicker: styled.div``, // TODO: move into wizard core lib (maybe not this 1)
-  FileUploadButton: styled.div``, // TODO: move into wizard core lib (and maybe not this 1 either)
-  InputPhoneNumber: styled.div``,
-};

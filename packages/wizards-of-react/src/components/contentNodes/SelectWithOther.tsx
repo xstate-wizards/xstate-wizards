@@ -1,12 +1,11 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import styled from "styled-components";
-import { defaultTheme } from "../../theme";
+import { wizardTheme } from "../../theme";
 import { CurrencyInput } from "./CurrencyInput";
+import { Input as FallbackInput } from "./fallbacks/Input";
+import { Select as FallbackSelect } from "./fallbacks/Select";
 
 const OTHER_VALUE = "__OTHER__";
-
-const FallbackInput = styled.input``;
-const FallbackSelect = styled.select``;
 
 export const SelectWithOther = ({ onChange, children, ...props }) => {
   // Styled/Component Refs
