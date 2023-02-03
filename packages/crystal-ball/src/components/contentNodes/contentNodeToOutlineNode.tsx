@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 import { ContentNodeType, evalForEachItems, evalSelectOptions } from "@xstate-wizards/spells";
 import { renderWizardML } from "@xstate-wizards/wizards-of-react";
 
-import { OutlineCondVisibility, useOutline } from "../data/OutlineStore";
+import { OutlineCondVisibility, useOutline } from "../../data/OutlineStore";
 
 const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditionalVisibility }) => {
   // Allow parent viewer to set a default hide/show option to condense interviews for easier skimming

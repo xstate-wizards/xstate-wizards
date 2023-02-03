@@ -2,10 +2,10 @@ import { get } from "lodash";
 import { Fragment } from "react";
 import styled from "styled-components";
 import { toDirectedGraph } from "@xstate/graph";
-import { emptyMachineContext, TCreateMachine, TSpellMap } from "@xstate-wizards/spells";
+import { emptyMachineContext, TSpellMap } from "@xstate-wizards/spells";
 import { wizardTheme } from "@xstate-wizards/wizards-of-react";
-import { contentNodeToOutlineNode } from "./contentNodeToOutlineNode";
-import { NodeNotes } from "./NodeNotes";
+import { contentNodeToOutlineNode } from "./contentNodes/contentNodeToOutlineNode";
+import { NodeNotes } from "./contentNodes/NodeNotes";
 import { useOutline } from "../data/OutlineStore";
 
 const nodeHighlightsToClassName = (graphNodeId, nodeHighlights): string => {
