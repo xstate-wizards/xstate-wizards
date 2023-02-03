@@ -4,7 +4,7 @@ import { useMachine, useService } from "@xstate/react";
 import { ID_GENERAL } from "@xstate-wizards/spells";
 
 import { WizardStateViewer } from "./WizardStateViewer";
-import { WizardWrapDefault } from "./wizardLayout/WizardWrapper";
+import { WizardWrapFrame } from "./layout/WizardWrap";
 import { logger } from "../wizardDebugger";
 import { TWizardStateMachineManagerProps } from "../types";
 
@@ -197,7 +197,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     );
 
   // RENDER
-  const WizardWrap = props.serializations?.components?.WizardWrap ?? WizardWrapDefault;
+  const WizardWrap = props.serializations?.components?.WizardWrap ?? WizardWrapFrame;
 
   //TODO: ideally shouldn't be handling translations here like this
   const processedSections = sections?.map((section) =>

@@ -52,7 +52,7 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
 
 const Container = styled.div`
   display: flex;
-  @media (max-width: ${(props) => defaultTheme.breakpoints[500]}) {
+  @media (max-width: ${(props) => wizardTheme.breakpoints[500]}) {
     flex-direction: column;
   }
   & > *:first-child {
@@ -62,7 +62,7 @@ const Container = styled.div`
   & > *:nth-child(2) {
     flex-grow: 1;
 
-    @media (min-width: ${(props) => defaultTheme.breakpoints[500]}) {
+    @media (min-width: ${(props) => wizardTheme.breakpoints[500]}) {
       margin-left: 20px;
     }
   }

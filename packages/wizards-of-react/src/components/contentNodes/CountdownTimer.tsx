@@ -94,15 +94,15 @@ const StyledCountdownTimer = styled.div`
 
   .countdown__path-elapsed {
     stroke-width: 7px;
-    stroke: ${defaultTheme.colors.brand[900]};
+    stroke: ${wizardTheme.colors.brand[900]};
     transition: 1s linear all;
   }
   .countdown__path-elapsed.done {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
     stroke: currentColor;
   }
   .countdown__path-elapsed.progressing {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
   }
 
   .countdown__path-remaining {
@@ -115,10 +115,10 @@ const StyledCountdownTimer = styled.div`
     stroke: currentColor;
   }
   .countdown__path-remaining.done {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
   }
   .countdown__path-remaining.progressing {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
   }
 
   .countdown__label {
@@ -131,12 +131,12 @@ const StyledCountdownTimer = styled.div`
     justify-content: center;
     font-size: 24px;
     font-weight: 700;
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
     svg {
       height: 24px;
       width: 24px;
       path {
-        fill: ${defaultTheme.colors.brand[500]};
+        fill: ${wizardTheme.colors.brand[500]};
       }
     }
   }

@@ -44,7 +44,7 @@ const StyledCurrencyInput = styled.div`
     padding-left: 1.4em;
   }
   span {
-    color: ${(props) => defaultTheme.colors.gray[900]};
+    color: ${(props) => wizardTheme.colors.gray[900]};
   }
 `;
 

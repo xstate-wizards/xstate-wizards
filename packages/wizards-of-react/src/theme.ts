@@ -1,5 +1,5 @@
 // TODO: find a better way to deal w/ styling
-export const defaultTheme = {
+export const wizardTheme = {
   breakpoints: {
     100: "240px",
     200: "360px",

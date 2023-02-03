@@ -93,22 +93,6 @@ declare global {
   }
 }
 
-// Take json-logic key/values and eval (ex: if we want to grab an id off content tree)
-const transformEventDataWithJsonLogic = (eventData, { context, content }) => {
-  const evaluatedEventData = cloneDeep(eventData);
-  for (const key in evaluatedEventData) {
-    if (evaluatedEventData[key]?.type === "jsonLogic" && isJsonLogic(evaluatedEventData[key]?.jsonLogic)) {
-      try {
-        const newDataValue = evalJsonLogic(evaluatedEventData[key].jsonLogic, { context, content });
-        evaluatedEventData[key] = newDataValue;
-      } catch {
-        // do nothing if we can't eval, move on
-      }
-    }
-  }
-  return evaluatedEventData;
-};
-
 /**
  *  <ContentNode />
  *  Component that renders based on the interview config type with lots of extra stuff happening.
@@ -1232,6 +1216,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                       if (node.config.schema[key].type === ContentNodeType.SELECT) {
                         return (
                           <Select
+                            // @ts-expect-error
                             size={node.attrs?.size || "sm"}
                             value={json[key]}
                             onChange={(e) =>
@@ -1872,13 +1857,29 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   return null;
 };
 
+// Take json-logic key/values and eval (ex: if we want to grab an id off content tree)
+const transformEventDataWithJsonLogic = (eventData, { context, content }) => {
+  const evaluatedEventData = cloneDeep(eventData);
+  for (const key in evaluatedEventData) {
+    if (evaluatedEventData[key]?.type === "jsonLogic" && isJsonLogic(evaluatedEventData[key]?.jsonLogic)) {
+      try {
+        const newDataValue = evalJsonLogic(evaluatedEventData[key].jsonLogic, { context, content });
+        evaluatedEventData[key] = newDataValue;
+      } catch {
+        // do nothing if we can't eval, move on
+      }
+    }
+  }
+  return evaluatedEventData;
+};
+
 const StyledInlineButtonWrapper = styled.div`
   display: flex;
   margin: 0 0 0.6em 0.2em;
   & > div {
     align-self: flex-end;
   }
-  @media (max-width: ${defaultTheme.breakpoints[500]}) {
+  @media (max-width: ${wizardTheme.breakpoints[500]}) {
     margin: 0.6em 0;
   }
 `;
@@ -1896,7 +1897,7 @@ const StyledCheckboxButton = styled.div<{ ButtonCSS: $TSFixMe; disabled?: boolea
       height: 18px;
       width: 18px;
       border-radius: 4px;
-      border: 1px solid ${defaultTheme.colors.brand[500]};
+      border: 1px solid ${wizardTheme.colors.brand[500]};
       &.radio {
         border-radius: 9px;
       }
@@ -1921,7 +1922,7 @@ const StyledImageWrapper = styled.div<{ shadow?: boolean }>`
   img {
     max-width: 100%;
     ${(props) => {
-      if (props.shadow) return `box-shadow: ${defaultTheme.effects.shadow[350]}`;
+      if (props.shadow) return `box-shadow: ${wizardTheme.effects.shadow[350]}`;
     }}
   }
 `;
@@ -1946,7 +1947,7 @@ const StyledAddressSuggestionsBox = styled.div`
   margin-top: -0.25em;
   margin-bottom: 0.5em;
   padding: 0.25em 0;
-  background: ${defaultTheme.colors.brand[900]};
+  background: ${wizardTheme.colors.brand[900]};
   width: 100%;
   border-radius: 0 0 24px 24px;
   // For some reason, the autocomplete library requires a map be mounted/rendered. This throw away div is for that
@@ -1973,28 +1974,28 @@ const StyledAddressSuggestionsBox = styled.div`
     }
   }
   .address-suggestions__place {
-    background: ${defaultTheme.colors.brand[900]};
-    border: 1px solid ${defaultTheme.colors.brand[800]};
-    border-bottom: 2px solid ${defaultTheme.colors.brand[700]};
-    color: ${defaultTheme.colors.brand[500]};
+    background: ${wizardTheme.colors.brand[900]};
+    border: 1px solid ${wizardTheme.colors.brand[800]};
+    border-bottom: 2px solid ${wizardTheme.colors.brand[700]};
+    color: ${wizardTheme.colors.brand[500]};
   }
   .address-suggestions__close {
     text-align: center;
     text-decoration: underline;
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.brand[500]};
   }
 `;
 
 const StyledResourcesList = styled.div`
   &.empty {
-    background: ${defaultTheme.colors.white[900]};
-    border: 2px dashed ${defaultTheme.colors.brand[800]};
+    background: ${wizardTheme.colors.white[900]};
+    border: 2px dashed ${wizardTheme.colors.brand[800]};
     border-radius: 6px;
     padding: 1em;
     margin: 0.5em 0;
     text-align: center;
     small {
-      color: ${defaultTheme.colors.brand[600]};
+      color: ${wizardTheme.colors.brand[600]};
     }
   }
 `;
