@@ -5,6 +5,7 @@ import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 import { TSpellMap } from "@xstate-wizards/spells";
 import { TCrystalBallViewSections, TCrystalBallViewSectionSpellConfig } from "../types";
 import { CrystalBall } from "./CrystalBall";
+import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS.css";
 
 type TCrystalBallViewProps = {
   sections: TCrystalBallViewSections;
@@ -21,6 +22,8 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
     // --- set params
     const params = new URLSearchParams();
     params.set("spellKey", spellOutline.spellKey);
+    // --- update url
+    window.history.replaceState({}, "", `${location.pathname}?${params}`);
     // --- set focus/machine, reset target node highlighting
     setFocusedSpellKey(spellOutline.spellKey);
   };
@@ -45,7 +48,7 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
       <div className="cb-view__sections">
         <div className="cb-view__sections__header">
           <div>
-            <h1>Crystal Ball</h1>
+            <h1>🔮</h1>
           </div>
         </div>
         {sections.map(
@@ -87,25 +90,29 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
 };
 
 const StyledCrystalBallView = styled.div`
+  ${SharedCrystalBallCSS}
   display: flex;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   .cb-view__sections {
     width: 360px;
     max-width: 360px;
-    height: 100%;
     overflow: scroll;
     padding: 0;
     background: ${wizardTheme.colors.white[800]};
     display: flex;
     flex-direction: column;
     .cb-view__sections__header {
-      width: 100%;
       padding: 0.25em 1em;
       background: ${wizardTheme.colors.white[700]};
       border-bottom: 2px solid ${wizardTheme.colors.white[500]};
       margin-bottom: 0.5em;
+      h1 {
+        text-align: center;
+        flex-grow: 1;
+      }
       h6 {
         color: ${wizardTheme.colors.gray[700]};
       }
@@ -120,40 +127,58 @@ const StyledCrystalBallView = styled.div`
         font-weight: 500;
       }
     }
-    .cb-view__section {
-      margin: 0.5em 1em;
-      &__header {
-        margin-bottom: 0.5em;
-      }
-      & > button,
-      small {
-        display: flex;
-        width: 100%;
-        margin-bottom: 0.5em;
+  }
+  .cb-view__section {
+    margin: 0.5em 1em;
+    & > button,
+    small {
+      display: flex;
+      width: 100%;
+      margin-bottom: 0.5em;
+    }
+    button {
+      color: ${wizardTheme.colors.blue[500]};
+      border-color: ${wizardTheme.colors.blue[500]};
+      padding: 0.3em 0.6em;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      &:disabled {
+        background: ${wizardTheme.colors.blue[500]};
+        color: white;
       }
     }
+  }
+  .cb-view__section__header {
+    margin-bottom: 0.5em;
+    font-size: 1.25em;
+    line-height: 1.5em;
+    font-weight: 600;
+    height: 24px;
   }
 
   .cb-view__viewer {
     width: 100%;
     overflow: scroll;
     background: ${wizardTheme.colors.white[600]};
-    .cb-view__viewer__header {
-      background: ${wizardTheme.colors.white[500]};
-      width: 100%;
-      padding: 0.25em 1em;
-      display: flex;
-      justify-content: space-between;
-      span {
-        &:first-of-type > small {
-          color: ${wizardTheme.colors.gray[900]};
-        }
+  }
+  .cb-view__viewer__header {
+    background: ${wizardTheme.colors.white[300]};
+    width: 100%;
+    padding: 0.25em 1em;
+    display: flex;
+    justify-content: space-between;
+    height: 22px;
+    span {
+      &:first-of-type > small {
+        color: ${wizardTheme.colors.gray[900]};
+        font-size: 13px;
       }
     }
-    .cb-view__viewer__body {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  }
+  .cb-view__viewer__body {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
   }
 `;

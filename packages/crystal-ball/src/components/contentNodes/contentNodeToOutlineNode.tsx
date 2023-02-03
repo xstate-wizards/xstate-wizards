@@ -1,84 +1,26 @@
 import { get, isEqual } from "lodash";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import ReactPlayer from "react-player";
 import { ContentNodeType, evalForEachItems, evalSelectOptions } from "@xstate-wizards/spells";
 import { renderWizardML } from "@xstate-wizards/wizards-of-react";
+import { ConditionalNode } from "./ConditionalNode";
 
-import { OutlineCondVisibility, useOutline } from "../../data/OutlineStore";
-
-const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditionalVisibility }) => {
-  // Allow parent viewer to set a default hide/show option to condense interviews for easier skimming
-  const [show, setShow] = useState(
-    contentNode.options ? OutlineCondVisibility.hide : initConditionalVisibility || OutlineCondVisibility.all
-  );
-  return (
-    <div className="conditional">
-      <div className="conditional__description">
-        <span>CONDITIONAL UI: {contentNode.description}</span>
-        <span className="conditional__description__toggles">
-          {contentNode.options ? (
-            <select onChange={(ev) => setShow(ev.target.value)} value={show}>
-              <option value="all">All</option>
-              <option value="hide">Hide</option>
-              <option disabled>---</option>
-              {Object.keys(contentNode.options).map((key) => (
-                <option key={key}>{key}</option>
-              ))}
-            </select>
-          ) : (
-            <>
-              <button className={show === "all" ? "active" : ""} onClick={() => setShow(OutlineCondVisibility.all)}>
-                All
-              </button>
-              <button className={show === "hide" ? "active" : ""} onClick={() => setShow(OutlineCondVisibility.hide)}>
-                Hide
-              </button>
-            </>
-          )}
-        </span>
-      </div>
-      {contentNode.hasOwnProperty("true") && ["all", "true"].includes(show) && (
-        <div className="conditional__section">
-          <div className="conditional__section__title">TRUE →</div>
-          <div className="conditional__section__nodes">
-            {(contentNode.true || []).map((newNode, nci) => (
-              <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
-            ))}
-          </div>
-        </div>
-      )}
-      {contentNode.hasOwnProperty("false") && ["all", "false"].includes(show) && (
-        <div className="conditional__section">
-          <div className="conditional__section__title">FALSE →</div>
-          <div className="conditional__section__nodes">
-            {(contentNode.false || []).map((newNode, nci) => (
-              <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
-            ))}
-          </div>
-        </div>
-      )}
-      {contentNode.hasOwnProperty("options") &&
-        Object.entries(contentNode.options)
-          .filter(([key]) => show === "all" || show === key)
-          .map(([key, optionNode], index) => (
-            <div key={`${key}-${index}`} className="conditional__section">
-              <div className="conditional__section__title">{key} →</div>
-              <div className="conditional__section__nodes">
-                {/* @ts-ignore */}
-                {(optionNode || []).map((newNode, nci) => (
-                  <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
-                ))}
-              </div>
-            </div>
-          ))}
-    </div>
-  );
+type TContentNodeToOutlineNodeParams = {
+  contentNode: any;
+  contentNodeIndex: any;
+  context: any;
+  graphJSON: any;
+  outliner: any; // TODO
 };
 
 // These params are a mess. clean up for another day
-export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) => {
-  const outliner = useOutline();
-
+export const contentNodeToOutlineNode = ({
+  contentNode,
+  contentNodeIndex: ci,
+  context: ctx = {},
+  graphJSON,
+  outliner,
+}: TContentNodeToOutlineNodeParams) => {
   // --- Component
   if (contentNode.type === ContentNodeType.COMPONENT) {
     return contentNode.alt || typeof contentNode.component === "string" ? (
@@ -92,7 +34,15 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
     return (
       <Fragment key={`${ci}-${contentNode?.type}`}>
         {(Array.isArray(contentNode) ? contentNode : contentNode.content || []).map((newNode, nci) => (
-          <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+          <Fragment key={nci}>
+            {contentNodeToOutlineNode({
+              contentNode: newNode,
+              contentNodeIndex: nci,
+              context: ctx,
+              graphJSON,
+              outliner,
+            })}
+          </Fragment>
         ))}
       </Fragment>
     );
@@ -105,6 +55,7 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
         contentNode={contentNode}
         graphJSON={graphJSON}
         initConditionalVisibility={outliner.initConditionalVisibility}
+        outliner={outliner}
       />
     );
   }
@@ -121,7 +72,9 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
           <span>Can rendering multiple of...</span>
         </div>
         <div className="conditional__section">
-          {forEachItems.map((node) => contentNodeToOutlineNode(node, ci, ctx, graphJSON))}
+          {forEachItems.map((node) =>
+            contentNodeToOutlineNode({ contentNode: node, contentNodeIndex: ci, context: ctx, graphJSON, outliner })
+          )}
         </div>
       </div>
     );
@@ -171,7 +124,17 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
           <li>[List of items...]</li>
         ) : (
           contentNode.items.map((item, itemIndex) => (
-            <li key={itemIndex}>{item.text ? item.text : contentNodeToOutlineNode(item, itemIndex, ctx, graphJSON)}</li>
+            <li key={itemIndex}>
+              {item.text
+                ? item.text
+                : contentNodeToOutlineNode({
+                    contentNode: item,
+                    contentNodeIndex: itemIndex,
+                    context: ctx,
+                    graphJSON,
+                    outliner,
+                  })}
+            </li>
           ))
         )}
       </ul>
@@ -215,7 +178,15 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
         <thead>
           <tr>
             {get(contentNode, "items[0].cells", {}).map((cell, ci) => (
-              <th key={ci}>{contentNodeToOutlineNode(cell, ci, ctx, graphJSON)}</th>
+              <th key={ci}>
+                {contentNodeToOutlineNode({
+                  contentNode: cell,
+                  contentNodeIndex: ci,
+                  context: ctx,
+                  graphJSON,
+                  outliner,
+                })}
+              </th>
             ))}
           </tr>
         </thead>
@@ -225,7 +196,17 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
             .map((row, ri) => (
               <tr key={row.id}>
                 {(row.cells || []).map((td, tdi) => (
-                  <td key={tdi}>{td.map((c, ci) => contentNodeToOutlineNode(c, ci, ctx, graphJSON))}</td>
+                  <td key={tdi}>
+                    {td.map((c, ci) =>
+                      contentNodeToOutlineNode({
+                        contentNode: c,
+                        contentNodeIndex: ci,
+                        context: ctx,
+                        graphJSON,
+                        outliner,
+                      })
+                    )}
+                  </td>
                 ))}
               </tr>
             ))}
@@ -239,7 +220,15 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
     return (
       <>
         {contentNode.content.map((newNode, nci) => (
-          <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+          <Fragment key={nci}>
+            {contentNodeToOutlineNode({
+              contentNode: newNode,
+              contentNodeIndex: nci,
+              context: ctx,
+              graphJSON,
+              outliner,
+            })}
+          </Fragment>
         ))}
       </>
     );
@@ -250,7 +239,15 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
       <>
         <h3>{contentNode.title}</h3>
         {contentNode.content.map((newNode, nci) => (
-          <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+          <Fragment key={nci}>
+            {contentNodeToOutlineNode({
+              contentNode: newNode,
+              contentNodeIndex: nci,
+              context: ctx,
+              graphJSON,
+              outliner,
+            })}
+          </Fragment>
         ))}
       </>
     );
@@ -260,7 +257,15 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
     return (
       <div className="outline__component">
         {contentNode.content.map((newNode, nci) => (
-          <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+          <Fragment key={nci}>
+            {contentNodeToOutlineNode({
+              contentNode: newNode,
+              contentNodeIndex: nci,
+              context: ctx,
+              graphJSON,
+              outliner,
+            })}
+          </Fragment>
         ))}
       </div>
     );
@@ -280,7 +285,10 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
   }
   if (contentNode.type === ContentNodeType.BUTTON) {
     return (
-      <div key={ci}>
+      <div
+        key={ci}
+        className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "back-button" : ""}
+      >
         <button
           className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "back-button" : ""}
           disabled={!contentNode.event}
@@ -439,7 +447,13 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
             <div>
               {contentNode({ __outline__: true, ...ctx }).length &&
                 contentNode({ __outline__: true, ...ctx }).map((newNode, nci) =>
-                  contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)
+                  contentNodeToOutlineNode({
+                    contentNode: newNode,
+                    contentNodeIndex: nci,
+                    context: ctx,
+                    graphJSON,
+                    outliner,
+                  })
                 )}
             </div>
           ) : (
@@ -447,14 +461,30 @@ export const contentNodeToOutlineNode = (contentNode, ci, ctx = {}, graphJSON) =
               {contentNode({ __outline__: true, ...ctx }).length > 0 && (
                 <div className="conditional-segment">
                   {contentNode({ __outline__: true, ...ctx }).map((newNode, nci) => (
-                    <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+                    <Fragment key={nci}>
+                      {contentNodeToOutlineNode({
+                        contentNode: newNode,
+                        contentNodeIndex: nci,
+                        context: ctx,
+                        graphJSON,
+                        outliner,
+                      })}
+                    </Fragment>
                   ))}
                 </div>
               )}
               {contentNode({ __outline__: false, ...ctx }).legnth > 0 && (
                 <div className="conditional-segment">
                   {contentNode({ __outline__: false, ...ctx }).map((newNode, nci) => (
-                    <Fragment key={nci}>{contentNodeToOutlineNode(newNode, nci, ctx, graphJSON)}</Fragment>
+                    <Fragment key={nci}>
+                      {contentNodeToOutlineNode({
+                        contentNode: newNode,
+                        contentNodeIndex: nci,
+                        context: ctx,
+                        graphJSON,
+                        outliner,
+                      })}
+                    </Fragment>
                   ))}
                 </div>
               )}
