@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/crystal-ball",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.8.13",
-    "@xstate-wizards/wizards-of-react": "^0.6.35",
+    "@xstate-wizards/wizards-of-react": "^0.7.0",
     "@xstate/graph": "^1.4.2",
     "date-fns": "^2.4.1",
     "lodash": "^4.17.20",
