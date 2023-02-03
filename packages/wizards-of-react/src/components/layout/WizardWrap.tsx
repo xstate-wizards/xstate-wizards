@@ -18,38 +18,35 @@ export const WizardWrapFullScreen = ({
   "data-test-id": dataTestId,
 }) => {
   return (
-    <>
-      <WizardWrapFullScreenCSSOverrides />
-      <StyledWizardWrap>
-        <div className="x-wizard__header">{title}</div>
-        {progress ? (
-          <StyledWizardWrapProgressBar progress={progress}>
-            <span className="x-wizard-progress-bar__counter">{Math.floor(progress * 100)}%</span>
-            <span className="x-wizard-progress-bar__flag">
-              <IconFlag />
-            </span>
-          </StyledWizardWrapProgressBar>
-        ) : null}
-        {sections ? (
-          <StyledWizardWrapSectionBar sections={sections}>
-            <div className="x-wizard-section-bar__scroll">
-              {sections.map((section) => (
-                <span
-                  key={section.trigger}
-                  className={`x-wizard-section-bar__tag ${section.highlight ? "highlight" : ""}`}
-                >
-                  {section.name}
-                </span>
-              ))}
-            </div>
-          </StyledWizardWrapSectionBar>
-        ) : null}
-        {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
-        <form className="x-wizard__body" onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
-          {children}
-        </form>
-      </StyledWizardWrap>
-    </>
+    <StyledWizardWrapFullScreen>
+      <div className="x-wizard__header">{title}</div>
+      {progress ? (
+        <StyledWizardWrapProgressBar progress={progress}>
+          <span className="x-wizard-progress-bar__counter">{Math.floor(progress * 100)}%</span>
+          <span className="x-wizard-progress-bar__flag">
+            <IconFlag />
+          </span>
+        </StyledWizardWrapProgressBar>
+      ) : null}
+      {sections ? (
+        <StyledWizardWrapSectionBar sections={sections}>
+          <div className="x-wizard-section-bar__scroll">
+            {sections.map((section) => (
+              <span
+                key={section.trigger}
+                className={`x-wizard-section-bar__tag ${section.highlight ? "highlight" : ""}`}
+              >
+                {section.name}
+              </span>
+            ))}
+          </div>
+        </StyledWizardWrapSectionBar>
+      ) : null}
+      {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
+      <form className="x-wizard__body" onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
+        {children}
+      </form>
+    </StyledWizardWrapFullScreen>
   );
 };
 // --- BOUND BOX
@@ -108,23 +105,17 @@ const StyledResourcesUpdatesWarningCallout = styled(Callout)`
   }
 `;
 
-const WizardWrapFullScreenCSSOverrides = createGlobalStyle`
-  html {
-    color: ${wizardTheme.colors.gray[500]};
-    font-size: 1em;
-    line-height: 150%;
-    font-family: "Averta", sans-serif;
-    font-weight: 300;
-  }
-  body {
-    margin: 0;
-  }
+const SharedGlobalWizardWrapCSS = css`
+  // ALL SUB-ELEMENTS
+  color: ${wizardTheme.colors.gray[500]};
+  font-size: 1em;
+  line-height: 150%;
+  font-family: sans-serif;
   * {
     box-sizing: border-box;
   }
-`;
 
-const SharedGlobalWizardWrapCSS = css`
+  // ETC
   h1,
   h2,
   h3,
@@ -149,12 +140,11 @@ const SharedGlobalWizardWrapCSS = css`
   input,
   select,
   textarea {
-    font-family: "Averta", sans-serif;
+    font-family: sans-serif;
   }
 `;
 
 const SharedWizardWrapCSS = css`
-  ${SharedGlobalWizardWrapCSS}
   & > table,
   & > div:not(.content-node__input):not(.node__row):not(.content-node__row) {
     margin-bottom: 1em;
@@ -247,7 +237,7 @@ const SharedWizardWrapCSS = css`
     textarea {
       font-size: 14px;
       line-height: 150%;
-      font-family: "Averta", sans-serif;
+      font-family: sans-serif;
     }
     input[type="date"]:not(:disabled) {
       background: white;
@@ -334,6 +324,7 @@ const SharedWizardWrapCSS = css`
 `;
 
 const StyledWizardWrapFrame = styled.form`
+  ${SharedGlobalWizardWrapCSS}
   ${SharedWizardWrapCSS}
   button.x-wizard__header-back-button {
     display: none;
@@ -343,7 +334,8 @@ const StyledWizardWrapFrame = styled.form`
   }
 `;
 
-const StyledWizardWrap = styled.div`
+const StyledWizardWrapFullScreen = styled.div`
+  ${SharedGlobalWizardWrapCSS}
   .x-wizard__header {
     // DEPRECATED: We don't need to absolute position bc we removed wrappers
     // position: absolute;
