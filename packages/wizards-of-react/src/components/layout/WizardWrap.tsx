@@ -144,7 +144,7 @@ const SharedGlobalWizardWrapCSS = css`
   }
 `;
 
-const SharedWizardWrapCSS = css`
+const SharedContentNodeCSS = css`
   & > table,
   & > div:not(.content-node__input):not(.node__row):not(.content-node__row) {
     margin-bottom: 1em;
@@ -325,7 +325,7 @@ const SharedWizardWrapCSS = css`
 
 const StyledWizardWrapFrame = styled.form`
   ${SharedGlobalWizardWrapCSS}
-  ${SharedWizardWrapCSS}
+  ${SharedContentNodeCSS}
   button.x-wizard__header-back-button {
     display: none;
   }
@@ -359,7 +359,7 @@ const StyledWizardWrapFullScreen = styled.div`
     margin: 0 auto;
     margin-bottom: 53px; // Height of bottom navbar
     // Content Nodes
-    ${SharedWizardWrapCSS}
+    ${SharedContentNodeCSS}
     & > h2, & > h3, & > h4, & > h5 {
       text-align: center;
     }
