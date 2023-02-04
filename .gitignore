@@ -12,3 +12,4 @@ coverage/
 
 # system misc
 .DS_Store
+.log
