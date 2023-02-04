@@ -1,10 +1,10 @@
-export type TOutlineSpellConfig = {
+export type TCrystalBallViewSectionSpellConfig = {
   title: string;
   spellKey: string;
   link: string;
 };
 
-export type TOutlineSections = {
+export type TCrystalBallViewSections = {
   sectionTitle: string;
-  spells: TOutlineSpellConfig[];
+  spells: TCrystalBallViewSectionSpellConfig[];
 }[];

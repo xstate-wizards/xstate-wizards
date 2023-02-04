@@ -26,40 +26,72 @@ import { logger } from "../wizardDebugger";
 // TODO: make text with auto suggest? the input for states to better handle other countries?
 import { COUNTRIES, STATES_US } from "../constants/geo";
 
+// COMPONENTS w/ fallbacks
 import { renderWizardML } from "./contentNodes/renderWizardML";
-
+import { wizardTheme } from "../theme";
 //TODO: probably extract all of these out
+// --- preconfigured advanced content nodes
 import { AgeInput } from "./contentNodes/AgeInput";
 import { CountdownTimer } from "./contentNodes/CountdownTimer";
 import { CurrencyInput } from "./contentNodes/CurrencyInput";
 import { SelectDatePicker } from "./contentNodes/SelectDatePicker";
 import { SelectWithOther } from "./contentNodes/SelectWithOther";
-import { VideoHolder } from "./styled/VideoHolder.div";
-import { Card } from "./styled/Card.div";
+import { VideoHolder } from "./styled/VideoHolder";
+import { Card } from "./contentNodes/Card";
 import { ConfirmButton } from "./contentNodes/ConfirmButton";
-import { defaultTheme } from "../theme";
+// --- fallbacks if no serialization provided (mostly for default stylings)
+import { A } from "./contentNodes/fallbacks/A";
+import { Button, ButtonLink, ButtonCSS } from "./contentNodes/fallbacks/Button";
+import { Callout } from "./contentNodes/fallbacks/Callout";
+import { H1, H2, H3, H4, H5, H6 } from "./contentNodes/fallbacks/H";
+import { HR } from "./contentNodes/fallbacks/HR";
+import { IconCheck, IconX } from "./contentNodes/fallbacks/Icons";
+import { Input } from "./contentNodes/fallbacks/Input";
+import { P } from "./contentNodes/fallbacks/P";
+import { Select } from "./contentNodes/fallbacks/Select";
+import { Small } from "./contentNodes/fallbacks/Small";
+import { Table } from "./contentNodes/fallbacks/Table";
+import { Textarea } from "./contentNodes/fallbacks/Textarea";
+import { InputPhoneNumber } from "./contentNodes/InputPhoneNumber";
+
+const fallbackComponents = {
+  // styled
+  A,
+  P,
+  Button,
+  ButtonLink,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  HR,
+  Input,
+  Select,
+  Small,
+  Table,
+  Textarea,
+  // icons
+  IconCheck, // TODO: more icons?
+  IconX, // TODO: more icons?
+  // advanced components
+  Callout,
+  InputPhoneNumber,
+  // TODO: advanced components
+  ResourcePanel: styled.div``, // TODO: move into wizard core lib (might want to go off of model loader schemas/configs)
+  CollapsiblePanel: styled.div``, // TODO: move into wizard core lib
+  CalendarDatePicker: styled.div``, // TODO: move into wizard core lib (maybe not this 1)
+  FileUploadButton: styled.input``, // TODO: move into wizard core lib (and maybe not this 1 either)
+  // DEPRECATE
+  ButtonCSS,
+};
 
 declare global {
   interface Window {
     google: any; // TODO: extract google address autocomplete
   }
 }
-
-// Take json-logic key/values and eval (ex: if we want to grab an id off content tree)
-const transformEventDataWithJsonLogic = (eventData, { context, content }) => {
-  const evaluatedEventData = cloneDeep(eventData);
-  for (const key in evaluatedEventData) {
-    if (evaluatedEventData[key]?.type === "jsonLogic" && isJsonLogic(evaluatedEventData[key]?.jsonLogic)) {
-      try {
-        const newDataValue = evalJsonLogic(evaluatedEventData[key].jsonLogic, { context, content });
-        evaluatedEventData[key] = newDataValue;
-      } catch {
-        // do nothing if we can't eval, move on
-      }
-    }
-  }
-  return evaluatedEventData;
-};
 
 /**
  *  <ContentNode />
@@ -1184,6 +1216,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                       if (node.config.schema[key].type === ContentNodeType.SELECT) {
                         return (
                           <Select
+                            // @ts-expect-error
                             size={node.attrs?.size || "sm"}
                             value={json[key]}
                             onChange={(e) =>
@@ -1824,13 +1857,29 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   return null;
 };
 
+// Take json-logic key/values and eval (ex: if we want to grab an id off content tree)
+const transformEventDataWithJsonLogic = (eventData, { context, content }) => {
+  const evaluatedEventData = cloneDeep(eventData);
+  for (const key in evaluatedEventData) {
+    if (evaluatedEventData[key]?.type === "jsonLogic" && isJsonLogic(evaluatedEventData[key]?.jsonLogic)) {
+      try {
+        const newDataValue = evalJsonLogic(evaluatedEventData[key].jsonLogic, { context, content });
+        evaluatedEventData[key] = newDataValue;
+      } catch {
+        // do nothing if we can't eval, move on
+      }
+    }
+  }
+  return evaluatedEventData;
+};
+
 const StyledInlineButtonWrapper = styled.div`
   display: flex;
   margin: 0 0 0.6em 0.2em;
   & > div {
     align-self: flex-end;
   }
-  @media (max-width: ${defaultTheme.breakpoints[500]}) {
+  @media (max-width: ${wizardTheme.breakpoints[500]}) {
     margin: 0.6em 0;
   }
 `;
@@ -1848,7 +1897,7 @@ const StyledCheckboxButton = styled.div<{ ButtonCSS: $TSFixMe; disabled?: boolea
       height: 18px;
       width: 18px;
       border-radius: 4px;
-      border: 1px solid ${defaultTheme.colors.brand[500]};
+      border: 1px solid ${wizardTheme.colors.blue[500]};
       &.radio {
         border-radius: 9px;
       }
@@ -1873,7 +1922,7 @@ const StyledImageWrapper = styled.div<{ shadow?: boolean }>`
   img {
     max-width: 100%;
     ${(props) => {
-      if (props.shadow) return `box-shadow: ${defaultTheme.effects.shadow[350]}`;
+      if (props.shadow) return `box-shadow: ${wizardTheme.effects.shadow[350]}`;
     }}
   }
 `;
@@ -1898,7 +1947,7 @@ const StyledAddressSuggestionsBox = styled.div`
   margin-top: -0.25em;
   margin-bottom: 0.5em;
   padding: 0.25em 0;
-  background: ${defaultTheme.colors.brand[900]};
+  background: ${wizardTheme.colors.blue[900]};
   width: 100%;
   border-radius: 0 0 24px 24px;
   // For some reason, the autocomplete library requires a map be mounted/rendered. This throw away div is for that
@@ -1925,28 +1974,28 @@ const StyledAddressSuggestionsBox = styled.div`
     }
   }
   .address-suggestions__place {
-    background: ${defaultTheme.colors.brand[900]};
-    border: 1px solid ${defaultTheme.colors.brand[800]};
-    border-bottom: 2px solid ${defaultTheme.colors.brand[700]};
-    color: ${defaultTheme.colors.brand[500]};
+    background: ${wizardTheme.colors.blue[900]};
+    border: 1px solid ${wizardTheme.colors.blue[800]};
+    border-bottom: 2px solid ${wizardTheme.colors.blue[700]};
+    color: ${wizardTheme.colors.blue[500]};
   }
   .address-suggestions__close {
     text-align: center;
     text-decoration: underline;
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
 `;
 
 const StyledResourcesList = styled.div`
   &.empty {
-    background: ${defaultTheme.colors.white[900]};
-    border: 2px dashed ${defaultTheme.colors.brand[800]};
+    background: ${wizardTheme.colors.white[900]};
+    border: 2px dashed ${wizardTheme.colors.blue[800]};
     border-radius: 6px;
     padding: 1em;
     margin: 0.5em 0;
     text-align: center;
     small {
-      color: ${defaultTheme.colors.brand[600]};
+      color: ${wizardTheme.colors.blue[600]};
     }
   }
 `;
@@ -1964,33 +2013,3 @@ const StyledMultiSelectButtonList = styled.div`
     margin-bottom: 3px;
   }
 `;
-
-const fallbackComponents = {
-  A: styled.a``,
-  P: styled.p``,
-  Button: styled.button``,
-  ButtonLink: styled.a``,
-  H1: styled.h1``,
-  H2: styled.h2``,
-  H3: styled.h3``,
-  H4: styled.h4``,
-  H5: styled.h5``,
-  H6: styled.h6``,
-  HR: styled.hr``,
-  IconCheck: styled.div``, // TODO: more icons?
-  IconX: styled.div``, // TODO: more icons?
-  Input: styled.input``,
-  Select: styled.select``,
-  Small: styled.small``,
-  Table: styled.table``,
-  Textarea: styled.textarea``,
-  // TODO: weave these components more elegantly into the wizard lib
-  // DEPRECATE THIS ButtonCSS. Doing it to get by for checkboxes
-  ButtonCSS: css``,
-  ResourcePanel: styled.div``, // TODO: move into wizard core lib (might want to go off of model loader schemas/configs)
-  CollapsiblePanel: styled.div``, // TODO: move into wizard core lib
-  Callout: styled.div``, // TODO: move into wizard core lib
-  CalendarDatePicker: styled.div``, // TODO: move into wizard core lib (maybe not this 1)
-  FileUploadButton: styled.div``, // TODO: move into wizard core lib (and maybe not this 1 either)
-  InputPhoneNumber: styled.div``,
-};

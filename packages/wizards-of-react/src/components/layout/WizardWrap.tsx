@@ -1,31 +1,35 @@
-import React, { useRef } from "react";
-import styled, { css } from "styled-components";
-import { $TSFixMe } from "@xstate-wizards/spells";
-import { wizardTheme } from "@xstate-wizards/wizards-of-react";
+import React, { useCallback, useState } from "react";
+import styled, { createGlobalStyle, css } from "styled-components";
+import { wizardTheme } from "../../theme";
+import { Callout } from "../contentNodes/fallbacks/Callout";
+import { IconFlag, IconQuestionMark } from "../contentNodes/fallbacks/Icons";
+import { P } from "../contentNodes/fallbacks/P";
+import { Small } from "../contentNodes/fallbacks/Small";
+import { Z_DROPDOWN_MENU, Z_STICKY_SCROLL_BANNER } from "../styled/zIndexes";
 
-export const SpellBookWizardWrap = ({
+// WRAPS
+// --- FULL SCREEN
+export const WizardWrapFullScreen = ({
   children,
   title,
   progress,
   sections,
-  // showResourcesUpdatesWarning,
+  showResourcesUpdatesWarning,
   "data-test-id": dataTestId,
 }) => {
-  // SETUP
-  // --- grab wrapper size for progress bar width calc
-  const wrapRef = useRef();
-  // RENDER
   return (
-    <StyledSpellBookWizardWrap ref={wrapRef}>
+    <StyledWizardWrapFullScreen>
       <div className="x-wizard__header">{title}</div>
-      {progress && wrapRef != null ? (
-        <StyledSpellBookWizardProgressBar
-          progress={progress}
-          width={(wrapRef as $TSFixMe)?.current?.scrollWidth ?? 0}
-        />
+      {progress ? (
+        <StyledWizardWrapProgressBar progress={progress}>
+          <span className="x-wizard-progress-bar__counter">{Math.floor(progress * 100)}%</span>
+          <span className="x-wizard-progress-bar__flag">
+            <IconFlag />
+          </span>
+        </StyledWizardWrapProgressBar>
       ) : null}
       {sections ? (
-        <StyledSpellBookWizardSectionBar sections={sections}>
+        <StyledWizardWrapSectionBar sections={sections}>
           <div className="x-wizard-section-bar__scroll">
             {sections.map((section) => (
               <span
@@ -36,17 +40,111 @@ export const SpellBookWizardWrap = ({
               </span>
             ))}
           </div>
-        </StyledSpellBookWizardSectionBar>
+        </StyledWizardWrapSectionBar>
       ) : null}
-      {/* {/* {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />} */}
+      {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
       <form className="x-wizard__body" onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
         {children}
       </form>
-    </StyledSpellBookWizardWrap>
+    </StyledWizardWrapFullScreen>
+  );
+};
+// --- BOUND BOX
+export const WizardWrapFrame = ({ children, "data-test-id": dataTestId }) => (
+  <StyledWizardWrapFrame onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
+    {children}
+  </StyledWizardWrapFrame>
+);
+
+// EXTRA COMPONENTS
+const ResourcesUpdatesWarning = () => {
+  const [expanded, setExpanded] = useState(false);
+  const onMouseLeave = useCallback(() => setExpanded(false), []);
+  return (
+    <StyledResourcesUpdatesWarningCallout
+      // @ts-ignore
+      styleType="warning"
+      onClick={() => setExpanded((e) => !e)}
+      onMouseLeave={onMouseLeave}
+    >
+      <div>
+        <Small>
+          Your changes have not been submitted yet. Continue forward until you reach the “This is all correct” button to
+          save. <IconQuestionMark />
+        </Small>
+        {expanded && (
+          <P>
+            If you close, refresh or leave this section, your changes will be lost. To save your changes continue
+            forward and click the “This is all correct” button at the end of the section.
+          </P>
+        )}
+      </div>
+    </StyledResourcesUpdatesWarningCallout>
   );
 };
 
-const SharedSpellBookWizardCSS = css`
+// STYLINGS
+const StyledResourcesUpdatesWarningCallout = styled(Callout)`
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: ${Z_STICKY_SCROLL_BANNER};
+
+  & > div {
+    width: 450px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 4px 16px;
+
+    p {
+      background: #fff;
+      border-radius: 4px;
+      margin: 8px auto;
+      padding: 4px 16px;
+    }
+  }
+`;
+
+const SharedGlobalWizardWrapCSS = css`
+  // ALL SUB-ELEMENTS
+  color: ${wizardTheme.colors.gray[500]};
+  font-size: 1em;
+  line-height: 150%;
+  font-family: sans-serif;
+  * {
+    box-sizing: border-box;
+  }
+
+  // ETC
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+  ul {
+    list-style-type: none;
+  }
+  ul,
+  ol {
+    padding: 0;
+  }
+  a {
+    color: ${wizardTheme.colors.blue[500]};
+    text-decoration: none;
+  }
+  &,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: sans-serif;
+  }
+`;
+
+const SharedContentNodeCSS = css`
   & > table,
   & > div:not(.content-node__input):not(.node__row):not(.content-node__row) {
     margin-bottom: 1em;
@@ -99,7 +197,7 @@ const SharedSpellBookWizardCSS = css`
       justify-content: space-between;
       align-items: center;
     }
-    @media (max-width: 45em) {
+    @media (max-width: ${wizardTheme.breakpoints[500]}) {
       & > div,
       & > div > div {
         width: 100%;
@@ -119,7 +217,7 @@ const SharedSpellBookWizardCSS = css`
     color: ${wizardTheme.colors.red[500]};
   }
   .content-node__input__label {
-    font-weight: 500;
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.3;
   }
@@ -139,7 +237,7 @@ const SharedSpellBookWizardCSS = css`
     textarea {
       font-size: 14px;
       line-height: 150%;
-      font-family: "Averta", san-serif;
+      font-family: sans-serif;
     }
     input[type="date"]:not(:disabled) {
       background: white;
@@ -151,6 +249,7 @@ const SharedSpellBookWizardCSS = css`
     }
     & > label,
     .content-node__input__label {
+      font-weight: 700;
       small {
         padding-bottom: 0.3em;
       }
@@ -170,7 +269,7 @@ const SharedSpellBookWizardCSS = css`
     &.json-array {
       margin-bottom: 0.5em;
       .json-panel {
-        border: 1px solid ${wizardTheme.colors.white[700]};
+        border: 1px solid ${wizardTheme.colors.white[500]};
         padding: 1em;
         margin-bottom: 1em;
         border-radius: 4px;
@@ -195,7 +294,7 @@ const SharedSpellBookWizardCSS = css`
                 flex-grow: 0;
               }
             }
-            @media (max-width: 45em) {
+            @media (max-width: ${wizardTheme.breakpoints[500]}) {
               flex-direction: column;
             }
           }
@@ -224,21 +323,32 @@ const SharedSpellBookWizardCSS = css`
   }
 `;
 
-const StyledSpellBookWizardWrap = styled.div`
+const StyledWizardWrapFrame = styled.form`
+  ${SharedGlobalWizardWrapCSS}
+  ${SharedContentNodeCSS}
+  button.x-wizard__header-back-button {
+    display: none;
+  }
+  div.x-wizard__header__navigation-options {
+    display: none;
+  }
+`;
+
+const StyledWizardWrapFullScreen = styled.div`
+  ${SharedGlobalWizardWrapCSS}
   .x-wizard__header {
     // DEPRECATED: We don't need to absolute position bc we removed wrappers
     // position: absolute;
     // left: 0;
     height: 46px;
-    width: 100%;
+    width: 100vw;
     padding: 0.6em 0.25em 0.4em;
     text-align: center;
-    background: white;
+    background: ${wizardTheme.colors.blue[900]};
     font-size: 13px;
     font-weight: 900;
-    color: #4d555b;
+    color: ${wizardTheme.colors.gray[500]};
     display: flex;
-    flex-direction: column
     align-items: center;
     justify-content: center;
   }
@@ -249,7 +359,7 @@ const StyledSpellBookWizardWrap = styled.div`
     margin: 0 auto;
     margin-bottom: 53px; // Height of bottom navbar
     // Content Nodes
-    ${SharedSpellBookWizardCSS}
+    ${SharedContentNodeCSS}
     & > h2, & > h3, & > h4, & > h5 {
       text-align: center;
     }
@@ -263,20 +373,21 @@ const StyledSpellBookWizardWrap = styled.div`
     & > h5,
     & > h6,
     & > p {
-      @media (max-width: 45em) {
+      @media (max-width: ${wizardTheme.breakpoints[500]}) {
         text-align: left;
       }
     }
     & > button.x-wizard__header-back-button {
-      position: relative;
-      top: -125px;
-      // left: calc(1.5em + 32px + 8px);
+      position: absolute;
+      top: 8px;
+      left: calc(1.5em + 32px + 8px);
       width: 88px;
       height: 32px;
       max-height: 32px;
       margin: 0;
       padding: 0;
       font-size: 13px;
+      font-weight: 700;
       letter-spacing: -0.2px;
       &,
       &:disabled {
@@ -288,16 +399,16 @@ const StyledSpellBookWizardWrap = styled.div`
       }
     }
     & > div.x-wizard__header__navigation-options {
-      position: relative;
-      top: -125px;
-      // left: 1.3em;
+      position: absolute;
+      top: 8px;
+      left: 1.3em;
       width: 32px;
       height: 32px;
       padding: 0;
-      display: none;
-      // display: flex;
-      // align-items: center;
-      // justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
       &,
       &:disabled,
       &:hover {
@@ -321,33 +432,33 @@ const StyledSpellBookWizardWrap = styled.div`
       position: absolute;
       top: calc(8px + 32px);
       left: 1.3em;
-      z-index: 0;
+      z-index: ${Z_DROPDOWN_MENU};
       padding: 0.5em;
       background: ${wizardTheme.colors.blue[900]};
       border-radius: 4px;
-      box-shadow: 0 4px 16px 0 rgba(228,228,230,1);
+      box-shadow: ${wizardTheme.effects.shadow[350]};
       button,
       button:disabled,
       button:hover {
         width: 100%;
         padding: 0.5em 1em;
         margin: 0.75em 0;
-        justify-content: flex-start;
         opacity: 1;
         background: white;
         border: 2px solid ${wizardTheme.colors.blue[800]};
         border-radius: 4px;
         cursor: pointer;
         color: ${wizardTheme.colors.gray[500]};
+        font-weight: 700;
       }
     }
   }
-  @media (min-width: calc(45em + 1px)) {
+  @media (min-width: calc(${wizardTheme.breakpoints[500]} + 1px)) {
     .x-wizard__body div.x-wizard__header__navigation-options-dropdown .back-button {
       display: none;
     }
   }
-  @media (max-width: 45em) {
+  @media (max-width: ${wizardTheme.breakpoints[500]}) {
     .x-wizard__header {
       height: 54px;
       font-size: 11px;
@@ -373,18 +484,70 @@ const StyledSpellBookWizardWrap = styled.div`
   }
 `;
 
-const StyledSpellBookWizardProgressBar = styled.div<{ progress: number; width: number }>`
+const StyledWizardWrapProgressBar = styled.div<{ progress: number }>`
+  position: absolute;
+  top: 46px;
   left: 0;
   height: 3px;
-  width: ${(props) => props.progress * props.width}px;
-  background: #17dc83;
+  width: 100vw;
+  background: ${wizardTheme.colors.green[900]};
+  @media (max-width: ${wizardTheme.breakpoints[500]}) {
+    top: 54px;
+  }
+  .x-wizard-progress-bar__counter {
+    position: absolute;
+    top: -33px;
+    right: 2.75em;
+    background: ${wizardTheme.colors.green[500]};
+    color: white;
+    border-radius: 12px;
+    padding: 0 16px;
+    font-weight: 900;
+    font-size: 16px;
+    @media (max-width: ${wizardTheme.breakpoints[500]}) {
+      top: -38px;
+      font-size: 12px;
+      right: 1.5em;
+    }
+  }
+  .x-wizard-progress-bar__flag {
+    position: absolute;
+    top: -30px;
+    right: 0.5em;
+    svg {
+      height: 32px;
+      width: 32px;
+      path {
+        fill: ${wizardTheme.colors.green[100]};
+      }
+    }
+    @media (max-width: ${wizardTheme.breakpoints[500]}) {
+      display: none;
+    }
+  }
+  ${(props) => {
+    if (props.progress != null) {
+      return css`
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 3px;
+          border-radius: 0 4px 4px 0;
+          width: ${props.progress * 100}vw;
+          background: ${wizardTheme.colors.green[500]};
+        }
+      `;
+    }
+  }}
 `;
 
-const StyledSpellBookWizardSectionBar = styled.div<{ sections: Partial<{ name: string }>[] }>`
+const StyledWizardWrapSectionBar = styled.div<{ sections: { name: string }[] }>`
   width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   overflow-x: auto;
-  background: #fcfcfc;
+  background: ${wizardTheme.colors.white[800]};
   font-size: 12px;
   .x-wizard-section-bar__scroll {
     display: flex;
@@ -401,13 +564,14 @@ const StyledSpellBookWizardSectionBar = styled.div<{ sections: Partial<{ name: s
     margin: 6px 6px 0;
     padding: 2px 4px;
     box-sizing: border-box;
+    font-weight: 600;
     &.highlight {
-      color: #17dc83;
-      border-bottom: 2px solid #17dc83;
+      color: ${wizardTheme.colors.green[300]};
+      border-bottom: 2px solid ${wizardTheme.colors.green[300]};
     }
     &:not(.highlight) {
-      color: gray;
-      border-bottom: 2px solid #ccc;
+      color: ${wizardTheme.colors.gray[900]};
+      border-bottom: 2px solid ${wizardTheme.colors.white[300]};
     }
     &:first-of-type {
       margin: 6px 6px 0 12px;
@@ -421,7 +585,7 @@ const StyledSpellBookWizardSectionBar = styled.div<{ sections: Partial<{ name: s
       // OPTIMIZE: There might be some weird scenarios where we cause overflow/scrollbars to show up when not needing to
       return css`
         .x-wizard-section-bar__scroll {
-          @media (max-width: 45em) {
+          @media (max-width: ${wizardTheme.breakpoints[500]}) {
             display: inline-flex;
           }
         }

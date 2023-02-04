@@ -1,5 +1,5 @@
 // TODO: find a better way to deal w/ styling
-export const defaultTheme = {
+export const wizardTheme = {
   breakpoints: {
     100: "240px",
     200: "360px",
@@ -13,7 +13,7 @@ export const defaultTheme = {
     900: "1200px",
   },
   colors: {
-    brand: {
+    blue: {
       100: "#191A9B",
       200: "#2527BC",
       300: "#2C2EE0",

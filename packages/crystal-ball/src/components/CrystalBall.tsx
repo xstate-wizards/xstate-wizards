@@ -2,32 +2,17 @@ import { get } from "lodash";
 import { Fragment } from "react";
 import styled from "styled-components";
 import { toDirectedGraph } from "@xstate/graph";
-import { emptyMachineContext, TCreateMachine, TSpellMap } from "@xstate-wizards/spells";
-import { contentNodeToOutlineNode } from "./contentNodeToOutlineNode";
-import { NodeNotes } from "./NodeNotes";
+import { emptyMachineContext, TSpellMap } from "@xstate-wizards/spells";
+import { wizardTheme } from "@xstate-wizards/wizards-of-react";
+import { contentNodeToOutlineNode } from "./contentNodes/contentNodeToOutlineNode";
+import { NodeNotes } from "./contentNodes/NodeNotes";
 import { useOutline } from "../data/OutlineStore";
-import {
-  THEME_COLOR_BLUE_500,
-  THEME_COLOR_BLUE_600,
-  THEME_COLOR_BLUE_800,
-  THEME_COLOR_BLUE_900,
-  THEME_COLOR_GRAY_500,
-  THEME_COLOR_GRAY_900,
-  THEME_COLOR_GREEN_300,
-  THEME_COLOR_GREEN_500,
-  THEME_COLOR_RED_300,
-  THEME_COLOR_RED_500,
-  THEME_COLOR_WHITE_300,
-  THEME_COLOR_WHITE_500,
-  THEME_COLOR_WHITE_600,
-  THEME_COLOR_WHITE_700,
-  THEME_COLOR_WHITE_800,
-} from "../theme";
+import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS.css";
 
-const nodeHighlightsToClassName = (graphNodeId, nodeHighlights): string => {
-  return `${nodeHighlights.sourceId === graphNodeId ? "source" : ""} ${
-    nodeHighlights.targetIds.some((id) => graphNodeId.includes(id)) ? "edge" : ""
-  } ${nodeHighlights.targetIds.some((id) => id === graphNodeId) ? "target" : ""}`.trim();
+const nodeHighlightsToClassName = (graphJSONId, nodeHighlights): string => {
+  return `${nodeHighlights.sourceId === graphJSONId ? "source" : ""} ${
+    nodeHighlights.targetIds.some((id) => graphJSONId.includes(id)) ? "edge" : ""
+  } ${nodeHighlights.targetIds.some((id) => id === graphJSONId) ? "target" : ""}`.trim();
 };
 
 type TCrystalBallProps = {
@@ -37,27 +22,24 @@ type TCrystalBallProps = {
 
 export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap }): React.ReactElement => {
   // SETUP
+  const outliner = useOutline();
   // --- machine
   const machine = spellMap[spellKey].createMachine(emptyMachineContext, {
     meta: { initial: "", outlineMode: true },
-    serializations: {
-      // TODO?
-      functions: {},
-    },
+    serializations: { functions: {} },
     spellMap,
   });
   // --- graph/outline
   const directedGraph = toDirectedGraph(machine);
-  const outliner = useOutline();
 
   // RENDER
   return (
     <StyledCrystalBall>
-      {directedGraph.children.map((graphNode, childIndex) => {
-        const nodeType = get(graphNode.stateNode, "meta.nodeType");
-        const meta = get(graphNode.stateNode, "meta", {});
+      {directedGraph.children.map((graphJSON, childIndex) => {
+        const nodeType = get(graphJSON.stateNode, "meta.nodeType");
+        const meta = get(graphJSON.stateNode, "meta", {});
         // - Final states ignored?
-        if (graphNode.stateNode.type === "final") {
+        if (graphJSON.stateNode.type === "final") {
           return null;
         }
         // - Content node rendering
@@ -65,21 +47,29 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
         if (meta && meta.content) {
           return (
             <div
-              key={`${childIndex}-${graphNode.id}`}
-              id={graphNode.id}
-              className={`node ${nodeHighlightsToClassName(graphNode.id, outliner.nodeHighlights)}`}
+              key={`${childIndex}-${graphJSON.id}`}
+              id={graphJSON.id}
+              className={`node ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
             >
-              <div className={`node-header ${nodeHighlightsToClassName(graphNode.id, outliner.nodeHighlights)}`}>
+              <div className={`node-header ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}>
                 {(() => {
-                  if (outliner.nodeHighlights.sourceId === graphNode.id) return "CURRENT";
-                  if (outliner.nodeHighlights.targetIds.some((id) => id === graphNode.id)) return "NEXT";
+                  if (outliner.nodeHighlights.sourceId === graphJSON.id) return "CURRENT";
+                  if (outliner.nodeHighlights.targetIds.some((id) => id === graphJSON.id)) return "NEXT";
                   return "STATE";
                 })()}{" "}
-                -- #{graphNode.id}
+                -- #{graphJSON.id}
               </div>
               {(typeof meta.content === "function" ? meta.content({ __outline__: true }) : meta.content).map(
                 (contentNode, ci) => (
-                  <Fragment key={ci}>{contentNodeToOutlineNode(contentNode, ci, machine.context, graphNode)}</Fragment>
+                  <Fragment key={ci}>
+                    {contentNodeToOutlineNode({
+                      contentNode,
+                      contentNodeIndex: ci,
+                      context: machine.context,
+                      graphJSON,
+                      outliner,
+                    })}
+                  </Fragment>
                 )
               )}
               <NodeNotes notes={meta.notes} />
@@ -91,19 +81,19 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
         if (spellMap[machineId]) {
           return (
             <div
-              key={`${childIndex}-${graphNode.id}`}
-              id={graphNode.id}
-              className={`machine-section ${nodeHighlightsToClassName(graphNode.id, outliner.nodeHighlights)}`}
+              key={`${childIndex}-${graphJSON.id}`}
+              id={graphJSON.id}
+              className={`machine-section ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
             >
               <CrystalBall spellKey={machineId} spellMap={spellMap} />
               <div className="machine-section__done-conditions">
-                {graphNode.edges
+                {graphJSON.edges
                   .filter((e) => e.label.text.includes("done"))
                   .map((edge, edgeIndex) => (
                     <button
                       key={(edgeIndex ?? 0) + 1}
                       onClick={() =>
-                        outliner.setNodeHighlights({ sourceId: graphNode.id, targetIds: [edge.target.id] })
+                        outliner.setNodeHighlights({ sourceId: graphJSON.id, targetIds: [edge.target.id] })
                       }
                     >
                       Done Condition #{edgeIndex + 1}
@@ -113,6 +103,7 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
             </div>
           );
         }
+        // no content no nested machine
         return null;
       })}
     </StyledCrystalBall>
@@ -120,7 +111,8 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
 };
 
 const StyledCrystalBall = styled.div`
-  background: ${THEME_COLOR_WHITE_600};
+  ${SharedCrystalBallCSS}
+  background: ${wizardTheme.colors.white[600]};
   font-size: 12px;
   text-align: left;
   padding: 2em 0;
@@ -129,27 +121,25 @@ const StyledCrystalBall = styled.div`
     &.node {
       background: white;
       border-radius: 12px;
-      border: 2px solid ${THEME_COLOR_WHITE_600};
+      border: 2px solid ${wizardTheme.colors.white[600]};
       margin-bottom: 0.75em;
       & > .node-header {
-        padding: 0 1em;
+        padding: 0.5em 1em;
+        margin-bottom: 0.25em;
         border-radius: 8px;
-        background: ${THEME_COLOR_WHITE_300};
+        background: ${wizardTheme.colors.white[300]};
         font-size: 10px;
         font-weight: 500;
-        color: ${THEME_COLOR_GRAY_900};
+        color: ${wizardTheme.colors.gray[900]};
       }
       & > *:not(.node-header) {
-        padding: 0.1em 1em;
-      }
-      & > *:last-of-type {
         padding: 0.1em 1em;
       }
     }
     &.source {
       border: 2px solid #3c5dff;
       & > .node-header {
-        background: ${THEME_COLOR_BLUE_500};
+        background: ${wizardTheme.colors.blue[500]};
         color: white;
       }
     }
@@ -159,7 +149,7 @@ const StyledCrystalBall = styled.div`
     &.target {
       border: 2px solid #17dc83;
       & > .node-header {
-        background: ${THEME_COLOR_GREEN_500};
+        background: ${wizardTheme.colors.green[500]};
         color: white;
       }
     }
@@ -186,28 +176,28 @@ const StyledCrystalBall = styled.div`
       }
     }
     .required-star {
-      color: ${THEME_COLOR_RED_500}
+      color: ${wizardTheme.colors.red[500]}
       font-size: 14px;
       margin-left: 2px;
     }
-    button.back-button {
+    div.back-button {
       position: relative;
       margin-left: -88px;
       margin-bottom: -20px;
       top: -20px;
-      &::before {
-        content: "←Back";
-      }
+      // &::before {
+      //   content: "←Back";
+      // }
     }
     .conditional {
       padding: 0 !important;
-      background: ${THEME_COLOR_WHITE_800}
+      background: ${wizardTheme.colors.white[800]}
       border-radius: 4px;
       .conditional__description {
         font-size: 10px;
         font-weight: 900;
-        background: ${THEME_COLOR_WHITE_500};
-        color: ${THEME_COLOR_GRAY_900};
+        background: ${wizardTheme.colors.white[500]};
+        color: ${wizardTheme.colors.gray[900]};
         padding: 2px 6px 0;
         height: 24px;
         display: flex;
@@ -225,14 +215,14 @@ const StyledCrystalBall = styled.div`
         }
       }
       .conditional__section {
-        border: 2px solid ${THEME_COLOR_WHITE_500};
+        border: 2px solid ${wizardTheme.colors.white[500]};
       }
       .conditional__section__title {
         font-size: 10px;
         font-weight: 900;
         padding: 0 6px;
-        background: ${THEME_COLOR_WHITE_500};
-        color: ${THEME_COLOR_GRAY_900};
+        background: ${wizardTheme.colors.white[500]};
+        color: ${wizardTheme.colors.gray[900]};
         display: flex;
         align-items: center;
         height: 20px;
@@ -279,14 +269,14 @@ const StyledCrystalBall = styled.div`
     border-radius: 24px;
     text-align: left;
     &.cancel.target {
-      background: ${THEME_COLOR_RED_300};
+      background: ${wizardTheme.colors.red[300]};
       color: white;
-      border: 2px solid ${THEME_COLOR_RED_300};
+      border: 2px solid ${wizardTheme.colors.red[300]};
     }
     &.save.target {
-      background: ${THEME_COLOR_GREEN_300};
+      background: ${wizardTheme.colors.green[300]};
       color: white;
-      border: 2px solid ${THEME_COLOR_GREEN_300};
+      border: 2px solid ${wizardTheme.colors.green[300]};
     }
   }
   div.node-header {
@@ -302,20 +292,20 @@ const StyledCrystalBall = styled.div`
     padding: 0.4em 1em;
     background: transparent;
     outline: none;
-    border: 1px solid ${THEME_COLOR_GRAY_900};
-    color: ${THEME_COLOR_GRAY_500}
+    border: 1px solid ${wizardTheme.colors.gray[900]};
+    color: ${wizardTheme.colors.gray[500]}
   }
   div.outline__component {
-    border: 2px solid ${THEME_COLOR_WHITE_700};
+    border: 2px solid ${wizardTheme.colors.white[700]};
     border-radius: 4px;
     margin: 0.25em;
     padding: 0.25em;
   }
   div.outline__component-place-holder,
   div.outline__media-place-holder {
-    background: ${THEME_COLOR_BLUE_900};
-    border: 2px solid ${THEME_COLOR_BLUE_800};
-    color: ${THEME_COLOR_BLUE_600};
+    background: ${wizardTheme.colors.blue[900]};
+    border: 2px solid ${wizardTheme.colors.blue[800]};
+    color: ${wizardTheme.colors.blue[600]};
     border-radius: 4px;
     margin: 0.5em;
     padding: 1em;
@@ -328,9 +318,9 @@ const StyledCrystalBall = styled.div`
     }
   }
   div.outline__media-place-holder {
-    background: ${THEME_COLOR_WHITE_800}
-    border: 2px solid ${THEME_COLOR_WHITE_700};
-    color: ${THEME_COLOR_GRAY_900};
+    background: ${wizardTheme.colors.white[800]}
+    border: 2px solid ${wizardTheme.colors.white[700]};
+    color: ${wizardTheme.colors.gray[900]};
     &::before {
       content: "Media Placeholder: ";
     }

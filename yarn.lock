@@ -2058,6 +2058,24 @@
     zustand "^4.0.0-rc.1"
     zxcvbn "^4.4.2"
 
+"@xstate-wizards/wizards-of-react@^0.6.12":
+  version "0.6.35"
+  resolved "https://registry.npmjs.org/@xstate-wizards/wizards-of-react/-/wizards-of-react-0.6.35.tgz#ccd232d23ac4e5956a035b37870a115eb2a6c9e9"
+  integrity sha512-JrmyMikKF0ZPuDN6Eitu/0Q+Sfu1hV/zBOa/28ZZUGbB2ptNYwQRVXQt5eiZOf8ngm4jO1GZng7dwajyn110KQ==
+  dependencies:
+    "@xstate-wizards/spells" "0.8.12"
+    "@xstate/react" "1.3.4"
+    date-fns "^2.4.1"
+    lodash "^4.17.20"
+    react-player "^2.10.1"
+    react-use "^17.3.2"
+    styled-components "^5.2.3"
+    tel-fns "^0.0.4"
+    use-places-autocomplete "^3.0.0"
+    uuid "^3.3.3"
+    xstate "4.25.0"
+    zustand "^4.0.0-rc.1"
+
 "@xstate/graph@^1.4.2":
   version "1.4.2"
   resolved "https://registry.npmjs.org/@xstate/graph/-/graph-1.4.2.tgz#14987fc1f6d4cf11dca31fe5e6cb14e802f7b299"

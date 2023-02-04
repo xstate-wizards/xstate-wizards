@@ -14,7 +14,7 @@ import {
 
 import { TWizardStateViewerProps } from "../types";
 import { ContentNode } from "./ContentNode";
-import { WizardNavigationPanel } from "./wizardLayout/WizardNavigationPanel";
+import { WizardNavigationPanel } from "./layout/WizardNavigationPanel";
 import { logger } from "../wizardDebugger";
 
 // HACK: We can't reliably call the back transition from the most child machine using transitionManager({ type: 'BACK', history: state.history });

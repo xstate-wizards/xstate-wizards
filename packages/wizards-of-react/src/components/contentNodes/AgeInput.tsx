@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from "react";
 import { InputRow } from "../styled/InputRow.div";
 import { TWizardSerializations } from "@xstate-wizards/spells";
+import { Select as FallbackSelect } from "./fallbacks/Select";
 
 type TAgeInputProps = {
   dataTestId?: string;
@@ -12,8 +13,6 @@ type TAgeInputProps = {
   value?: number | string;
   serializations: TWizardSerializations;
 };
-
-const FallbackSelect = styled.select``;
 
 const roundToHundreth = (x): number => {
   const precision = 0.01;

@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { $TSFixMe } from "@xstate-wizards/spells";
-import { defaultTheme } from "../../theme";
-
-const FallbackInput = styled.input``;
+import { wizardTheme } from "../../theme";
+import { Input as FallbackInput } from "./fallbacks/Input";
 
 export const CurrencyInput: React.FC<$TSFixMe> = ({
   dataTestId,
@@ -45,7 +44,7 @@ const StyledCurrencyInput = styled.div`
     padding-left: 1.4em;
   }
   span {
-    color: ${(props) => defaultTheme.colors.gray[900]};
+    color: ${(props) => wizardTheme.colors.gray[900]};
   }
 `;
 

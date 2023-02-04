@@ -1,12 +1,11 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import styled from "styled-components";
-import { defaultTheme } from "../../theme";
+import { wizardTheme } from "../../theme";
 import { CurrencyInput } from "./CurrencyInput";
+import { Input as FallbackInput } from "./fallbacks/Input";
+import { Select as FallbackSelect } from "./fallbacks/Select";
 
 const OTHER_VALUE = "__OTHER__";
-
-const FallbackInput = styled.input``;
-const FallbackSelect = styled.select``;
 
 export const SelectWithOther = ({ onChange, children, ...props }) => {
   // Styled/Component Refs
@@ -53,7 +52,7 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
 
 const Container = styled.div`
   display: flex;
-  @media (max-width: ${(props) => defaultTheme.breakpoints[500]}) {
+  @media (max-width: ${(props) => wizardTheme.breakpoints[500]}) {
     flex-direction: column;
   }
   & > *:first-child {
@@ -63,7 +62,7 @@ const Container = styled.div`
   & > *:nth-child(2) {
     flex-grow: 1;
 
-    @media (min-width: ${(props) => defaultTheme.breakpoints[500]}) {
+    @media (min-width: ${(props) => wizardTheme.breakpoints[500]}) {
       margin-left: 20px;
     }
   }

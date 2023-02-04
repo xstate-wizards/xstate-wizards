@@ -1,4 +1,7 @@
+import { CANCEL_STATE } from "@xstate-wizards/spells";
+import { CONTENT_NODE_SUBMIT } from "@xstate-wizards/spells";
 import {
+  CONTENT_NODE_BACK,
   createLocalId,
   createSpell,
   INTERVIEW_INTRO_STATE,
@@ -31,6 +34,7 @@ const updateFavoritePet = () =>
     }
     return curctx;
   });
+
 export const machineMapping = createSpell({
   key: ID_EXAMPLE_INTERVIEW,
   version: "1",
@@ -39,7 +43,13 @@ export const machineMapping = createSpell({
     //initial: "userName",
     title: "Example Interview",
     // exitTo: "/",
-    sectionsBar: [],
+    sectionsBar: [
+      { name: "Validation", trigger: INTERVIEW_INTRO_STATE },
+      { name: "Data", trigger: "userName" },
+      { name: "Data Pt.2", trigger: "petsAsk" },
+      { name: "Data Pt.3", trigger: "hobbiesAsk" },
+      { name: "Learn More", trigger: "faq" },
+    ],
   },
   models: {
     Hobby: { loader: {} },
@@ -60,17 +70,20 @@ export const machineMapping = createSpell({
   states: {
     [INTERVIEW_INTRO_STATE]: {
       content: [
-        { type: "h4", text: "Alright, well let's walk through some functionality!" },
-        { type: "button", event: "SUBMIT", text: "ok" },
+        CONTENT_NODE_BACK,
+        { type: "h4", text: "Let's explore functionality in more depth!" },
+        CONTENT_NODE_SUBMIT,
       ],
       on: {
+        BACK: CANCEL_STATE,
         SUBMIT: "humanTestPi",
       },
     },
     // broken example showing how if you have an invoke with a timeout that shows an input but doesn't change the total number of nodes, validation won't run
     humanTestPi: {
-      invoke: () => (transition: any) => setTimeout(() => transition({ type: "SHOW_INPUT_TIMEOUT" }), 1000),
+      invoke: () => (transition: any) => setTimeout(() => transition({ type: "SHOW_INPUT_TIMEOUT" }), 0),
       content: [
+        CONTENT_NODE_BACK,
         { type: "h4", text: "First up are custom validations on inputs! Here's an odd one below." },
         { type: "p", text: "What are the starting digits of Pi?" },
 
@@ -98,7 +111,7 @@ export const machineMapping = createSpell({
           },
         },
         { type: "small", text: `HINT: It is not <<<JSON_LOGIC('{"Math.random":[]}')>>>` },
-        { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
+        CONTENT_NODE_SUBMIT,
       ],
       on: {
         BACK: INTERVIEW_INTRO_STATE,
@@ -109,6 +122,7 @@ export const machineMapping = createSpell({
     },
     humanTestYear: {
       content: [
+        CONTENT_NODE_BACK,
         { type: "h4", text: "Here's an example of a custom drop down with another unique validator." },
         { type: "p", text: "What year is it currently?" },
         {
@@ -131,8 +145,7 @@ export const machineMapping = createSpell({
           assign: "states.humanTestYear",
           validations: ["required", "isCurrentYear"],
         },
-        { type: "button", text: "Back", event: "BACK" },
-        { type: "button", buttonType: "submit", text: "Continue", event: "SUBMIT" },
+        CONTENT_NODE_SUBMIT,
       ],
       on: {
         BACK: "humanTestPi",
@@ -141,7 +154,8 @@ export const machineMapping = createSpell({
     },
     userName: {
       content: (ctx) => [
-        { type: "h4", text: "Now let's do some editing to a **User** model/resource:" },
+        CONTENT_NODE_BACK,
+        { type: "h4", text: "Editing a data model: **User**" },
         { type: "p", text: "Use a 'resourceEditor' to wrap inputs so it's easier to update values." },
         {
           type: "resourceEditor",
@@ -155,7 +169,7 @@ export const machineMapping = createSpell({
             resourceDefaults: {},
           },
           content: [
-            { type: "p", text: `user id: <<<JSON_LOGIC('{"selectUser":[{"var":["context"]},"id"]}')>>>` },
+            // { type: "p", text: `user id: <<<JSON_LOGIC('{"selectUser":[{"var":["context"]},"id"]}')>>>` },
             {
               type: "input",
               inputType: "text",
@@ -183,6 +197,7 @@ export const machineMapping = createSpell({
               label: "Pick your age!",
               assign: { path: "age" },
               validations: ["required"],
+              attrs: { size: "sm" },
             },
             {
               type: "input",
@@ -190,6 +205,7 @@ export const machineMapping = createSpell({
               label: "Your Phone Number",
               assign: { path: "phoneNumber" },
               validations: ["required", "validPhoneNumber"],
+              attrs: { size: "sm" },
             },
             {
               type: "multiSelect",
@@ -201,17 +217,20 @@ export const machineMapping = createSpell({
                 { text: "Blue", value: "blue" },
               ],
               validations: [],
+              attrs: { size: "sm" },
             },
           ],
         },
         { type: "button", buttonType: "submit", text: "Looks good", event: "SUBMIT" },
       ],
       on: {
+        BACK: "humanTestYear",
         SUBMIT: "petsAsk",
       },
     },
     petsAsk: {
       content: [
+        CONTENT_NODE_BACK,
         {
           type: "h4",
           text: "Let's now show how to skip sections! Clicking yes brings us to an list screen, no skips to the next section.",
@@ -221,6 +240,7 @@ export const machineMapping = createSpell({
         { type: "button", text: "No", event: "NO" },
       ],
       on: {
+        BACK: "userName",
         YES: "petsEditor",
         NO: "hobbiesAsk",
       },
@@ -229,11 +249,12 @@ export const machineMapping = createSpell({
       entry: (ctx, ev) => console.log("entry action"),
       exit: (ctx, ev) => console.log("exit action"),
       content: [
+        CONTENT_NODE_BACK,
         {
-          type: "h4",
+          type: "h5",
           text: "From here, we'll see a 'forEach' content node in action, repeating editors for each 'Pet' model we create.",
         },
-        { type: "h2", text: "Do you have any pets?" },
+        { type: "h4", text: "Do you have any pets?" },
         {
           type: "row",
           content: [
@@ -266,7 +287,7 @@ export const machineMapping = createSpell({
             ],
           },
           content: [
-            { type: "h4", text: `pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
+            // { type: "h4", text: `pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
             {
               type: "resourceEditor",
               config: {
@@ -277,7 +298,7 @@ export const machineMapping = createSpell({
                 resourceDefaults: {},
               },
               content: [
-                { type: "small", text: `smaller pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
+                // { type: "small", text: `smaller pet id: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
                 {
                   type: "row",
                   content: [
@@ -309,6 +330,7 @@ export const machineMapping = createSpell({
       ],
       on: {
         ADD_PET: { actions: ["Models.Pet.create"] },
+        BACK: "petsAsk",
         REMOVE_PET: { actions: ["Models.Pet.delete"] },
         SUBMIT: { target: "hobbiesAsk" },
         ASSIGN_CONTEXT: {
@@ -318,6 +340,7 @@ export const machineMapping = createSpell({
     },
     hobbiesAsk: {
       content: [
+        CONTENT_NODE_BACK,
         { type: "h4", text: "Same as before, we have a section skip based on a YES/NO event." },
         { type: "p", text: "Do you have any hobbies?" },
         { type: "button", text: "Yep!", event: "YES" },

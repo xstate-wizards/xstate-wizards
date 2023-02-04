@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import { useInterval } from "react-use";
 import styled from "styled-components";
 import { TWizardSerializations } from "@xstate-wizards/spells";
-import { defaultTheme } from "../../theme";
+import { wizardTheme } from "../../theme";
+import { IconCheck as FallbackIconCheck } from "./fallbacks/Icons";
 
 const FULL_DASH_ARRAY = 283;
 const COUNTDOWN_INTERVAL = 1000;
-
-const FallbackIcon = styled.div``;
 
 const getRemainingPathColor = (timeLeft) => {
   if (timeLeft <= 0) {
@@ -30,7 +29,7 @@ type TCountdownTimerProps = {
 
 export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props }) => {
   // Styled/Component Refs
-  const IconCheck = props.serializations?.components?.IconCheck ?? FallbackIcon;
+  const IconCheck = props.serializations?.components?.IconCheck ?? FallbackIconCheck;
   // State
   const [timePassed, setTimePassed] = useState(COUNTDOWN_INTERVAL);
   const [timeLeft, setTimeLeft] = useState(timer - COUNTDOWN_INTERVAL);
@@ -95,15 +94,15 @@ const StyledCountdownTimer = styled.div`
 
   .countdown__path-elapsed {
     stroke-width: 7px;
-    stroke: ${defaultTheme.colors.brand[900]};
+    stroke: ${wizardTheme.colors.blue[900]};
     transition: 1s linear all;
   }
   .countdown__path-elapsed.done {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
     stroke: currentColor;
   }
   .countdown__path-elapsed.progressing {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
 
   .countdown__path-remaining {
@@ -116,10 +115,10 @@ const StyledCountdownTimer = styled.div`
     stroke: currentColor;
   }
   .countdown__path-remaining.done {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
   .countdown__path-remaining.progressing {
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
   }
 
   .countdown__label {
@@ -132,12 +131,12 @@ const StyledCountdownTimer = styled.div`
     justify-content: center;
     font-size: 24px;
     font-weight: 700;
-    color: ${defaultTheme.colors.brand[500]};
+    color: ${wizardTheme.colors.blue[500]};
     svg {
       height: 24px;
       width: 24px;
       path {
-        fill: ${defaultTheme.colors.brand[500]};
+        fill: ${wizardTheme.colors.blue[500]};
       }
     }
   }

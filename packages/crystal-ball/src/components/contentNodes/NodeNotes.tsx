@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 
 export const NodeNotes: React.FC<{ notes: { date: string; text: string }[] }> = ({ notes }) => {
   const [showNotes, setShowNotes] = useState(false);
@@ -17,11 +18,11 @@ export const NodeNotes: React.FC<{ notes: { date: string; text: string }[] }> = 
 };
 
 const StyledNodeNotes = styled.div`
-  background: ${(props) => props.theme.colors.white[800]};
+  background: ${wizardTheme.colors.white[800]};
   width: 100%;
   padding: 1em 0.25em 0.25em;
   margin-top: 0.5em;
-  border-top: 1px solid ${(props) => props.theme.colors.white[500]};
+  border-top: 1px solid ${wizardTheme.colors.white[500]};
   border-radius: 12px;
   & > small {
     text-decoration: underline;
