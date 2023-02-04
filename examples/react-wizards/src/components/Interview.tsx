@@ -1,4 +1,4 @@
-import { WizardRunner } from "@xstate-wizards/wizards-of-react";
+import { WizardRunner, WizardWrapFullScreen } from "@xstate-wizards/wizards-of-react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { getUser } from "../models/user";
@@ -27,12 +27,18 @@ export const Interview = () => {
         spellKey={ID_EXAMPLE_INTERVIEW}
         spellMap={spellMap}
         models={wizardModelMap}
-        serializations={wizardSerializations}
+        serializations={{
+          ...wizardSerializations,
+          components: {
+            ...wizardSerializations.components,
+            WizardWrap: WizardWrapFullScreen,
+          },
+        }}
         navigate={navigate}
         sessionEnabled={false}
         onWizardFinal={({ machine }) => {
           // When done, send back to base route w/ screener
-          // navigate("/");
+          navigate("/");
         }}
       />
     </form>

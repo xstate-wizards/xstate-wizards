@@ -6,6 +6,7 @@ import { putUser, selectUser } from "../models/user";
 import { wizardSerializations } from "../wizards/wizardSerializations";
 import { ID_EXAMPLE_SCREENER } from "../spells/exampleScreener";
 import { wizardModelMap } from "../wizards/wizardModelMap";
+import { WizardWrapFrame } from "@xstate-wizards/wizards-of-react";
 
 type TScreenerProps = {
   onClose: () => void;
@@ -22,12 +23,19 @@ export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
       spellKey={ID_EXAMPLE_SCREENER}
       spellMap={spellMap}
       models={wizardModelMap}
-      serializations={wizardSerializations}
+      serializations={{
+        ...wizardSerializations,
+        components: {
+          ...wizardSerializations.components,
+          WizardWrap: WizardWrapFrame,
+        },
+      }}
       navigate={navigate}
       sessionEnabled={false}
       onWizardFinal={({ machine }) => {
-        // if user qualified...
-        if (machine.context.states.isInterestedInInterview) {
+        console.log(machine);
+        // if user qualified (aka didn't exit)...
+        if (machine.value !== "cancel") {
           // --- update user info
           putUser(selectUser(machine.context));
           // --- route to interview
