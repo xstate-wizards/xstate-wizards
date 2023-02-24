@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { TypographyCSS } from "./Typography.css";
+import { TypographyCSS } from "./TypographyCSS";
 
 type TSmallCSS = {
   padding?: string; // deprecate

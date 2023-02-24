@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { wizardTheme } from "../../../theme";
-import { InputSizesCSS } from "./InputSizes.css";
-import { InputStatesCSS, TInputStatesCSS } from "./InputStates.css";
+import { InputSizesCSS } from "./InputSizesCSS";
+import { InputStatesCSS, TInputStatesCSS } from "./InputStatesCSS";
 import { TComponentSize } from "./types";
 
 type TSelectCSS = { size?: TComponentSize; width?: string } & TInputStatesCSS;

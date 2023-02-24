@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { wizardTheme } from "../../../theme";
-import { TypographyCSS } from "./Typography.css";
+import { TypographyCSS } from "./TypographyCSS";
 
 export const H0CSS = css`
   color: ${wizardTheme.colors.black[300]};

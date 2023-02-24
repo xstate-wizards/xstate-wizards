@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TypographyCSS } from "./Typography.css";
+import { TypographyCSS } from "./TypographyCSS";
 
 export const P = styled.p`
   font-size: 16px;
