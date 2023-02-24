@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { wizardTheme } from "../../../theme";
-import { InputSizesCSS } from "./InputSizes.css";
-import { InputStatesCSS } from "./InputStates.css";
+import { InputSizesCSS } from "./InputSizesCSS";
+import { InputStatesCSS } from "./InputStatesCSS";
 
 type TInputCSS = {
   width?: string;
