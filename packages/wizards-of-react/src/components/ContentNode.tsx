@@ -154,7 +154,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   const Textarea: $TSFixMe = serializations?.components?.Textarea ?? fallbackComponents.Textarea;
   // TODO: weave these components more elegantly into the wizard lib
   // DEPRECATE THIS ButtonCSS. Doing it to get by for checkboxes
-  const ButtonCSS = serializations?.components?.ButtonCSS;
+  const ButtonCSS = serializations?.components?.ButtonCSS ?? fallbackComponents.ButtonCSS;
   const ResourcePanel: $TSFixMe = serializations?.components?.ResourcePanel ?? fallbackComponents.ResourcePanel;
   const CollapsiblePanel = serializations?.components?.CollapsiblePanel ?? fallbackComponents.CollapsiblePanel;
   const Callout: $TSFixMe = serializations?.components?.Callout ?? fallbackComponents.Callout;
@@ -649,7 +649,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.COUNTDOWN_TIMER) {
     return (
       <StyledCountdownTimerNode>
-        <CountdownTimer timer={node.config.timer} serializations={serializations} />
+        <CountdownTimer timer={node.config.timer} serializations={{ ...fallbackComponents, ...serializations }} />
       </StyledCountdownTimerNode>
     );
   }
@@ -726,7 +726,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               // On change so far is just for the address
               if (typeof node._onChange === "function") node._onChange(e);
             }}
-            serializations={serializations}
+            serializations={{
+              ...fallbackComponents,
+              ...serializations,
+            }}
           />
         );
       } else if (node.inputType === ContentNodeInputType.CHECKBOX) {
@@ -759,7 +762,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               // On change so far is just for the address
               if (typeof node._onChange === "function") node._onChange(e);
             }}
-            serializations={serializations}
+            serializations={{
+              ...fallbackComponents,
+              ...serializations,
+            }}
           />
         );
       } else if (node.inputType === ContentNodeInputType.DATE) {
@@ -773,7 +779,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               inputOnChange(date);
               if (typeof node._onChange === "function") node._onChange(date);
             }}
-            serializations={serializations}
+            serializations={{
+              ...fallbackComponents,
+              ...serializations,
+            }}
             dateStart={node.dateStart}
             dateEnd={node.dateEnd}
             dateDisabled={node.dateDisabled}
@@ -888,7 +897,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           }}
           type={node.inputType}
           {...omit(nodeAttrs, "canInputOther")}
-          serializations={serializations}
+          serializations={{
+            ...fallbackComponents,
+            ...serializations,
+          }}
         >
           <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
           {selectOptions.map((opt) => (
@@ -1048,7 +1060,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 }}
                 type={node.inputType}
                 {...omit(nodeAttrs, "canInputOther")}
-                serializations={serializations}
+                serializations={{
+                  ...fallbackComponents,
+                  ...serializations,
+                }}
               >
                 <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
                 {selectOptions.map((opt) => (
@@ -1831,7 +1846,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           onConfirm={onButtonClick}
           messagePrompts={node.text}
           {...node.attrs}
-          serializations={serializations}
+          serializations={{
+            ...fallbackComponents,
+            ...serializations,
+          }}
         />
       );
     }

@@ -7,6 +7,7 @@
 import React from "react";
 import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, templateFunctionToValue } from "@xstate-wizards/spells";
+import { A as FallbackA } from "../contentNodes/fallbacks/A";
 
 type TWizardMLProps = {
   ctx?: $TSFixMe; // machine context
@@ -14,8 +15,6 @@ type TWizardMLProps = {
   serializations: TWizardSerializations;
   contentTree?: $TSFixMe;
 };
-
-const FallbackA = styled.a``;
 
 export function renderWizardML({ ctx, text, serializations, contentTree }: TWizardMLProps): React.ReactNode[] {
   const A = serializations?.components?.A ?? FallbackA;

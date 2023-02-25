@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, formatDate, parseDate } from "@xstate-wizards/spells";
 import { logger } from "../../wizardDebugger";
+import { Select as FallbackSelect } from "./fallbacks/Select";
 
 type TSelectDatePickerProps = {
   disabled?: boolean;
@@ -24,8 +25,6 @@ type TSelectDatePickerProps = {
   dateStart?: Date | string;
   dateEnd?: Date | string;
 };
-
-const FallbackSelect = styled.select``;
 
 /**
  * SelectDatePicker
