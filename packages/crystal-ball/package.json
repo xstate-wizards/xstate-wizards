@@ -1,6 +1,6 @@
 {
   "name": "@xstate-wizards/crystal-ball",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

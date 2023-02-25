@@ -7,7 +7,7 @@ import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 import { contentNodeToOutlineNode } from "./contentNodes/contentNodeToOutlineNode";
 import { NodeNotes } from "./contentNodes/NodeNotes";
 import { useOutline } from "../data/OutlineStore";
-import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS.css";
+import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS";
 
 const nodeHighlightsToClassName = (graphJSONId, nodeHighlights): string => {
   return `${nodeHighlights.sourceId === graphJSONId ? "source" : ""} ${
