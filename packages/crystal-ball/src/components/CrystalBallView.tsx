@@ -5,7 +5,7 @@ import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 import { TSpellMap } from "@xstate-wizards/spells";
 import { TCrystalBallViewSections, TCrystalBallViewSectionSpellConfig } from "../types";
 import { CrystalBall } from "./CrystalBall";
-import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS.css";
+import { SharedCrystalBallCSS } from "./styled/SharedCrystalBallCSS";
 
 type TCrystalBallViewProps = {
   sections: TCrystalBallViewSections;
