@@ -216,7 +216,7 @@ export const WizardRunner = ({
     // skip if no interview session or already showing inactive screen
     if (!interviewSession || showInterviewInactive) return;
     // get times for active/cached progress
-    // const activeInterviewSession = null;
+    
     const activeInterviewSession = await sessionRequestCheck?.({
       key: spellKey,
       version: spellMap[spellKey]?.version,
@@ -252,8 +252,9 @@ export const WizardRunner = ({
   // ==========================
   // RENDER
   // ==========================
+    // style={showInterviewInactive ? { overflow: "hidden", height: "100vh" } : null}
   return initialMachineContext !== undefined ? (
-    <div style={showInterviewInactive ? { overflow: "hidden", height: "100vh" } : null}>
+    <div>
       <WizardStateMachineManager
         // Machine (from either of 2 methods)
         // ~~~~~~a) a machine already called (allows custom machine ctx, createMachine)~~~~~~ removing to simplify api
@@ -293,7 +294,7 @@ export const WizardRunner = ({
         onMachineProgress={machineProgressHandler}
         useNavigationBlocker={useNavigationBlocker}
       />
-      {showInterviewInactive && SessionInactiveOverlay != null ? <SessionInactiveOverlay /> : null}
+      {/* {showInterviewInactive && SessionInactiveOverlay != null ? <SessionInactiveOverlay /> : null} */}
     </div>
   ) : null;
 };
