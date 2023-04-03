@@ -235,14 +235,17 @@ export const WizardRunner = ({
       (cachedLastProgressAt && activeProgressAt && activeProgressAt > cachedLastProgressAt)
     ) {
       logger.info(`Inactive Session`);
-      setShowInterviewInactive(true);
+        //TEMPORARY: stop checking sessions because this is blocking users. Unclear if this will solve the issue
+      // setShowInterviewInactive(true);
     }
   }, [interviewSession, showInterviewInactive]);
   // --- on long interval (30sec), check active
+
   useEffect(() => {
     const checkSesssionIsActiveInterval = setInterval(() => checkSesssionIsActive(), 1000 * 30);
     return () => clearInterval(checkSesssionIsActiveInterval);
   }, [checkSesssionIsActive]);
+  
   // --- on window focus, check active
   useWindowFocusEffect(checkSesssionIsActive, [checkSesssionIsActive]);
 
