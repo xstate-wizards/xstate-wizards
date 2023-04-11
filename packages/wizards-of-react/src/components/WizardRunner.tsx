@@ -1,5 +1,5 @@
 import { isBefore, subMinutes } from "date-fns";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { assign } from "xstate";
 import {
   $TSFixMe,
@@ -10,7 +10,6 @@ import {
   parseDate,
   prepMachineContextWithResources,
   setJsonLogicOperation,
-  TPrepparedSpellMapping,
   TWizardSession,
   updateResourceOnContext,
   upsertResourceOnContext,
@@ -216,7 +215,7 @@ export const WizardRunner = ({
     // skip if no interview session or already showing inactive screen
     if (!interviewSession || showInterviewInactive) return;
     // get times for active/cached progress
-    
+
     const activeInterviewSession = await sessionRequestCheck?.({
       key: spellKey,
       version: spellMap[spellKey]?.version,
@@ -235,8 +234,7 @@ export const WizardRunner = ({
       (cachedLastProgressAt && activeProgressAt && activeProgressAt > cachedLastProgressAt)
     ) {
       logger.info(`Inactive Session`);
-        //TEMPORARY: stop checking sessions because this is blocking users. Unclear if this will solve the issue
-      // setShowInterviewInactive(true);
+      setShowInterviewInactive(true);
     }
   }, [interviewSession, showInterviewInactive]);
   // --- on long interval (30sec), check active
@@ -245,16 +243,15 @@ export const WizardRunner = ({
     const checkSesssionIsActiveInterval = setInterval(() => checkSesssionIsActive(), 1000 * 30);
     return () => clearInterval(checkSesssionIsActiveInterval);
   }, [checkSesssionIsActive]);
-  
+
   // --- on window focus, check active
   useWindowFocusEffect(checkSesssionIsActive, [checkSesssionIsActive]);
 
   // ==========================
   // RENDER
   // ==========================
-    // style={showInterviewInactive ? { overflow: "hidden", height: "100vh" } : null}
   return initialMachineContext !== undefined ? (
-    <div>
+    <div style={showInterviewInactive ? { overflow: "hidden", height: "100vh" } : null}>
       <WizardStateMachineManager
         // Machine (from either of 2 methods)
         // ~~~~~~a) a machine already called (allows custom machine ctx, createMachine)~~~~~~ removing to simplify api
@@ -294,7 +291,7 @@ export const WizardRunner = ({
         onMachineProgress={machineProgressHandler}
         useNavigationBlocker={useNavigationBlocker}
       />
-      {/* {showInterviewInactive && SessionInactiveOverlay != null ? <SessionInactiveOverlay /> : null} */}
+      {showInterviewInactive && SessionInactiveOverlay != null ? <SessionInactiveOverlay /> : null}
     </div>
   ) : null;
 };
