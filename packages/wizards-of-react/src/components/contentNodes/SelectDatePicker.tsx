@@ -55,13 +55,14 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
       }),
     []
   );
-  const [day, setDay] = useState(value ? getDate(parseDate(value)) : undefined);
-  const [monthIndex, setMonthIndex] = useState(value ? getMonth(parseDate(value)) : undefined);
-  const [year, setYear] = useState(value ? getYear(parseDate(value)) : undefined);
-  const propagateChange = (newYear?, newMonthIndex?, newDay?) => {
-    if (newDay != null && newMonthIndex != null && newYear != null) {
-      // constructor: new Date(year, monthIndex, day)
-      onChange(new Date(newYear, newMonthIndex, newDay));
+
+  const [day, setDay] = useState<number | undefined>(value ? getDate(parseDate(value)) : undefined);
+  const [month, setMonth] = useState<number | undefined>(value ? getMonth(parseDate(value)) : undefined);
+  const [year, setYear] = useState<number | undefined>(value ? getYear(parseDate(value)) : undefined);
+  const propagateChange = (newYear?, newMonth?, newDay?) => {
+    if (newDay != null && newMonth != null && newYear != null) {
+      // constructor: new Date(year, month, day)
+      onChange(new Date(newYear, newMonth, newDay));
     } else {
       onChange(undefined);
     }
@@ -72,7 +73,7 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
     // Check if initial value is selectable (will clear bad data automatically)
     if (value && isSelectDisabled({ date: parseDate(value) })) {
       setDay(undefined);
-      setMonthIndex(undefined);
+      setMonth(undefined);
       setYear(undefined);
       // HACK: If multiple date inputs are on page, we want all to render before running updates
       setTimeout(() => onChange(undefined), 0);
@@ -82,22 +83,22 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   return (
     <StyledSelectDatePicker data-test-label={props["data-test-label"]}>
       <Select
-        value={monthIndex ?? ""}
+        value={month ?? ""}
         disabled={disabled}
         size={size}
         onChange={(e) => {
-          const newMonthIndex = Number(e.target.value);
-          setMonthIndex(newMonthIndex);
+          const newMonth = Number(e.target.value);
+          setMonth(newMonth);
           // Reset day if beyond whats in month or whats allowed
           if (
-            day > getDaysInMonth(new Date(year ?? endYear, newMonthIndex)) ||
-            isSelectDisabled({ date: new Date(year ?? endYear, newMonthIndex, day) })
+            day > getDaysInMonth(new Date(year ?? endYear, newMonth)) ||
+            isSelectDisabled({ date: new Date(year ?? endYear, newMonth, day) })
           ) {
             logger.info("Day is outside month selected range or not allowed to be selected, clearing its value.");
             setDay(undefined);
-            propagateChange(year, newMonthIndex, undefined);
+            propagateChange(year, newMonth, undefined);
           } else {
-            propagateChange(year, newMonthIndex, day);
+            propagateChange(year, newMonth, day);
           }
         }}
       >
@@ -112,25 +113,23 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
       </Select>
       <Select
         value={day ?? ""}
-        disabled={disabled || monthIndex == null}
+        disabled={disabled || month == null}
         size={size}
         onChange={(e) => {
           const newDay = Number(e.target.value);
           setDay(newDay);
-          propagateChange(year, monthIndex, newDay);
+          propagateChange(year, month, newDay);
         }}
       >
         <option value="">-- Day --</option>
-        {Array(monthIndex !== undefined ? getDaysInMonth(new Date(year ?? endYear, monthIndex ?? 0)) : 0)
+        {Array(month !== undefined ? getDaysInMonth(new Date(year ?? endYear, month ?? 0)) : 0)
           .fill(0)
           .map((zero, i) => (
             <option
               key={i}
               value={i + 1}
               disabled={
-                year !== undefined &&
-                monthIndex !== undefined &&
-                isSelectDisabled({ date: new Date(year, monthIndex, i + 1) })
+                year !== undefined && month !== undefined && isSelectDisabled({ date: new Date(year, month, i + 1) })
               }
             >
               {i + 1}
@@ -144,17 +143,17 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
         onChange={(e) => {
           const newYear = Number(e.target.value);
           setYear(newYear);
-          propagateChange(newYear, monthIndex, day);
+          propagateChange(newYear, month, day);
         }}
       >
         <option value="">-- Year --</option>
         {Array(Math.max(0, differenceInYears(dateEnd, dateStart) + 1))
           .fill(0)
-          .map((zero, i) => (
+          .map((_, i) => (
             <option
               key={endYear - i}
               value={endYear - i}
-              // disabled={isSelectDisabled({ date: new Date(endYear - i, monthIndex ?? 0, day ?? 1) })}
+              disabled={isSelectDisabled({ date: new Date(endYear - i, month ?? 0, day ?? 1) })}
             >
               {endYear - i}
             </option>
