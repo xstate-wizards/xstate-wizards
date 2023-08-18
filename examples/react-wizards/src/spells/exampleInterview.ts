@@ -203,6 +203,7 @@ export const machineMapping = createSpell({
               type: "input",
               inputType: "tel",
               label: "Your Phone Number",
+              allowCountryCode: true, // if false, country code select is replaced with default country code (+1), default: true
               assign: { path: "phoneNumber" },
               validations: ["required", "validPhoneNumber"],
               attrs: { size: "sm" },
