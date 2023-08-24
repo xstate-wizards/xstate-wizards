@@ -3,15 +3,16 @@
 # 🔮 XState Wizards 🧙🏽‍♂️
 
 
-Handle incredibly complex questionnaires with ease. A WIP set of libraries that let you easily create state machines and wrapping UI components to drive them. Here's the gist how it works:
+### Handle incredibly complex questionnaires with ease, by writing questions and sets of questions as state machines! Here's how it works:
 
-1. Write your flows of questions as state machines, with each question/question set presented to the user as its own state.
-2. On each state, a user triggers events that determine which state they navigate to next.
+1. Write your flows with each question/question set presented to the user as its own state.
+2. On each state...
+   1. we list out content as JSON which is turned into a pretty UI by the library (you can replace it with your own styling components). 
+   2. As the user interacts with components, they trigger events which you will explictly write out transitions for. Sometimes it sends them to a new state or modifies data. **The magic of xstate-wizards** is that we've abstracted out a lot of boiler plate events/configs so speed up the development flow.
 3. Each transition can have conditions for different target states. That can be another question, a data fetch, or spawning an entirely new and isolated question flow that will resolve back into this state machine.
 
-
-![Diagram of questionnaire state machines invoking each other](/docs/flow.png)
 ![Example of questionnaire UIs](/docs/questions.png)
+![Diagram of questionnaire state machines invoking each other](/docs/flow.png)
 
 ## The Packages
 
@@ -39,28 +40,17 @@ We highly recommend you check out the examples `./examples/react-wizards` and `.
 export const machineMapping = createSpell({
   version: "1",
   config: {
-    initial: personalizedStartMessage,
+    initial: personalizedStartMessage, // state machine initial state choice
     title: "Example Screener",
     exitTo: "/",
     sectionsBar: [],
   },
-  models: {
-    User: { loader: {} },
-  },
-  schema: {
-    type: "object",
-    properties: {
-      states: {
-        type: "object",
-        properties: {
-          isInterestedInInterview: { type: ["boolean", "null"], default: null },
-          wizardScore: { type: ["number"], default: 0 },
-        },
-      },
-    },
-  },
+  models: {}, // If you want to map to ORM/database models for pushing updates simply
+  schema: {}, // If you want to set defaults
   states: {
+    // 1st state...
     personalizedStartMessage: {
+      // ... content to be rendered in React/Vue
       content: (ctx) => [
         {
           type: "h5",
@@ -71,10 +61,12 @@ export const machineMapping = createSpell({
         { type: "hr" },
         { type: "countdownTimer", config: { timer: 1000 * 5 } },
       ],
+      // ... events to be evaluated (check XState docs)
       on: {
         WAITED: { target: "questionVolume" },
       },
     },
+    // 2nd state...
     questionVolume: {
       content: (ctx) => [
         { type: "h5", text: "How many questions do you have to ask your users?" },
@@ -118,6 +110,7 @@ export const machineMapping = createSpell({
         NONE: { target: "developerExperience" },
       },
     },
+    // 3rd state...
     developerExperience: {
       content: (ctx) => [
         {
@@ -191,6 +184,12 @@ export const machineMapping = createSpell({
 });
 
 ```
+
+## Who is Using this?
+
+This library was created by [Mark Hansen](https://markhansen.com) who was building a self-service tool for low-income people to file bankruptcy along with several immigration products. It continues to be used at [Upsolve](https://upsolve.org/) and other social impact and government adjacent orgs in the U.S.
+
+This library stands on the shoulders of the XState community, which is why the name was chosen to pay clear respect. It's also been deeply informed by the past experiences of the team that salvaged Healthcare.gov after its launch.
 
 
 ## Development
