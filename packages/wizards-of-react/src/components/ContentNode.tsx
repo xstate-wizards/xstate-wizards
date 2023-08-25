@@ -802,7 +802,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             //@ts-ignore
             disabled={inputDisabled}
             size={node.attrs?.size}
-            allowCountryCode={node.allowCountryCode}
+            defaultCountryCode={node.defaultCountryCode}
+            allowSelectingCountryCode={node.allowSelectingCountryCode}
             value={inputValue}
             isValid={!showInputAsInvalid}
             onChange={(phoneNumber, validations) => {

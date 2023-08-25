@@ -11,7 +11,8 @@ type TInputPhoneNumberProps = {
   onChange: (value: string, validations: Record<string, boolean>) => void;
   size?: TComponentSize;
   value: string;
-  allowCountryCode?: boolean;
+  defaultCountryCode?: number;
+  allowSelectingCountryCode?: boolean;
 };
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
@@ -20,9 +21,10 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   onChange,
   size,
   value,
-  allowCountryCode = true,
+  defaultCountryCode = 1,
+  allowSelectingCountryCode,
 }) => {
-  const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? "1"}`);
+  const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? `${defaultCountryCode}`}`);
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
   useEffect(() => {
     const parsed = parseTel(`${countryCode}${phoneNumber}`);
@@ -37,7 +39,9 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   // RENDER
   return (
     <StyledInputPhoneNumber>
-      {allowCountryCode ? (
+      {allowSelectingCountryCode === false ? (
+        <StyledUSCode>+{defaultCountryCode}</StyledUSCode>
+      ) : (
         <Select
           disabled={disabled}
           isValid={isValid}
@@ -55,8 +59,6 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
               </option>
             ))}
         </Select>
-      ) : (
-        <StyledUSCode>+1</StyledUSCode>
       )}
       <Input
         // @ts-ignore
