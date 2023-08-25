@@ -7,14 +7,16 @@ import { TComponentSize } from "./fallbacks/types";
 
 type TInputPhoneNumberProps = {
   disabled?: boolean;
+  isValid?: boolean;
   onChange: (value: string) => void;
   size?: TComponentSize;
   value: string;
-	allowCountryCode?: boolean;
+  allowCountryCode?: boolean;
 };
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   disabled,
+  isValid,
   onChange,
   size,
   value,
@@ -25,29 +27,39 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   useEffect(() => {
     if (countryCode && phoneNumber) {
       const parsed = parseTel(`${countryCode}${phoneNumber}`);
+      logger.info(parsed);
       // If a valid number, push back change. Should this be looser and just use isPossibleNumber
-      if (parsed.isValidNumber) onChange(`${countryCode}${phoneNumber}`);
+      if (parsed.isValidNumber) {
+        onChange(`${countryCode}${phoneNumber}`);
+      } else {
+        // We should still push back a value if not, because a user can continue to type a number and context doesn't update when its invalid
+        onChange("");
+      }
     }
   }, [countryCode, phoneNumber]);
 
   // RENDER
   return (
     <StyledInputPhoneNumber>
-	    {allowCountryCode ? (
-      // @ts-ignore
-        <Select disabled={disabled} size={size} value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
+      {allowCountryCode ? (
+        <Select
+          disabled={disabled}
+          isValid={isValid}
+          // @ts-ignore
+          size={size}
+          value={countryCode}
+          onChange={(e) => setCountryCode(e.target.value)}
+        >
           {Object.keys(COUNTRY_CALLING_CODES)
             .sort()
             .sort((a) => (a === "US" ? -1 : 0))
             .map((country) => (
-              // @ts-ignore
               <option key={country} value={COUNTRY_CALLING_CODES[country]}>
-                {/* @ts-ignore */}
                 {country} {COUNTRY_CALLING_CODES[country]}
               </option>
             ))}
         </Select>
-	    ) : (
+      ) : (
         <StyledUSCode>+1</StyledUSCode>
       )}
       <Input
@@ -57,6 +69,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
         type="tel"
         placeholder="Phone Number"
         value={phoneNumber}
+        isValid={isValid}
         onChange={(e) => setPhoneNumber(e.target.value)}
       />
     </StyledInputPhoneNumber>
