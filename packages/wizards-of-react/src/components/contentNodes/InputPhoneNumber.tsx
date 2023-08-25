@@ -30,7 +30,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
     if (phoneNumber) {
       onChange(`${countryCode}${phoneNumber}`, { isValidNumber: parsed.isValidNumber });
     } else {
-      onChange("", { isValidNumber: parsed.isValidNumber });
+      onChange(null, { isValidNumber: parsed.isValidNumber });
     }
   }, [countryCode, phoneNumber]);
 
