@@ -8,7 +8,7 @@ import { TComponentSize } from "./fallbacks/types";
 type TInputPhoneNumberProps = {
   disabled?: boolean;
   isValid?: boolean;
-  onChange: (value: string) => void;
+  onChange: (value: string, validations: Record<string, boolean>) => void;
   size?: TComponentSize;
   value: string;
   allowCountryCode?: boolean;
@@ -25,16 +25,12 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? "1"}`);
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
   useEffect(() => {
-    if (countryCode && phoneNumber) {
-      const parsed = parseTel(`${countryCode}${phoneNumber}`);
-      logger.info(parsed);
-      // If a valid number, push back change. Should this be looser and just use isPossibleNumber
-      if (parsed.isValidNumber) {
-        onChange(`${countryCode}${phoneNumber}`);
-      } else {
-        // We should still push back a value if not, because a user can continue to type a number and context doesn't update when its invalid
-        onChange("");
-      }
+    const parsed = parseTel(`${countryCode}${phoneNumber}`);
+    // Since we default country code, only update when phone input changes, otherwise don't push anything (bc country code breaks required statements)
+    if (phoneNumber) {
+      onChange(`${countryCode}${phoneNumber}`, { isValidNumber: parsed.isValidNumber });
+    } else {
+      onChange("", { isValidNumber: parsed.isValidNumber });
     }
   }, [countryCode, phoneNumber]);
 

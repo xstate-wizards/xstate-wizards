@@ -186,7 +186,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   // INPUT EVENT HANDLER
   // ===================
-  const inputOnChange = (e, overrideNode?: TContentDefinition) => {
+  const inputOnChange = (
+    e,
+    overrides?: { overrideNode?: TContentDefinition; componentValidationInstruction?: string }
+  ) => {
+    const overrideNode = overrides?.overrideNode;
+    const componentValidationInstruction = overrides?.componentValidationInstruction;
     let value;
     if (
       [
@@ -254,7 +259,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         setValidationMap(newValidationMap);
         // - Everything else, normal node validations (jsonArray is special because child nodes might have validations)
       } else if (node.validations || node.type === ContentNodeType.JSON_ARRAY) {
-        let newValidationInstruction = validateInputValue(node.validations, value, serializations?.validations);
+        let newValidationInstruction =
+          validateInputValue(node.validations, value, serializations?.validations) ?? componentValidationInstruction;
         // - Json-array validations (If the nested editors have validation failures, we need to highlight them)
         if (node.type === ContentNodeType.JSON_ARRAY && newValidationInstruction == null) {
           // For each schema item w/ a validation func, run on each array item
@@ -799,8 +805,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             allowCountryCode={node.allowCountryCode}
             value={inputValue}
             isValid={!showInputAsInvalid}
-            onChange={(phoneNumber) => {
-              inputOnChange(phoneNumber);
+            onChange={(phoneNumber, validations) => {
+              // Unlike other inputs, we're going to get some validations from the component (a user shouldnt have to ask for phone number validation)
+              let componentValidationInstruction = null;
+              // no number means isValidNumber = null, so we'll skip. that way a required validation can take precedence
+              if (validations.isValidNumber === false) componentValidationInstruction = "Invalid phone number.";
+              // On change, send value & any instructions
+              inputOnChange(phoneNumber, { componentValidationInstruction });
               if (typeof node._onChange === "function") node._onChange(phoneNumber);
             }}
           />
@@ -1483,22 +1494,27 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                           place.address_components.find((ac) => (ac.types || []).some((t) => t === "country")),
                           "short_name"
                         ) || "";
-                      inputOnChange(
-                        [streetNumberComponent, streetRouteComponent].join(" ").trim(),
-                        extendAddressChildNode(props, { childKey: "street1" }).node
-                      );
-                      inputOnChange("", extendAddressChildNode(props, { childKey: "street2", validations: [] }).node);
-                      inputOnChange(
-                        cityComponent || boroughComponent,
-                        extendAddressChildNode(props, { childKey: "city" }).node
-                      );
-                      inputOnChange(
-                        countyComponent,
-                        extendAddressChildNode(props, { childKey: "county", validations: [] }).node
-                      );
-                      inputOnChange(stateComponent, extendAddressChildNode(props, { childKey: "state" }).node);
-                      inputOnChange(zipcodeComponent, extendAddressChildNode(props, { childKey: "zipcode" }).node);
-                      inputOnChange(countryComponent, extendAddressChildNode(props, { childKey: "country" }).node);
+                      inputOnChange([streetNumberComponent, streetRouteComponent].join(" ").trim(), {
+                        overrideNode: extendAddressChildNode(props, { childKey: "street1" }).node,
+                      });
+                      inputOnChange("", {
+                        overrideNode: extendAddressChildNode(props, { childKey: "street2", validations: [] }).node,
+                      });
+                      inputOnChange(cityComponent || boroughComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "city" }).node,
+                      });
+                      inputOnChange(countyComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "county", validations: [] }).node,
+                      });
+                      inputOnChange(stateComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "state" }).node,
+                      });
+                      inputOnChange(zipcodeComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "zipcode" }).node,
+                      });
+                      inputOnChange(countryComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "country" }).node,
+                      });
                       // TODO: Save country
                       // When input changes run, an old validationMap is persisted through on each run. We have to manually reset the map afterwards
                       const addressKeys = ["street1", "street2", "city", "county", "state", "zipcode", "country"];
