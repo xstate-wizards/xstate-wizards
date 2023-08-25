@@ -844,7 +844,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           className={`content-node__input ${showInputAsInvalid ? "validation-error" : ""} ${node.inputType ?? ""}`}
         >
           {!node.label && innerInput}
-          {node.label && node.inputType !== ContentNodeInputType.CHECKBOX && innerInput && (
+          {node.label && innerInput && (
             <label>
               <Small className="content-node__input__label">
                 {node.label}
@@ -860,19 +860,6 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 </Small>
               )}
               {innerInput}
-            </label>
-          )}
-          {node.label && node.inputType === ContentNodeInputType.CHECKBOX && innerInput && (
-            <label style={{ display: "flex", alignItems: "center" }}>
-              {innerInput}
-              <Small className="content-node__input__label checkbox">
-                {node.label}
-                {(node.validations || []).includes("required") ? (
-                  <span className="content-node__input__required-tick">*</span>
-                ) : (
-                  ""
-                )}
-              </Small>
             </label>
           )}
           {showInputAsInvalid && (
