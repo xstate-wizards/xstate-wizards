@@ -18,6 +18,7 @@ import {
   isJsonLogic,
   resolveAssignId,
   TContentNode,
+  TContentDefinition,
   validateInputValue,
   validationKeyForNode,
 } from "@xstate-wizards/spells";
@@ -102,7 +103,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   // SETUP
   // ===================
-  const { serializations, node, state, transition, validationMap, setValidationMap } = props;
+  const { serializations, node, state, transition, validationMap, setValidationMap } = props; // : { serializations: TWizardSerializations, node: TContentDefinition, state: $TSFixMe, transition: $TSFixMe, validationMap: TValidationMap, setValidationMap: Function }
   const contentTree = node.contentTree ?? props.contentTree; // not sure why we prefer node before props
   // --- Input Prep
   const {
@@ -185,7 +186,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   // INPUT EVENT HANDLER
   // ===================
-  const inputOnChange = (e, overrideNode?) => {
+  const inputOnChange = (e, overrideNode?: TContentDefinition) => {
     let value;
     if (
       [
@@ -841,6 +842,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {innerInput}
             </label>
           )}
@@ -923,6 +929,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {SelectJSX}
             </label>
           ) : (
@@ -966,6 +977,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {TextareaJSX}
             </label>
           ) : (
@@ -1023,6 +1039,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
             </label>
           )}
           {node.inputType === "list" ? (

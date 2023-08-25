@@ -218,7 +218,7 @@ const SharedContentNodeCSS = css`
   }
   .content-node__input__label {
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.3;
   }
   .content-node__input {
@@ -259,6 +259,11 @@ const SharedContentNodeCSS = css`
           margin: 0;
         }
       }
+    }
+    .content-node__input__label-byline {
+      font-size: 13px;
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
     }
     &.checkbox {
       padding-top: 0.2em;
