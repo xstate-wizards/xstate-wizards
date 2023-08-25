@@ -205,7 +205,7 @@ export const machineMapping = createSpell({
               label: "Your Phone Number",
               allowCountryCode: true, // if false, country code select is replaced with default country code (+1), default: true
               assign: { path: "phoneNumber" },
-              validations: ["required", "validPhoneNumber"],
+              validations: [], // "validPhoneNumber" is now built in. We'll see a validation err only if its a bad input
               attrs: { size: "sm" },
             },
             {
