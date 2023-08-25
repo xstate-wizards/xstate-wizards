@@ -209,7 +209,7 @@ But before we do anything, get onto the right Node version, and run our install/
 - `yarn install`
 - `yarn build`
 
-Then we'll want to connect our package directories to `yalc`, our local registry mirror:
+Then we'll want to connect our package directories to our local registry mirror using `yalc`:
 
 - `yarn yalclink`
 

@@ -30,7 +30,7 @@
     "clean:packages": "yarn workspaces run clean",
     "build": "lerna run build",
     "test": "lerna run test",
-    "yalclink": "lerna run yalclink",
+    "yalclink": "lerna run yalclink && cd ./examples/react-spellbook && yarn yalclink && cd - && cd ./examples/react-wizards && yarn yalclink && cd - && cd ./examples/react-wizards-i18n && yarn yalclink && cd -",
     "yalcpush": "lerna run yalcpush",
     "yalcpush-since": "lerna run yalcpush --since main"
   }
