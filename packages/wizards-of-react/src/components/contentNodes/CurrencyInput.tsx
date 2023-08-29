@@ -4,14 +4,16 @@ import { $TSFixMe } from "@xstate-wizards/spells";
 import { wizardTheme } from "../../theme";
 import { Input as FallbackInput } from "./fallbacks/Input";
 
-export const CurrencyInput: React.FC<$TSFixMe> = ({
+type TCurrencyInputProps = $TSFixMe;
+
+export const CurrencyInput: React.FC<TCurrencyInputProps> = ({
   dataTestId,
   disabled,
   isValid,
+  onChange,
   placeholder,
   size,
   value,
-  onChange,
   ...props
 }) => {
   // Styled/Component Refs

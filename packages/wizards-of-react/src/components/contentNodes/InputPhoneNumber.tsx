@@ -13,16 +13,18 @@ type TInputPhoneNumberProps = {
   value: string;
   defaultCountryCode?: number;
   allowSelectingCountryCode?: boolean;
+  "data-test-label"?: string;
 };
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
+  allowSelectingCountryCode,
+  "data-test-label": dataTestLabel,
+  defaultCountryCode = 1,
   disabled,
   isValid,
   onChange,
   size,
   value,
-  defaultCountryCode = 1,
-  allowSelectingCountryCode,
 }) => {
   const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? `${defaultCountryCode}`}`);
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
@@ -38,7 +40,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
 
   // RENDER
   return (
-    <StyledInputPhoneNumber>
+    <StyledInputPhoneNumber data-test-label={dataTestLabel}>
       {allowSelectingCountryCode === false ? (
         <StyledUSCode>+{defaultCountryCode}</StyledUSCode>
       ) : (
