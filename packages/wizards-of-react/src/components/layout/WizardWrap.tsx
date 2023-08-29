@@ -6,21 +6,23 @@ import { IconFlag, IconQuestionMark } from "../contentNodes/fallbacks/Icons";
 import { P } from "../contentNodes/fallbacks/P";
 import { Small } from "../contentNodes/fallbacks/Small";
 import { Z_DROPDOWN_MENU, Z_STICKY_SCROLL_BANNER } from "../styled/zIndexes";
+import { logger } from "../../wizardDebugger";
 
 // WRAPS
 // --- FULL SCREEN
-export const WizardWrapFullScreen = ({
-  children,
-  title,
-  progress,
-  sections,
-  showResourcesUpdatesWarning,
-  "data-wiz-entry-machine-id": dataWizEntryMachineId,
-  "data-wiz-entry-machine-state": dataWizEntryMachineState,
-  "data-wiz-machine-id": dataWizMachineId,
-  "data-wiz-machine-state": dataWizMachineState,
-  "data-test-id": dataTestId,
-}) => {
+export const WizardWrapFullScreen = (props) => {
+  const {
+    children,
+    title,
+    progress,
+    sections,
+    showResourcesUpdatesWarning,
+    "data-wiz-entry-machine-id": dataWizEntryMachineId,
+    "data-wiz-entry-machine-state": dataWizEntryMachineState,
+    "data-wiz-machine-id": dataWizMachineId,
+    "data-wiz-machine-state": dataWizMachineState,
+    "data-test-id": dataTestId,
+  } = props;
   return (
     <StyledWizardWrapFullScreen>
       <div className="x-wizard__header">{title}</div>
@@ -62,25 +64,28 @@ export const WizardWrapFullScreen = ({
   );
 };
 // --- BOUND BOX
-export const WizardWrapFrame = ({
-  children,
-  "data-entry-machine-id": dataWizEntryMachineId,
-  "data-entry-machine-state": dataWizEntryMachineState,
-  "data-machine-id": dataWizMachineId,
-  "data-machine-state": dataWizMachineState,
-  "data-test-id": dataTestId,
-}) => (
-  <StyledWizardWrapFrame
-    onSubmit={(e) => e.preventDefault()}
-    data-wiz-entry-machine-id={dataWizEntryMachineId}
-    data-wiz-entry-machine-state={dataWizEntryMachineState}
-    data-wiz-machine-id={dataWizMachineId}
-    data-wiz-machine-state={dataWizMachineState}
-    data-test-id={dataTestId}
-  >
-    {children}
-  </StyledWizardWrapFrame>
-);
+export const WizardWrapFrame = (props) => {
+  const {
+    children,
+    "data-wiz-entry-machine-id": dataWizEntryMachineId,
+    "data-wiz-entry-machine-state": dataWizEntryMachineState,
+    "data-wiz-machine-id": dataWizMachineId,
+    "data-wiz-machine-state": dataWizMachineState,
+    "data-test-id": dataTestId,
+  } = props;
+  return (
+    <StyledWizardWrapFrame
+      onSubmit={(e) => e.preventDefault()}
+      data-wiz-entry-machine-id={dataWizEntryMachineId}
+      data-wiz-entry-machine-state={dataWizEntryMachineState}
+      data-wiz-machine-id={dataWizMachineId}
+      data-wiz-machine-state={dataWizMachineState}
+      data-test-id={dataTestId}
+    >
+      {children}
+    </StyledWizardWrapFrame>
+  );
+};
 
 // EXTRA COMPONENTS
 const ResourcesUpdatesWarning = () => {
