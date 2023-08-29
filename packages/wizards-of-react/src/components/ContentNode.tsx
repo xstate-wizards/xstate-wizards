@@ -723,7 +723,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       if (node.inputType === ContentNodeInputType.AGE) {
         innerInput = (
           <AgeInput
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -743,7 +744,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         innerInput = (
           <Input
             {...node.attrs}
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size="lg"
             type={node.inputType}
             disabled={inputDisabled}
@@ -759,7 +761,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.CURRENCY) {
         innerInput = (
           <CurrencyInput
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -778,7 +781,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.DATE) {
         innerInput = (
           <SelectDatePicker
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             disabled={inputDisabled}
             size={node.attrs?.size}
             value={inputValue}
@@ -798,7 +802,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.TEL) {
         innerInput = (
           <InputPhoneNumber
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             //@ts-ignore
             disabled={inputDisabled}
             size={node.attrs?.size}
@@ -820,7 +825,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else {
         innerInput = (
           <Input
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size || "sm"}
             type={node.inputType === ContentNodeInputType.INTEGER ? "number" : node.inputType}
             inputMode={node.inputMode}
@@ -877,7 +883,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const selectOptions = evalSelectOptions(node.options, { content: contentTree, context: state.context });
       const SelectJSX = (
         <SelectComponent
-          data-test-label={node.label}
+          data-test-label={node.label} // DEPRECATE
+          data-wiz-label={node.label}
           value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
           disabled={inputDisabled}
           isValid={!showInputAsInvalid}
@@ -950,7 +957,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     if (node.type === ContentNodeType.TEXTAREA) {
       const TextareaJSX = (
         <Textarea
-          data-test-label={node.label}
+          data-test-label={node.label} // DEPRECATE
+          data-wiz-label={node.label}
           size="sm"
           type={node.inputType}
           disabled={inputDisabled}
@@ -1000,7 +1008,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const InputCheckboxJSX = (
         <StyledCheckboxButton
           ButtonCSS={ButtonCSS} // DEPRECATE
-          data-test-label={node.text}
+          data-test-label={node.text} // DEPRECATE
+          data-wiz-label={node.label}
           inverted={!inputCheckboxValue}
           onClick={() => inputOnChange(!inputCheckboxValue)}
           {...node.attrs}
@@ -1048,7 +1057,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.inputType === "list" ? (
             <div>
               <SelectComponent
-                data-test-label={node.label}
+                data-test-label={node.label} // DEPRECATE
+                data-wiz-label={node.label}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
                 disabled={inputDisabled}
                 isValid={!showInputAsInvalid}
@@ -1116,8 +1126,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div key={option?.value} className="content-node__input">
                   <StyledCheckboxButton
                     ButtonCSS={ButtonCSS} // DEPRECATE
-                    data-test-label={node.label}
-                    data-test-option={option.text}
+                    data-test-label={node.label} // DEPRECATE
+                    data-test-option={option.text} // DEPRECATE
+                    data-wiz-label={node.label}
+                    data-wiz-option-value={String(option.value)}
+                    data-wiz-option-text={option?.text}
                     inverted={!selections.includes(option?.value)}
                     onClick={() =>
                       selections.includes(option?.value)
@@ -1137,8 +1150,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div className="content-node__input">
                   <StyledCheckboxButton
                     ButtonCSS={ButtonCSS} // DEPRECATE
-                    data-test-label={node.label}
-                    data-test-option="None of the above"
+                    data-test-label={node.label} // DEPRECATE
+                    data-test-option="None of the above" // DEPRECATE
+                    data-wiz-label={node.label}
+                    data-wiz-option-value=""
+                    data-wiz-option-text="None of the above"
                     inverted={!(selections.length > 0 && selections.filter((str) => str).length === 0)}
                     onClick={() => {
                       // HACK: If we set an empty array with > 0 length, 'required' validations pass
@@ -1192,8 +1208,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <div key={option?.value} className="content-node__input">
                 <StyledCheckboxButton
                   ButtonCSS={ButtonCSS} // DEPRECATE
-                  data-test-label={node.label}
-                  data-test-option={option.text}
+                  data-test-label={node.label} // DEPRECATE
+                  data-test-option={option.text} // DEPRECATE
+                  data-wiz-label={node.label}
+                  data-wiz-option-value={String(option.value)}
+                  data-wiz-option-text={option?.text}
                   inverted={selection !== option?.value}
                   disabled={inputDisabled || optionDisabled}
                   onClick={() => {
