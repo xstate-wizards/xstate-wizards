@@ -15,6 +15,10 @@ export const WizardWrapFullScreen = ({
   progress,
   sections,
   showResourcesUpdatesWarning,
+  "data-wiz-entry-machine-id": dataWizEntryMachineId,
+  "data-wiz-entry-machine-state": dataWizEntryMachineState,
+  "data-wiz-machine-id": dataWizMachineId,
+  "data-wiz-machine-state": dataWizMachineState,
   "data-test-id": dataTestId,
 }) => {
   return (
@@ -43,15 +47,37 @@ export const WizardWrapFullScreen = ({
         </StyledWizardWrapSectionBar>
       ) : null}
       {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
-      <form className="x-wizard__body" onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
+      <form
+        className="x-wizard__body"
+        onSubmit={(e) => e.preventDefault()}
+        data-wiz-entry-machine-id={dataWizEntryMachineId}
+        data-wiz-entry-machine-state={dataWizEntryMachineState}
+        data-wiz-machine-id={dataWizMachineId}
+        data-wiz-machine-state={dataWizMachineState}
+        data-test-id={dataTestId}
+      >
         {children}
       </form>
     </StyledWizardWrapFullScreen>
   );
 };
 // --- BOUND BOX
-export const WizardWrapFrame = ({ children, "data-test-id": dataTestId }) => (
-  <StyledWizardWrapFrame onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
+export const WizardWrapFrame = ({
+  children,
+  "data-entry-machine-id": dataWizEntryMachineId,
+  "data-entry-machine-state": dataWizEntryMachineState,
+  "data-machine-id": dataWizMachineId,
+  "data-machine-state": dataWizMachineState,
+  "data-test-id": dataTestId,
+}) => (
+  <StyledWizardWrapFrame
+    onSubmit={(e) => e.preventDefault()}
+    data-wiz-entry-machine-id={dataWizEntryMachineId}
+    data-wiz-entry-machine-state={dataWizEntryMachineState}
+    data-wiz-machine-id={dataWizMachineId}
+    data-wiz-machine-state={dataWizMachineState}
+    data-test-id={dataTestId}
+  >
     {children}
   </StyledWizardWrapFrame>
 );
