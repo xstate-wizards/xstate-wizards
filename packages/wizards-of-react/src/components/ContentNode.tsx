@@ -18,6 +18,7 @@ import {
   isJsonLogic,
   resolveAssignId,
   TContentNode,
+  TContentDefinition,
   validateInputValue,
   validationKeyForNode,
 } from "@xstate-wizards/spells";
@@ -102,7 +103,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   // SETUP
   // ===================
-  const { serializations, node, state, transition, validationMap, setValidationMap } = props;
+  const { serializations, node, state, transition, validationMap, setValidationMap } = props; // : { serializations: TWizardSerializations, node: TContentDefinition, state: $TSFixMe, transition: $TSFixMe, validationMap: TValidationMap, setValidationMap: Function }
   const contentTree = node.contentTree ?? props.contentTree; // not sure why we prefer node before props
   // --- Input Prep
   const {
@@ -185,7 +186,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   // INPUT EVENT HANDLER
   // ===================
-  const inputOnChange = (e, overrideNode?) => {
+  const inputOnChange = (
+    e,
+    overrides?: { overrideNode?: TContentDefinition; componentValidationInstruction?: string }
+  ) => {
+    const overrideNode = overrides?.overrideNode;
+    const componentValidationInstruction = overrides?.componentValidationInstruction;
     let value;
     if (
       [
@@ -253,7 +259,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         setValidationMap(newValidationMap);
         // - Everything else, normal node validations (jsonArray is special because child nodes might have validations)
       } else if (node.validations || node.type === ContentNodeType.JSON_ARRAY) {
-        let newValidationInstruction = validateInputValue(node.validations, value, serializations?.validations);
+        let newValidationInstruction =
+          validateInputValue(node.validations, value, serializations?.validations) ?? componentValidationInstruction;
         // - Json-array validations (If the nested editors have validation failures, we need to highlight them)
         if (node.type === ContentNodeType.JSON_ARRAY && newValidationInstruction == null) {
           // For each schema item w/ a validation func, run on each array item
@@ -716,7 +723,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       if (node.inputType === ContentNodeInputType.AGE) {
         innerInput = (
           <AgeInput
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -736,7 +744,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         innerInput = (
           <Input
             {...node.attrs}
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size="lg"
             type={node.inputType}
             disabled={inputDisabled}
@@ -752,7 +761,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.CURRENCY) {
         innerInput = (
           <CurrencyInput
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -771,7 +781,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.DATE) {
         innerInput = (
           <SelectDatePicker
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             disabled={inputDisabled}
             size={node.attrs?.size}
             value={inputValue}
@@ -791,15 +802,22 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.TEL) {
         innerInput = (
           <InputPhoneNumber
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             //@ts-ignore
             disabled={inputDisabled}
             size={node.attrs?.size}
-            allowCountryCode={node.allowCountryCode}
+            defaultCountryCode={node.defaultCountryCode}
+            allowSelectingCountryCode={node.allowSelectingCountryCode}
             value={inputValue}
             isValid={!showInputAsInvalid}
-            onChange={(phoneNumber) => {
-              inputOnChange(phoneNumber);
+            onChange={(phoneNumber, validations) => {
+              // Unlike other inputs, we're going to get some validations from the component (a user shouldnt have to ask for phone number validation)
+              let componentValidationInstruction = null;
+              // no number means isValidNumber = null, so we'll skip. that way a required validation can take precedence
+              if (validations.isValidNumber === false) componentValidationInstruction = "Invalid phone number.";
+              // On change, send value & any instructions
+              inputOnChange(phoneNumber, { componentValidationInstruction });
               if (typeof node._onChange === "function") node._onChange(phoneNumber);
             }}
           />
@@ -807,7 +825,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else {
         innerInput = (
           <Input
-            data-test-label={node.label}
+            data-test-label={node.label} // DEPRECATE
+            data-wiz-label={node.label}
             size={node.attrs?.size || "sm"}
             type={node.inputType === ContentNodeInputType.INTEGER ? "number" : node.inputType}
             inputMode={node.inputMode}
@@ -831,7 +850,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           className={`content-node__input ${showInputAsInvalid ? "validation-error" : ""} ${node.inputType ?? ""}`}
         >
           {!node.label && innerInput}
-          {node.label && node.inputType !== ContentNodeInputType.CHECKBOX && innerInput && (
+          {node.label && innerInput && (
             <label>
               <Small className="content-node__input__label">
                 {node.label}
@@ -841,20 +860,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {innerInput}
-            </label>
-          )}
-          {node.label && node.inputType === ContentNodeInputType.CHECKBOX && innerInput && (
-            <label style={{ display: "flex", alignItems: "center" }}>
-              {innerInput}
-              <Small className="content-node__input__label checkbox">
-                {node.label}
-                {(node.validations || []).includes("required") ? (
-                  <span className="content-node__input__required-tick">*</span>
-                ) : (
-                  ""
-                )}
-              </Small>
             </label>
           )}
           {showInputAsInvalid && (
@@ -872,7 +883,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const selectOptions = evalSelectOptions(node.options, { content: contentTree, context: state.context });
       const SelectJSX = (
         <SelectComponent
-          data-test-label={node.label}
+          data-test-label={node.label} // DEPRECATE
+          data-wiz-label={node.label}
           value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
           disabled={inputDisabled}
           isValid={!showInputAsInvalid}
@@ -923,6 +935,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {SelectJSX}
             </label>
           ) : (
@@ -940,7 +957,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     if (node.type === ContentNodeType.TEXTAREA) {
       const TextareaJSX = (
         <Textarea
-          data-test-label={node.label}
+          data-test-label={node.label} // DEPRECATE
+          data-wiz-label={node.label}
           size="sm"
           type={node.inputType}
           disabled={inputDisabled}
@@ -966,6 +984,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
               {TextareaJSX}
             </label>
           ) : (
@@ -985,7 +1008,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const InputCheckboxJSX = (
         <StyledCheckboxButton
           ButtonCSS={ButtonCSS} // DEPRECATE
-          data-test-label={node.text}
+          data-test-label={node.text} // DEPRECATE
+          data-wiz-label={node.label}
           inverted={!inputCheckboxValue}
           onClick={() => inputOnChange(!inputCheckboxValue)}
           {...node.attrs}
@@ -1023,12 +1047,18 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
             </label>
           )}
           {node.inputType === "list" ? (
             <div>
               <SelectComponent
-                data-test-label={node.label}
+                data-test-label={node.label} // DEPRECATE
+                data-wiz-label={node.label}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
                 disabled={inputDisabled}
                 isValid={!showInputAsInvalid}
@@ -1096,8 +1126,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div key={option?.value} className="content-node__input">
                   <StyledCheckboxButton
                     ButtonCSS={ButtonCSS} // DEPRECATE
-                    data-test-label={node.label}
-                    data-test-option={option.text}
+                    data-test-label={node.label} // DEPRECATE
+                    data-test-option={option.text} // DEPRECATE
+                    data-wiz-label={node.label}
+                    data-wiz-option-value={String(option.value)}
+                    data-wiz-option-text={option?.text}
                     inverted={!selections.includes(option?.value)}
                     onClick={() =>
                       selections.includes(option?.value)
@@ -1117,8 +1150,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div className="content-node__input">
                   <StyledCheckboxButton
                     ButtonCSS={ButtonCSS} // DEPRECATE
-                    data-test-label={node.label}
-                    data-test-option="None of the above"
+                    data-test-label={node.label} // DEPRECATE
+                    data-test-option="None of the above" // DEPRECATE
+                    data-wiz-label={node.label}
+                    data-wiz-option-value=""
+                    data-wiz-option-text="None of the above"
                     inverted={!(selections.length > 0 && selections.filter((str) => str).length === 0)}
                     onClick={() => {
                       // HACK: If we set an empty array with > 0 length, 'required' validations pass
@@ -1172,8 +1208,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <div key={option?.value} className="content-node__input">
                 <StyledCheckboxButton
                   ButtonCSS={ButtonCSS} // DEPRECATE
-                  data-test-label={node.label}
-                  data-test-option={option.text}
+                  data-test-label={node.label} // DEPRECATE
+                  data-test-option={option.text} // DEPRECATE
+                  data-wiz-label={node.label}
+                  data-wiz-option-value={String(option.value)}
+                  data-wiz-option-text={option?.text}
                   inverted={selection !== option?.value}
                   disabled={inputDisabled || optionDisabled}
                   onClick={() => {
@@ -1462,22 +1501,27 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                           place.address_components.find((ac) => (ac.types || []).some((t) => t === "country")),
                           "short_name"
                         ) || "";
-                      inputOnChange(
-                        [streetNumberComponent, streetRouteComponent].join(" ").trim(),
-                        extendAddressChildNode(props, { childKey: "street1" }).node
-                      );
-                      inputOnChange("", extendAddressChildNode(props, { childKey: "street2", validations: [] }).node);
-                      inputOnChange(
-                        cityComponent || boroughComponent,
-                        extendAddressChildNode(props, { childKey: "city" }).node
-                      );
-                      inputOnChange(
-                        countyComponent,
-                        extendAddressChildNode(props, { childKey: "county", validations: [] }).node
-                      );
-                      inputOnChange(stateComponent, extendAddressChildNode(props, { childKey: "state" }).node);
-                      inputOnChange(zipcodeComponent, extendAddressChildNode(props, { childKey: "zipcode" }).node);
-                      inputOnChange(countryComponent, extendAddressChildNode(props, { childKey: "country" }).node);
+                      inputOnChange([streetNumberComponent, streetRouteComponent].join(" ").trim(), {
+                        overrideNode: extendAddressChildNode(props, { childKey: "street1" }).node,
+                      });
+                      inputOnChange("", {
+                        overrideNode: extendAddressChildNode(props, { childKey: "street2", validations: [] }).node,
+                      });
+                      inputOnChange(cityComponent || boroughComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "city" }).node,
+                      });
+                      inputOnChange(countyComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "county", validations: [] }).node,
+                      });
+                      inputOnChange(stateComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "state" }).node,
+                      });
+                      inputOnChange(zipcodeComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "zipcode" }).node,
+                      });
+                      inputOnChange(countryComponent, {
+                        overrideNode: extendAddressChildNode(props, { childKey: "country" }).node,
+                      });
                       // TODO: Save country
                       // When input changes run, an old validationMap is persisted through on each run. We have to manually reset the map afterwards
                       const addressKeys = ["street1", "street2", "city", "county", "state", "zipcode", "country"];

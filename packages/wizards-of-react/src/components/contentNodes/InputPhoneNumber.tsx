@@ -7,48 +7,64 @@ import { TComponentSize } from "./fallbacks/types";
 
 type TInputPhoneNumberProps = {
   disabled?: boolean;
-  onChange: (value: string) => void;
+  isValid?: boolean;
+  onChange: (value: string, validations: Record<string, boolean>) => void;
   size?: TComponentSize;
   value: string;
-	allowCountryCode?: boolean;
+  defaultCountryCode?: number;
+  allowSelectingCountryCode?: boolean;
+  "data-test-label"?: string;
+  "data-wiz-label"?: string;
 };
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
+  allowSelectingCountryCode,
+  defaultCountryCode = 1,
   disabled,
+  isValid,
   onChange,
   size,
   value,
-  allowCountryCode = true,
+  ...props
 }) => {
-  const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? "1"}`);
+  const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? `${defaultCountryCode}`}`);
   const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
   useEffect(() => {
-    if (countryCode && phoneNumber) {
-      const parsed = parseTel(`${countryCode}${phoneNumber}`);
-      // If a valid number, push back change. Should this be looser and just use isPossibleNumber
-      if (parsed.isValidNumber) onChange(`${countryCode}${phoneNumber}`);
+    const parsed = parseTel(`${countryCode}${phoneNumber}`);
+    // Since we default country code, only update when phone input changes, otherwise don't push anything (bc country code breaks required statements)
+    if (phoneNumber) {
+      onChange(`${countryCode}${phoneNumber}`, { isValidNumber: parsed.isValidNumber });
+    } else {
+      onChange(null, { isValidNumber: parsed.isValidNumber });
     }
   }, [countryCode, phoneNumber]);
 
   // RENDER
   return (
-    <StyledInputPhoneNumber>
-	    {allowCountryCode ? (
-      // @ts-ignore
-        <Select disabled={disabled} size={size} value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
+    <StyledInputPhoneNumber
+      data-test-label={props["data-test-label"]} // DEPRECATED
+      data-wiz-label={props["data-wiz-label"]}
+    >
+      {allowSelectingCountryCode === false ? (
+        <StyledUSCode>+{defaultCountryCode}</StyledUSCode>
+      ) : (
+        <Select
+          disabled={disabled}
+          isValid={isValid}
+          // @ts-ignore
+          size={size}
+          value={countryCode}
+          onChange={(e) => setCountryCode(e.target.value)}
+        >
           {Object.keys(COUNTRY_CALLING_CODES)
             .sort()
             .sort((a) => (a === "US" ? -1 : 0))
             .map((country) => (
-              // @ts-ignore
               <option key={country} value={COUNTRY_CALLING_CODES[country]}>
-                {/* @ts-ignore */}
                 {country} {COUNTRY_CALLING_CODES[country]}
               </option>
             ))}
         </Select>
-	    ) : (
-        <StyledUSCode>+1</StyledUSCode>
       )}
       <Input
         // @ts-ignore
@@ -57,6 +73,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
         type="tel"
         placeholder="Phone Number"
         value={phoneNumber}
+        isValid={isValid}
         onChange={(e) => setPhoneNumber(e.target.value)}
       />
     </StyledInputPhoneNumber>

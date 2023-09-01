@@ -43,6 +43,7 @@ export type TTestNodeHandlerProps = {
   tapSelectInput: (label: string | RegExp, value: string) => Promise<void>;
   tapSelectDateInput: (label: string | RegExp, date: Date) => Promise<void>;
   typeInput: (label: string, text: string | RegExp) => Promise<void>;
+  typePhoneInput: (label: string, countryCode: string, phoneNumber: string) => Promise<void>;
   waitForTimeout: (ms: number) => Promise<void>;
 };
 
@@ -67,10 +68,11 @@ type TContentTableDefinition = {
 // TODO: Update content definition for all new node types
 export type TContentDefinition = {
   type?: string;
+  inputType?: string; // for inputs - number, text (I would love to deprecate this for 'typeInput')
   text?: string;
   component?: React.FunctionComponent; // if comp, render
   label?: string; // wrappers for inputs
-  inputType?: string; // for inputs - number, text
+  labelByLine?: string; // extra small description allowed under label
   valueKey?: string;
   validations?: string[];
   onClick?: Function; // standard onClick override

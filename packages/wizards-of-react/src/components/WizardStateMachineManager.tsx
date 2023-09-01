@@ -213,6 +213,10 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
       <WizardWrap
         // @ts-expect-error
         key={state.value}
+        data-wiz-entry-machine-id={props.machine.id}
+        data-wiz-entry-machine-state={props.machine.config.initial}
+        data-wiz-machine-id={props.machine.id}
+        data-wiz-machine-state={state.value}
         data-test-id={state.value}
         //pre-process translations
         title={processedTitle}
@@ -239,6 +243,10 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
         <WizardWrap
           // @ts-expect-error
           key={state.value}
+          data-wiz-entry-machine-id={props.machine.id}
+          data-wiz-entry-machine-state={props.machine.config.initial}
+          data-wiz-machine-id={spellKey}
+          data-wiz-machine-state={state.value}
           data-test-id={state.value}
           //TODO: should this actually be the title of the child spell?
           title={processedTitle}

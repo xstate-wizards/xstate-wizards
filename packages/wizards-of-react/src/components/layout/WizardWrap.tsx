@@ -6,17 +6,23 @@ import { IconFlag, IconQuestionMark } from "../contentNodes/fallbacks/Icons";
 import { P } from "../contentNodes/fallbacks/P";
 import { Small } from "../contentNodes/fallbacks/Small";
 import { Z_DROPDOWN_MENU, Z_STICKY_SCROLL_BANNER } from "../styled/zIndexes";
+import { logger } from "../../wizardDebugger";
 
 // WRAPS
 // --- FULL SCREEN
-export const WizardWrapFullScreen = ({
-  children,
-  title,
-  progress,
-  sections,
-  showResourcesUpdatesWarning,
-  "data-test-id": dataTestId,
-}) => {
+export const WizardWrapFullScreen = (props) => {
+  const {
+    children,
+    title,
+    progress,
+    sections,
+    showResourcesUpdatesWarning,
+    "data-wiz-entry-machine-id": dataWizEntryMachineId,
+    "data-wiz-entry-machine-state": dataWizEntryMachineState,
+    "data-wiz-machine-id": dataWizMachineId,
+    "data-wiz-machine-state": dataWizMachineState,
+    "data-test-id": dataTestId,
+  } = props;
   return (
     <StyledWizardWrapFullScreen>
       <div className="x-wizard__header">{title}</div>
@@ -43,18 +49,43 @@ export const WizardWrapFullScreen = ({
         </StyledWizardWrapSectionBar>
       ) : null}
       {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
-      <form className="x-wizard__body" onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
+      <form
+        className="x-wizard__body"
+        onSubmit={(e) => e.preventDefault()}
+        data-wiz-entry-machine-id={dataWizEntryMachineId}
+        data-wiz-entry-machine-state={dataWizEntryMachineState}
+        data-wiz-machine-id={dataWizMachineId}
+        data-wiz-machine-state={dataWizMachineState}
+        data-test-id={dataTestId}
+      >
         {children}
       </form>
     </StyledWizardWrapFullScreen>
   );
 };
 // --- BOUND BOX
-export const WizardWrapFrame = ({ children, "data-test-id": dataTestId }) => (
-  <StyledWizardWrapFrame onSubmit={(e) => e.preventDefault()} data-test-id={dataTestId}>
-    {children}
-  </StyledWizardWrapFrame>
-);
+export const WizardWrapFrame = (props) => {
+  const {
+    children,
+    "data-wiz-entry-machine-id": dataWizEntryMachineId,
+    "data-wiz-entry-machine-state": dataWizEntryMachineState,
+    "data-wiz-machine-id": dataWizMachineId,
+    "data-wiz-machine-state": dataWizMachineState,
+    "data-test-id": dataTestId,
+  } = props;
+  return (
+    <StyledWizardWrapFrame
+      onSubmit={(e) => e.preventDefault()}
+      data-wiz-entry-machine-id={dataWizEntryMachineId}
+      data-wiz-entry-machine-state={dataWizEntryMachineState}
+      data-wiz-machine-id={dataWizMachineId}
+      data-wiz-machine-state={dataWizMachineState}
+      data-test-id={dataTestId}
+    >
+      {children}
+    </StyledWizardWrapFrame>
+  );
+};
 
 // EXTRA COMPONENTS
 const ResourcesUpdatesWarning = () => {
@@ -218,7 +249,7 @@ const SharedContentNodeCSS = css`
   }
   .content-node__input__label {
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.3;
   }
   .content-node__input {
@@ -259,6 +290,11 @@ const SharedContentNodeCSS = css`
           margin: 0;
         }
       }
+    }
+    .content-node__input__label-byline {
+      font-size: 13px;
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
     }
     &.checkbox {
       padding-top: 0.2em;

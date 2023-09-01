@@ -124,10 +124,10 @@ export const machineMapping = createSpell({
       content: [
         CONTENT_NODE_BACK,
         { type: "h4", text: "Here's an example of a custom drop down with another unique validator." },
-        { type: "p", text: "What year is it currently?" },
         {
           type: "select",
           label: "Current Year",
+          labelByLine: "There can only be __one__ correct answer.",
           options: {
             "lodash.range": [
               { "date-fns.getYear": [{ "Date.now": [] }] },
@@ -203,9 +203,10 @@ export const machineMapping = createSpell({
               type: "input",
               inputType: "tel",
               label: "Your Phone Number",
-              allowCountryCode: true, // if false, country code select is replaced with default country code (+1), default: true
+              // allowSelectingCountryCode: false, // if false, country code select is replaced with default country code (+1), default: true
+              // defaultCountryCode: 1,
               assign: { path: "phoneNumber" },
-              validations: ["required", "validPhoneNumber"],
+              validations: [], // "validPhoneNumber" is now built in. We'll see a validation err only if its a bad input
               attrs: { size: "sm" },
             },
             {
