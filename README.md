@@ -26,16 +26,14 @@ To make this work across multiple frontends, we've separated out our logic & UI 
 - `@xstate-wizards/wizards-of-vue` Placeholder for Vue implementation of HOC
 - `@xstate-wizards/wizards-of-svelt` Placeholder for Svelt implementation of HOC
 
-
-
 In addition, as we've built complex flows that need input from non-technical team members, we've created some packages to aid in visibility as well as an entire no-code editor.
 
 - `@xstate-wizards/crystal-ball` is a way to view state machines in an 'outline' mode, or in other words, in a linear chart with their branching sub components revealed as well.
 - `@xstate-wizards/spellbook` is a no-code editor for these flows. It takes advantage of the fact that state machines can be serialized as JSON. (If you decide to turn this into a wildly successful for-profit company, please consider throwing some money back to this project)
 
-| *Spellbook* No-code Editor |
-| :--: |
-| ![No code editor for questionnaire flows called Spellbook](/docs/spellbook.png) |
+| *Crystal Ball* Reviewer | *Spellbook* No-code Editor |
+| :--: | :--: |
+| ![State machine outline viewer](/docs/crystal-ball.png) | ![No code editor for questionnaire flows called Spellbook](/docs/spellbook.png) |
 
 ## Casting Your First Spell (aka Writing Your First State Machine)
 
@@ -43,9 +41,9 @@ We highly recommend you check out the examples `./examples/react-wizards` and `.
 
 ```typescript
 export const machineMapping = createSpell({
-  version: "1",
+  version: "1", // if persisting sessions, incrementing can force restarts
   config: {
-    initial: personalizedStartMessage, // state machine initial state choice
+    initial: "personalizedStartMessage", // state machine initial state choice
     title: "Example Screener",
     exitTo: "/",
     sectionsBar: [],

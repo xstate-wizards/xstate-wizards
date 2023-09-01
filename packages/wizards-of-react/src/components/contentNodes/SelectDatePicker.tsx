@@ -81,7 +81,10 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   }, []);
 
   return (
-    <StyledSelectDatePicker data-test-label={props["data-test-label"]}>
+    <StyledSelectDatePicker
+      data-test-label={props["data-test-label"]} // DEPRECATED
+      data-wiz-label={props["data-wiz-label"]}
+    >
       <Select
         value={month ?? ""}
         disabled={disabled}
