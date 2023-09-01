@@ -64,7 +64,6 @@ export class WizardPuppeteerUtils {
         // tap if contains label
         testLabel.startsWith(label)
       ) {
-        console.log(option);
         if (option && testOption.indexOf(option) === -1) {
           // skip, if option was provided and does not match
           continue;
@@ -75,7 +74,7 @@ export class WizardPuppeteerUtils {
       }
     }
     if (!performedTap) {
-      console.log("label, option", label, option);
+      // console.log("label, option", label, option);
       throw new Error(".tapInput() found nothing to tap!");
     }
   }
@@ -98,7 +97,7 @@ export class WizardPuppeteerUtils {
       }
     }
     if (!performedTap) {
-      console.log("label, value", label, value);
+      // console.log("label, value", label, value);
       throw new Error(".tapSelectInput() found nothing to tap!");
     }
   }
@@ -134,7 +133,7 @@ export class WizardPuppeteerUtils {
       }
     }
     if (!performedType) {
-      console.log("label, text", label, text);
+      // console.log("label, text", label, text);
       throw new Error(".typeInput() found nothing to type into!");
     }
   }
