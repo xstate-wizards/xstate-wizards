@@ -43,6 +43,7 @@ export type TTestNodeHandlerProps = {
   tapSelectInput: (label: string | RegExp, value: string) => Promise<void>;
   tapSelectDateInput: (label: string | RegExp, date: Date) => Promise<void>;
   typeInput: (label: string, text: string | RegExp) => Promise<void>;
+  typePhoneInput: (label: string, countryCode: string, phoneNumber: string) => Promise<void>;
   waitForTimeout: (ms: number) => Promise<void>;
 };
 
