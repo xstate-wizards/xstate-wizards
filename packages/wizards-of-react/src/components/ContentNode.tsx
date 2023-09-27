@@ -1200,6 +1200,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   ""
                 )}
               </Small>
+              {node.labelByLine && (
+                <Small className="content-node__input__label-byline">
+                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                </Small>
+              )}
             </label>
           )}
           {evalSelectOptions(node.options, { content: contentTree, context: state.context }).map((option) => {
