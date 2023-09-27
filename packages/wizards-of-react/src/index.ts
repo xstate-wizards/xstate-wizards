@@ -8,6 +8,7 @@ export { wizardTheme } from "./theme";
 
 // TESTING
 export { runTestPlan } from "./testing/runTestPlan";
+export { WizardPuppeteerUtils } from "./testing/wizardPuppeteerUtils";
 
 // TYPES
 export * from "./types";
