@@ -50,7 +50,7 @@ export class WizardPuppeteerUtils {
       throw new Error(".tapButton() found nothing to tap!");
     }
   }
-  async tapInput(label, option) {
+  async tapInput(label, option?: string) {
     const elms = await this._page.$$(".content-node__input *[data-wiz-label]");
     let performedTap = false;
     for (const elm of elms) {
