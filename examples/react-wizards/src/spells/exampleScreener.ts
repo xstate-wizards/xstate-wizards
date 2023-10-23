@@ -37,7 +37,7 @@ export const machineMapping = createSpell({
         { type: "p", text: "This is a screener to help you evaluate the XState Wizard™️ in front of you." },
         {
           type: "p",
-          text: `We'll keep a running score below, but before we get started, what's your name?`,
+          text: `We'll keep a running score of ~~Pain~~ [Wizard Points](https://google.com){"target":"_blank"}, but before we get started, what's your name?`,
         },
         {
           type: "resourceEditor",
