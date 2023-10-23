@@ -24,24 +24,38 @@ export function renderWizardML({ ctx, text, serializations, contentTree }: TWiza
   // the number of arguments in the handler.
   const PATTERNS = [
     {
-      // Bold - **bolded tex**
+      // Bold - **bolded text**
       pattern: "\\*\\*(.+?)\\*\\*",
       handler: (i, text) => <b key={i}>{text}</b>,
     },
     {
-      // Underlined - __underlined tex__
+      // Underlined - __underlined text__
       pattern: "\\__(.+?)\\__",
       handler: (i, text) => <u key={i}>{text}</u>,
     },
     {
-      // Hyperlink - [Link text](https://upsolve.org)
-      // If a relative link, it's internal so use react router dom <Link/>
-      pattern: "\\[(.+?)\\]\\((.+?)\\)",
-      handler: (i, text, url) => (
-        <A key={i} href={url}>
-          {text}
-        </A>
-      ),
+      // Strikethrough - ~~strike throughed text~~
+      pattern: "\\~~(.+?)\\~~",
+      handler: (i, text) => <del key={i}>{text}</del>,
+    },
+    {
+      // Hyperlink - [Link text](https://upsolve.org){"target":"_blank"}
+      // If a relative link, it's internal so use react router dom <Link/>. Attributes obj is optional.
+      pattern: "\\[(.+?)\\]\\((.+?)\\)(\\{.+?\\})?",
+      handler: (i, text, url, attrsString) => {
+        // Cast to JSON obj to keep life simple. Using other markdown syntax needs special parsing (ex: removing quotes). Only handles 1 layer of obj
+        let attrs: Record<string, any> = {};
+        try {
+          attrs = JSON.parse(attrsString);
+        } catch (e) {
+          // noop
+        }
+        return (
+          <A key={i} href={url} target={attrs.target}>
+            {text}
+          </A>
+        );
+      },
     },
     {
       // Javascript Selector Functions - <<<get("states.wizardScore")>>>
