@@ -6,7 +6,7 @@
 1. Write your flows with each question/question set presented to the user as its own state.
 2. On each state...
    1. we list out content as JSON which is turned into a pretty UI by the library (you can replace it with your own styling components). 
-   2. As the user interacts with components, they trigger events which you will explictly write out transitions for. Sometimes it sends them to a new state or modifies data. **The magic of xstate-wizards** is that we've abstracted out a lot of boiler plate events/configs so speed up the development flow.
+   2. As the user interacts with components, they trigger events which you will explictly write out transitions for. Sometimes it sends them to a new state or modifies data. **The magic of xstate-wizards** is that we've abstracted out a lot of boilerplate events/configs to speed up the development flow.
 3. Each transition can have conditions for different target states. That can be another question, a data fetch, or spawning an entirely new and isolated question flow that will resolve back into this state machine.
 
 | Example Question State | Example State Listing Address Records | Re-Usable Spawned Address Editor |
@@ -22,13 +22,13 @@
 To make this work across multiple frontends, we've separated out our logic & UI packages.
 
 - `@xstate-wizards/spells` has state machine ("spell") setup functions and references
-- `@xstate-wizards/wizards-of-react` has UI components for running in a React setup
-- `@xstate-wizards/wizards-of-vue` Placeholder for Vue implementation of HOC
-- `@xstate-wizards/wizards-of-svelt` Placeholder for Svelt implementation of HOC
+- `@xstate-wizards/wizards-of-react` has UI components for running in a [React](https://react.dev/) setup
+- `@xstate-wizards/wizards-of-vue` Placeholder for [Vue](https://vuejs.org/) implementation of components
+- `@xstate-wizards/wizards-of-svelte` Placeholder for [Svelte](https://svelte.dev/) implementation of components
 
 In addition, as we've built complex flows that need input from non-technical team members, we've created some packages to aid in visibility as well as an entire no-code editor.
 
-- `@xstate-wizards/crystal-ball` is a way to view state machines in an 'outline' mode, or in other words, in a linear chart with their branching sub components revealed as well.
+- `@xstate-wizards/crystal-ball` is a way to view state machines in an 'outline' mode, or in other words, in a linear chart with their branching sub-components revealed as well.
 - `@xstate-wizards/spellbook` is a no-code editor for these flows. It takes advantage of the fact that state machines can be serialized as JSON. (If you decide to turn this into a wildly successful for-profit company, please consider throwing some money back to this project)
 
 | *Crystal Ball* Reviewer | *Spellbook* No-code Editor |
