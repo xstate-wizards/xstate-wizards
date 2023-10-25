@@ -260,7 +260,7 @@ export type TSpellInstructions = {
   models: TSpellModelOptionsMap;
   schema: JSONSchema7;
   states: TTempState;
-  editor: TSpellEditor;
+  editor?: TSpellEditor;
   // database related
   id?: string | number;
   createdAt?: string; // may exist from database?
