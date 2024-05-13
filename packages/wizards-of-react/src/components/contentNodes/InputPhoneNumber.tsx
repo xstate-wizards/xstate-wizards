@@ -28,20 +28,40 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   ...props
 }) => {
   const [countryCode, setCountryCode] = useState(`+${parseTel(value).getCountryCode ?? `${defaultCountryCode}`}`);
-  const [phoneNumber, setPhoneNumber] = useState(parseTel(value)?.getNationalNumber ?? "");
-  useEffect(() => {
-    const parsed = parseTel(`${countryCode}${phoneNumber}`);
-    // Since we default country code, only update when phone input changes, otherwise don't push anything (bc country code breaks required statements)
-    if (phoneNumber) {
-      onChange(`${countryCode}${phoneNumber}`, { isValidNumber: parsed.isValidNumber });
-    } else {
-      onChange(null, { isValidNumber: parsed.isValidNumber });
-    }
-  }, [countryCode, phoneNumber]);
+  const [phoneNumberDisplay, setPhoneNumberDisplay] = useState(parseTel(value)?.getNationalNumber ?? "");
 
-  // RENDER
+  // Format the input value as '(xxx) xxx-xxxx'
+  const handleOnChange = (event) => {
+    const newValue = event.target.value;
+    // Numbers cannot exceed 20? digits.
+    let cleanValue = newValue.replace(/\D/g, "").substring(0, 20);
+    // Only do this formatting for US phone numbers.
+    if (countryCode === "+1") {
+      // US Phone numbers only have up to 10 digits.
+      cleanValue = cleanValue.substring(0, 10);
+      let formattedValue = "";
+      for (let i = 0; i < cleanValue.length; i++) {
+        if (i === 0) {
+          formattedValue += "(";
+        }
+        if (i === 3) {
+          formattedValue += ") ";
+        }
+        if (i === 6) {
+          formattedValue += "-";
+        }
+        formattedValue += cleanValue[i];
+      }
+      setPhoneNumberDisplay(formattedValue);
+    } else {
+      setPhoneNumberDisplay(cleanValue);
+    }
+    // Update internal values (display is so we can format for and re-iterate US phone number flow)
+    onChange(`${countryCode}${cleanValue}`, { isValidNumber: parseTel(`${countryCode}${cleanValue}`).isValidNumber });
+  };
+
   return (
-    <StyledInputPhoneNumber
+    <StyledInputPhoneNumberWrapper
       data-test-label={props["data-test-label"]} // DEPRECATED
       data-wiz-label={props["data-wiz-label"]}
     >
@@ -50,7 +70,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
       ) : (
         <Select
           disabled={disabled}
-          isValid={isValid}
+          //isValid={isValid}
           // @ts-ignore
           size={size}
           value={countryCode}
@@ -66,21 +86,34 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
             ))}
         </Select>
       )}
-      <Input
+      <StyledInputPhoneNumber
+        type="tel"
         // @ts-ignore
         size={size}
-        disabled={disabled}
-        type="tel"
-        placeholder="Phone Number"
-        value={phoneNumber}
-        isValid={isValid}
-        onChange={(e) => setPhoneNumber(e.target.value)}
+        placeholder={countryCode === "+1" ? "(###) ###-####" : "### ### ###"}
+        value={phoneNumberDisplay}
+        onChange={handleOnChange}
       />
-    </StyledInputPhoneNumber>
+    </StyledInputPhoneNumberWrapper>
   );
 };
 
-export const StyledInputPhoneNumber = styled.div`
+export const StyledInputPhoneNumberWrapper = styled.div`
+  display: flex;
+  height: auto;
+  & > select,
+  & > input {
+    flex-grow: 1;
+    margin: 0;
+  }
+  & > select {
+    max-width: 120px;
+    margin: 0;
+    margin-bottom: 0 !important; // YIKES
+  }
+`;
+
+export const StyledInputPhoneNumber = styled(Input)`
   display: flex;
   height: auto;
   & > select,
