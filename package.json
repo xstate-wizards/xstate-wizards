@@ -21,7 +21,6 @@
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.0.0",
-    "lerna": "^8.2.4",
     "prettier": "^3.0.0",
     "typescript": "^5.5.0"
   },
@@ -32,8 +31,8 @@
   "scripts": {
     "postinstall": "manypkg check || true",
     "clean:packages": "npm run clean --workspaces --if-present",
-    "build": "lerna run build",
-    "test": "lerna run test",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
     "test:examples": "npx playwright test"
   },
   "devDependencies": {
