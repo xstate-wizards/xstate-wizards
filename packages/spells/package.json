@@ -12,8 +12,8 @@
     "minor": "npm version minor --no-git-tag-version && npm publish",
     "patch": "npm version patch --no-git-tag-version && npm publish",
     "pre": "npm version prerelease --preid=$USER --no-git-tag-version && npm publish",
-    "test": "jest --runInBand --expand",
-    "test:ci": "jest --runInBand --expand"
+    "test": "vitest run",
+    "test:ci": "vitest run"
   },
   "dependencies": {
     "acorn": "^8.7.1",
@@ -28,13 +28,10 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.0",
     "@types/json-logic-js": "^1.2.1",
     "@types/json-schema": "^7.0.11",
     "@types/lodash": "^4.14.182",
     "@types/uuid": "^8.3.4",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.0",
     "typescript": "^5.5.0"
   }
 }

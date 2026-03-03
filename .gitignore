@@ -8,7 +8,6 @@ dist
 
 # test artifacts
 coverage/
-test-results/
 
 # system misc
 .DS_Store

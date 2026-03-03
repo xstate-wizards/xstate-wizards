@@ -27,13 +27,13 @@
     "@types/react-dom": "^18.2.0"
   },
   "scripts": {
-    "postinstall": "manypkg check || true",
     "clean:packages": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "test": "npm test --workspaces --if-present",
-    "test:examples": "npx playwright test"
+    "test": "vitest run",
+    "test:e2e": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2"
+    "@playwright/test": "^1.48.0",
+    "vitest": "^3.0.0"
   }
 }
