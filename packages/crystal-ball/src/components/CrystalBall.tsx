@@ -1,7 +1,6 @@
 import { get } from "lodash";
 import { Fragment } from "react";
 import styled from "styled-components";
-import { toDirectedGraph } from "@xstate/graph";
 import { emptyMachineContext, TSpellMap } from "@xstate-wizards/spells";
 import { wizardTheme } from "@xstate-wizards/wizards-of-react";
 import { contentNodeToOutlineNode } from "./contentNodes/contentNodeToOutlineNode";
@@ -20,6 +19,59 @@ type TCrystalBallProps = {
   spellMap: TSpellMap;
 };
 
+// v5: toDirectedGraph removed from @xstate/graph. Walk machine config manually.
+function machineConfigToGraph(machine: any) {
+  const config = machine.config ?? machine;
+  const states = config.states ?? {};
+  const machineId = config.id ?? "machine";
+  return {
+    id: machineId,
+    children: Object.entries(states).map(([stateName, stateConfig]: [string, any]) => {
+      // Build edges from transitions
+      const edges: any[] = [];
+      const onConfig = stateConfig.on ?? {};
+      for (const [eventName, transition] of Object.entries(onConfig)) {
+        const targets = Array.isArray(transition)
+          ? transition.map((t: any) => (typeof t === "string" ? t : t.target)).filter(Boolean)
+          : [typeof transition === "string" ? transition : (transition as any)?.target].filter(Boolean);
+        for (const target of targets) {
+          edges.push({
+            label: { text: eventName },
+            target: { id: `${machineId}.${target}` },
+          });
+        }
+      }
+      // Add invoke onDone edges
+      const invoke = stateConfig.invoke;
+      if (invoke) {
+        const invokes = Array.isArray(invoke) ? invoke : [invoke];
+        for (const inv of invokes) {
+          const onDone = inv.onDone;
+          if (onDone) {
+            const doneTransitions = Array.isArray(onDone) ? onDone : [onDone];
+            for (const dt of doneTransitions) {
+              if (dt && (typeof dt === "string" || dt.target)) {
+                edges.push({
+                  label: { text: `done.invoke.${inv.id ?? ""}` },
+                  target: { id: `${machineId}.${typeof dt === "string" ? dt : dt.target}` },
+                });
+              }
+            }
+          }
+        }
+      }
+      return {
+        id: `${machineId}.${stateName}`,
+        stateNode: {
+          type: stateConfig.type ?? "default",
+          meta: stateConfig.meta ?? {},
+        },
+        edges,
+      };
+    }),
+  };
+}
+
 export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap }): React.ReactElement => {
   // SETUP
   const outliner = useOutline();
@@ -29,8 +81,8 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
     serializations: { functions: {} },
     spellMap,
   });
-  // --- graph/outline
-  const directedGraph = toDirectedGraph(machine);
+  // --- graph/outline (v5: walk machine config instead of @xstate/graph)
+  const directedGraph = machineConfigToGraph(machine);
 
   // RENDER
   return (
@@ -65,7 +117,8 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
                     {contentNodeToOutlineNode({
                       contentNode,
                       contentNodeIndex: ci,
-                      context: machine.context,
+                      // v5: context is a factory function; get initial context
+                      context: typeof machine.config?.context === 'function' ? machine.config.context({}) : (machine.config?.context ?? {}),
                       graphJSON,
                       outliner,
                     })}
