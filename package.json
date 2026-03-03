@@ -23,8 +23,7 @@
     "eslint-config-prettier": "^9.0.0",
     "lerna": "^8.2.4",
     "prettier": "^3.0.0",
-    "typescript": "^5.5.0",
-    "yalc": "^1.0.0-pre.53"
+    "typescript": "^5.5.0"
   },
   "overrides": {
     "@types/react": "^18.2.0",
@@ -35,10 +34,7 @@
     "clean:packages": "npm run clean --workspaces --if-present",
     "build": "lerna run build",
     "test": "lerna run test",
-    "test:examples": "npx playwright test",
-    "yalclink": "lerna run yalclink && cd ./examples/react-spellbook && npm run yalclink && cd - && cd ./examples/react-wizards && npm run yalclink && cd - && cd ./examples/react-wizards-i18n && npm run yalclink && cd -",
-    "yalcpush": "lerna run yalcpush",
-    "yalcpush-since": "lerna run yalcpush --since main"
+    "test:examples": "npx playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2"

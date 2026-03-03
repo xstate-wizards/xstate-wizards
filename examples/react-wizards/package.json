@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
-    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/crystal-ball"
+    "dev": "vite"
   },
   "dependencies": {
     "@xstate-wizards/crystal-ball": "^0.1.7",

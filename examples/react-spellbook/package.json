@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
-    "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/spellbook"
+    "dev": "vite"
   },
   "dependencies": {
     "@xstate-wizards/spellbook": "^0.6.13",

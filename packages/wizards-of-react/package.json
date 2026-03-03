@@ -13,9 +13,7 @@
     "patch": "npm version patch --no-git-tag-version && npm publish",
     "pre": "npm version prerelease --preid=$USER --no-git-tag-version && npm publish",
     "test": "jest --runInBand --expand --passWithNoTests",
-    "test:ci": "jest --runInBand --expand --passWithNoTests",
-    "yalcpush": "npm run build && yalc push",
-    "yalclink": "npx yalc link @xstate-wizards/spells"
+    "test:ci": "jest --runInBand --expand --passWithNoTests"
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.8.16",

@@ -13,9 +13,7 @@
     "patch": "npm version patch --no-git-tag-version && npm publish",
     "pre": "npm version prerelease --preid=$USER --no-git-tag-version && npm publish",
     "test": "jest --runInBand --expand --passWithNoTests",
-    "test:ci": "jest --runInBand --expand --passWithNoTests",
-    "yalcpush": "npm run build && yalc push",
-    "yalclink": "echo 'No Links'"
+    "test:ci": "jest --runInBand --expand --passWithNoTests"
   },
   "dependencies": {
     "google-libphonenumber": "^3.2.30"
