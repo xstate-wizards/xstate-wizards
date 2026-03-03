@@ -11,7 +11,7 @@ export const CONTENT_NODE_BACK = {
   type: "button",
   event: "BACK",
   text: "← Back",
-  attrs: { className: "x-wizard__header-back-button" },
+  attrs: { className: "xw--header-back-btn" },
 };
 export const CONTENT_NODE_SUBMIT = {
   type: "button",
@@ -28,5 +28,5 @@ export const CONTENT_NODE_NO = { type: "button", buttonType: "submit", text: "No
 export const CONTENT_NODE_PAUSE_AND_EXIT_TO = {
   type: "button",
   text: "Pause and Exit Interview",
-  attrs: { size: "lg", className: "x-wizard__pause-and-exit-to-button" },
+  attrs: { size: "lg", className: "xw--pause-exit-btn" },
 };
