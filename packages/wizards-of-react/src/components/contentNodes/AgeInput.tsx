@@ -4,11 +4,10 @@ import { TWizardSerializations } from "@xstate-wizards/spells";
 import { Select as FallbackSelect } from "./fallbacks/Select";
 
 type TAgeInputProps = {
+  className?: string;
   dataTestId?: string;
   disabled?: boolean;
-  isValid?: boolean;
   onChange: (value: number) => void;
-  size?: string;
   value?: number | string;
   serializations: TWizardSerializations;
 };
@@ -19,7 +18,7 @@ const roundToHundreth = (x): number => {
   return y - (y % (precision === undefined ? 1 : +precision));
 };
 
-export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onChange, size, value, ...props }) => {
+export const AgeInput: React.FC<TAgeInputProps> = ({ className, dataTestId, disabled, onChange, value, ...props }) => {
   // Styled/Component Refs
   const Select = props.serializations?.components?.Select ?? FallbackSelect;
   // Handlers
@@ -35,6 +34,7 @@ export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onCha
   return (
     <InputRow className="xw--age-input">
       <Select
+        className={className}
         value={Math.trunc(Number(value || 0))}
         disabled={disabled}
         onChange={(e) => updateYear(e.target.value)}
@@ -50,6 +50,7 @@ export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onCha
           ))}
       </Select>
       <Select
+        className={className}
         value={roundToHundreth(Number(value || 0) % 1)}
         disabled={disabled}
         onChange={(e) => updateMonth(e.target.value)}

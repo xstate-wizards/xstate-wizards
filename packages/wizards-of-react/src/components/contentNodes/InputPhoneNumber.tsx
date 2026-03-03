@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { COUNTRY_CALLING_CODES, parseTel } from "tel-fns";
 import { Input } from "./fallbacks/Input";
 import { Select } from "./fallbacks/Select";
-import { TComponentSize } from "./fallbacks/types";
 
 type TInputPhoneNumberProps = {
+  className?: string;
   disabled?: boolean;
-  isValid?: boolean;
   onChange: (value: string, validations: Record<string, boolean>) => void;
-  size?: TComponentSize;
   value: string;
   defaultCountryCode?: number;
   allowSelectingCountryCode?: boolean;
@@ -18,11 +16,10 @@ type TInputPhoneNumberProps = {
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   allowSelectingCountryCode,
+  className,
   defaultCountryCode = 1,
   disabled,
-  isValid,
   onChange,
-  size,
   value,
   ...props
 }) => {
@@ -69,8 +66,8 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
         <span className="xw--phone-us-code">+{defaultCountryCode}</span>
       ) : (
         <Select
+          className={className}
           disabled={disabled}
-          size={size}
           value={countryCode}
           onChange={(e) => setCountryCode(e.target.value)}
         >
@@ -85,9 +82,8 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
         </Select>
       )}
       <Input
-        className="xw--phone-input"
+        className={`xw--phone-input ${className || ""}`}
         type="tel"
-        size={size}
         placeholder={countryCode === "+1" ? "(###) ###-####" : "### ### ###"}
         value={phoneNumberDisplay}
         onChange={handleOnChange}

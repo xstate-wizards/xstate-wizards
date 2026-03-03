@@ -5,12 +5,11 @@ import { Input as FallbackInput } from "./fallbacks/Input";
 type TCurrencyInputProps = $TSFixMe;
 
 export const CurrencyInput: React.FC<TCurrencyInputProps> = ({
+  className,
   dataTestId,
   disabled,
-  isValid,
   onChange,
   placeholder,
-  size,
   value,
   ...props
 }) => {
@@ -22,11 +21,10 @@ export const CurrencyInput: React.FC<TCurrencyInputProps> = ({
       <span className="xw--currency-symbol">$</span>
       <Input
         type="text"
+        className={className}
         placeholder={placeholder || 0}
         value={value}
-        size={size}
         disabled={disabled}
-        isValid={isValid}
         onChange={onChange}
         data-test-id={dataTestId}
         data-test-label={props["data-test-label"]}

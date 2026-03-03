@@ -81,6 +81,15 @@ const fallbackComponents = {
   FileUploadButton: "input" as any,
 };
 
+// Helper: build className from node.className + node.attrs?.className + extras, and strip styling props from attrs
+const STYLING_PROPS = ["size", "variant", "buttonType", "inverted", "isValid", "styleType", "className"];
+function nodeClassName(node: any, ...extras: (string | false | null | undefined)[]): string {
+  return [node?.attrs?.className, ...extras].filter(Boolean).join(" ");
+}
+function nodeAttrsClean(attrs: Record<string, any> | undefined): any {
+  return attrs ? omit(attrs, STYLING_PROPS) : {};
+}
+
 declare global {
   interface Window {
     google: any; // TODO: extract google address autocomplete
@@ -360,7 +369,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Array = Input Row (array is shorthand for node type 'row', which can allow for attrs passing like style)
   if (Array.isArray(node) || node?.type === ContentNodeType.ROW) {
     return (
-      <div {...node.attrs} className={`xw--node-row ${node?.attrs?.className ?? ""}`}>
+      <div {...nodeAttrsClean(node.attrs)} className={`xw--node-row ${nodeClassName(node)}`}>
         {(Array.isArray(node) ? node : node?.content || []).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
@@ -432,15 +441,15 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Image
   if (node.type === ContentNodeType.IMG) {
     return (
-      <div className="xw--image-wrapper" {...node.attrs}>
-        <img key={node} src={node.src} alt={node.alt || ""} {...node.attrs} />
+      <div className={`xw--image-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
+        <img key={node} src={node.src} alt={node.alt || ""} />
       </div>
     );
   }
   if (node.type === ContentNodeType.ILLUSTRATION) {
     // Cancel out any height/width properties on svg default
     return (
-      <div className="xw--illustration-wrapper" {...node.attrs}>
+      <div className={`xw--illustration-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
         <node.svg height="100%" width="100%" />
       </div>
     );
@@ -470,7 +479,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H1)
     return (
       <H1
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -479,7 +489,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H2)
     return (
       <H2
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -488,7 +499,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H3)
     return (
       <H3
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -497,7 +509,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H4)
     return (
       <H4
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -506,7 +519,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H5)
     return (
       <H5
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -515,7 +529,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.H6)
     return (
       <H6
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -524,7 +539,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.P)
     return (
       <P
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -533,7 +549,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.SMALL)
     return (
       <Small
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -542,8 +559,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.LABEL)
     return (
       <Small
-        className="xw--node-label"
-        {...node.attrs}
+        className={nodeClassName(node, "xw--node-label")}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
@@ -556,7 +573,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       logger.debug("DEPRECATED: For ol/ul content nodes, use 'content' instead of 'items'");
     }
     return (
-      <node.type {...node.attrs}>
+      <node.type className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {(node.content ?? node.items ?? []).map((item, itemIndex) => (
           <li key={itemIndex}>
             <ContentNode {...props} node={item} serializations={serializations} />
@@ -568,7 +585,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Tables
   if (node.type === ContentNodeType.TABLE) {
     return (
-      <Table size="sm" {...node.attrs}>
+      <Table className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         <thead>
           <tr>
             {get(node, "items[0].cells", {}).map((cell, ci) => (
@@ -606,7 +623,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.CALLOUT) {
     if (node.content) {
       return (
-        <Callout {...node.attrs}>
+        <Callout className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
           {(node.content || []).map((node, nodeIndex) => (
             <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
           ))}
@@ -614,7 +631,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       );
     }
     return (
-      <Callout {...node.attrs}>
+      <Callout className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {node.fullSize ? (
           renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })
         ) : (
@@ -626,7 +643,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Panels
   if (node.type === ContentNodeType.COLLAPSIBLE_PANEL) {
     return (
-      <CollapsiblePanel headerTitle={node.headerTitle} headerIconSVG={node.headerIconSVG} {...node.attrs}>
+      <CollapsiblePanel headerTitle={node.headerTitle} headerIconSVG={node.headerIconSVG} className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {(node.content || []).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
@@ -635,7 +652,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   }
   if (node.type === ContentNodeType.CARD) {
     return (
-      <Card {...node.attrs}>
+      <Card className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {(node.content || []).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
@@ -645,7 +662,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Timers
   if (node.type === ContentNodeType.COUNTDOWN_TIMER) {
     return (
-      <div className="xw--countdown-node">
+      <div className={`xw--countdown-node ${nodeClassName(node)}`}>
         <CountdownTimer timer={node.config.timer} serializations={{ ...fallbackComponents, ...serializations }} />
       </div>
     );
@@ -715,10 +732,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <AgeInput
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            size={node.attrs?.size}
+            className={nodeClassName(node)}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
-            isValid={!showInputAsInvalid}
             onChange={(e) => {
               inputOnChange(e);
               // On change so far is just for the address
@@ -733,14 +749,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.CHECKBOX) {
         innerInput = (
           <Input
-            {...node.attrs}
+            {...nodeAttrsClean(node.attrs)}
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            size="lg"
+            className={nodeClassName(node, "xw--input-lg", showInputAsInvalid && "xw--input-invalid")}
             type={node.inputType}
             disabled={inputDisabled}
             checked={inputValue || false}
-            isValid={!showInputAsInvalid}
             onChange={(e) => {
               inputOnChange(e);
               // On change so far is just for the address
@@ -753,10 +768,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <CurrencyInput
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            size={node.attrs?.size}
+            className={nodeClassName(node)}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
-            isValid={!showInputAsInvalid}
             onChange={(e) => {
               inputOnChange(e);
               // On change so far is just for the address
@@ -774,7 +788,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
             disabled={inputDisabled}
-            size={node.attrs?.size}
+            className={nodeClassName(node)}
             value={inputValue}
             onChange={(date) => {
               inputOnChange(date);
@@ -796,11 +810,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             data-wiz-label={node.label}
             //@ts-ignore
             disabled={inputDisabled}
-            size={node.attrs?.size}
+            className={nodeClassName(node)}
             defaultCountryCode={node.defaultCountryCode}
             allowSelectingCountryCode={node.allowSelectingCountryCode}
             value={inputValue}
-            isValid={!showInputAsInvalid}
             onChange={(phoneNumber, validations) => {
               // Unlike other inputs, we're going to get some validations from the component (a user shouldnt have to ask for phone number validation)
               let componentValidationInstruction = null;
@@ -817,14 +830,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <Input
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            size={node.attrs?.size || "sm"}
+            className={nodeClassName(node, showInputAsInvalid && "xw--input-invalid")}
             type={node.inputType === ContentNodeInputType.INTEGER ? "number" : node.inputType}
             inputMode={node.inputMode}
             disabled={inputDisabled}
             placeholder={node.placeholder}
             autocomplete={node.inputType === ContentNodeInputType.PASSWORD ? false : undefined}
             value={node.value || (inputValue ?? "")}
-            isValid={!showInputAsInvalid}
             onChange={(e) => {
               inputOnChange(e);
               // On change so far is just for the address
@@ -869,15 +881,15 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     // - Select
     if (node.type === ContentNodeType.SELECT) {
       const SelectComponent = node.attrs?.canInputOther ? SelectWithOther : Select;
-      const nodeAttrs = omit(node.attrs || {}, ["canInputOther"]);
+      const nodeAttrs: any = omit(node.attrs || {}, ["canInputOther", ...STYLING_PROPS]);
       const selectOptions = evalSelectOptions(node.options, { content: contentTree, context: state.context });
       const SelectJSX = (
         <SelectComponent
           data-test-label={node.label} // DEPRECATE
           data-wiz-label={node.label}
+          className={nodeClassName(node, showInputAsInvalid && "xw--select-invalid")}
           value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
           disabled={inputDisabled}
-          isValid={!showInputAsInvalid}
           onChange={(e) => {
             const targetValue = e.target.value;
             // If option was num/bool cast it back, otherwise return string/else
@@ -949,11 +961,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         <Textarea
           data-test-label={node.label} // DEPRECATE
           data-wiz-label={node.label}
-          size="sm"
+          className={nodeClassName(node, "xw--textarea-sm", showInputAsInvalid && "xw--textarea-invalid")}
           type={node.inputType}
           disabled={inputDisabled}
           value={inputValue || ""}
-          isValid={!showInputAsInvalid}
           onChange={(e) => {
             inputOnChange(e);
             // On change so far is just for the address
@@ -997,12 +1008,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const inputCheckboxValue = typeof node.selected === "boolean" ? node.selected : inputValue;
       const InputCheckboxJSX = (
         <div
-          className="xw--checkbox-btn"
+          className={`xw--checkbox-btn ${!inputCheckboxValue ? "xw--cb-inverted" : ""}`}
           data-test-label={node.text}
           data-wiz-label={node.label}
-          data-inverted={!inputCheckboxValue ? "" : undefined}
           onClick={() => inputOnChange(!inputCheckboxValue)}
-          {...node.attrs}
+          {...nodeAttrsClean(node.attrs)}
         >
           <div className="xw--cb-check">{inputCheckboxValue ? <IconCheck /> : <div className="xw--cb-box" />}</div>
           <div className="xw--cb-text">{node.text}</div>
@@ -1049,9 +1059,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <SelectComponent
                 data-test-label={node.label} // DEPRECATE
                 data-wiz-label={node.label}
+                className={nodeClassName(node, showInputAsInvalid && "xw--select-invalid")}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
                 disabled={inputDisabled}
-                isValid={!showInputAsInvalid}
                 onChange={(e) => {
                   const targetValue = e.target.value;
                   // --- CAST
@@ -1115,19 +1125,18 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               {selectOptions.map((option) => (
                 <div key={option?.value} className="xw--node-input">
                   <div
-                    className="xw--checkbox-btn"
+                    className={`xw--checkbox-btn ${!selections.includes(option?.value) ? "xw--cb-inverted" : ""}`}
                     data-test-label={node.label}
                     data-test-option={option.text}
                     data-wiz-label={node.label}
                     data-wiz-option-value={String(option.value)}
                     data-wiz-option-text={option?.text}
-                    data-inverted={!selections.includes(option?.value) ? "" : undefined}
                     onClick={() =>
                       selections.includes(option?.value)
                         ? inputOnChange(selections.filter((v) => v !== option?.value))
                         : inputOnChange(selections.concat(option?.value))
                     }
-                    {...node.attrs}
+                    {...nodeAttrsClean(node.attrs)}
                   >
                     <div className="xw--cb-check">
                       {selections.includes(option?.value) ? <IconCheck /> : <div className="xw--cb-box" />}
@@ -1139,20 +1148,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               {node?.attrs?.canSelectNone === true && (
                 <div className="xw--node-input">
                   <div
-                    className="xw--checkbox-btn"
+                    className={`xw--checkbox-btn ${!(selections.length > 0 && selections.filter((str) => str).length === 0) ? "xw--cb-inverted" : ""}`}
                     data-test-label={node.label}
                     data-test-option="None of the above"
                     data-wiz-label={node.label}
                     data-wiz-option-value=""
                     data-wiz-option-text="None of the above"
-                    data-inverted={!(selections.length > 0 && selections.filter((str) => str).length === 0) ? "" : undefined}
                     onClick={() => {
                       // HACK: If we set an empty array with > 0 length, 'required' validations pass
                       const emptyArrayWithLength = [];
                       emptyArrayWithLength.length = 1;
                       inputOnChange(emptyArrayWithLength);
                     }}
-                    {...node.attrs}
+                    {...nodeAttrsClean(node.attrs)}
                   >
                     <div className="xw--cb-check">
                       {selections.length > 0 && selections.filter((str) => str).length === 0 ? (
@@ -1202,18 +1210,16 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             return (
               <div key={option?.value} className="xw--node-input">
                 <div
-                  className="xw--checkbox-btn"
+                  className={`xw--checkbox-btn ${selection !== option?.value ? "xw--cb-inverted" : ""} ${(inputDisabled || optionDisabled) ? "xw--cb-disabled" : ""}`}
                   data-test-label={node.label}
                   data-test-option={option.text}
                   data-wiz-label={node.label}
                   data-wiz-option-value={String(option.value)}
                   data-wiz-option-text={option?.text}
-                  data-inverted={selection !== option?.value ? "" : undefined}
-                  data-disabled={(inputDisabled || optionDisabled) ? "" : undefined}
                   onClick={() => {
                     if (!inputDisabled && !optionDisabled && selection !== option?.value) inputOnChange(option?.value);
                   }}
-                  {...node.attrs}
+                  {...nodeAttrsClean(node.attrs)}
                 >
                   <div className="xw--cb-check">
                     {selection === option?.value ? <IconCheck /> : <div className="xw--cb-box xw--cb-radio" />}
@@ -1240,7 +1246,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const jsonArrayValue = inputValue || [];
       return (
         <div
-          className={`xw--node-input xw--json-array ${node.attrs?.size || ""} ${
+          className={`xw--node-input xw--json-array ${nodeClassName(node)} ${
             showInputAsInvalid ? "xw--invalid" : ""
           }`}
         >
@@ -1266,7 +1272,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                       if (node.config.schema[key].type === ContentNodeType.SELECT) {
                         return (
                           <Select
-                            size={node.attrs?.size || "sm"}
+                            className={nodeClassName(node)}
                             value={json[key]}
                             onChange={(e) =>
                               inputOnChange(set(cloneDeep(jsonArrayValue), `[${jsonI}].${key}`, e.target.value))
@@ -1284,7 +1290,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                       if (node.config.schema[key].inputType === ContentNodeInputType.CURRENCY) {
                         return (
                           <CurrencyInput
-                            size={node.attrs?.size || "sm"}
+                            className={nodeClassName(node)}
                             value={json[key] || 0}
                             onChange={(e) => {
                               const value = e.target.value.replace(/[^0-9\.\-]+/g, "");
@@ -1295,7 +1301,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                       }
                       return (
                         <Input
-                          size={node.attrs?.size || "sm"}
+                          className={nodeClassName(node)}
                           type={node.config.schema[key].type}
                           value={json[key] || ""}
                           checked={json[key] || ""}
@@ -1355,14 +1361,14 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       return (
         <>
           <FileUploadButton
-            size={node.attrs?.size || "sm"}
             disabled={inputDisabled}
             onUploadAll={(files) => node.onUpload({ files, transition })}
-            {...node.attrs}
+            className={nodeClassName(node)}
+            {...nodeAttrsClean(node.attrs)}
           >
             {node.text || "Upload / Take Picture"}
           </FileUploadButton>
-          <Callout styleType="warning" style={{ textAlign: "center" }}>
+          <Callout className="xw--callout-warning" style={{ textAlign: "center" }}>
             <Small>If you have issues uploading files, please try a different a browser.</Small>
           </Callout>
         </>
@@ -1735,13 +1741,14 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // LINKS
   if (node.type === ContentNodeType.A) {
     return node.href?.includes("https://") ? (
-      <A href={node.href} target="_blank" {...node.attrs}>
+      <A href={node.href} target="_blank" className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
       </A>
     ) : (
       <A
         to={node.href}
-        {...node.attrs}
+        className={nodeClassName(node)}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => {
           if (node?.onClick) node?.onClick();
         }}
@@ -1767,26 +1774,26 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
 
     return (node.href || "")[0] !== "/" || node?.attrs?.target === "_blank" ? (
       <ButtonLink
-        className="xw--btn-link"
+        className={nodeClassName(node, "xw--btn-link")}
         href={node.href}
         target="_blank"
         rel="noopener noreferrer"
         onClick={onButtonLinkClick}
-        {...node.attrs}
+        {...nodeAttrsClean(node.attrs)}
       >
         <b>{renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}</b>
       </ButtonLink>
     ) : (
       <A
-        className="xw--btn-link"
+        className={nodeClassName(node, "xw--btn-link")}
         to={node.href}
-        {...node.attrs}
+        {...nodeAttrsClean(node.attrs)}
         onClick={() => {
           onButtonLinkClick();
           if (node?.onClick) node?.onClick();
         }}
       >
-        <Button {...node.attrs}>
+        <Button>
           {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
         </Button>
       </A>
@@ -1872,7 +1879,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           type={node.buttonType === "submit" ? "submit" : "button"} // https://dzello.com/blog/2017/02/19/demystifying-enter-key-submission-for-react-forms/
           disabled={buttonIsDisabled}
           onClick={onButtonClick}
-          {...node.attrs}
+          className={nodeClassName(node)}
+          {...nodeAttrsClean(node.attrs)}
         >
           {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
         </Button>
@@ -1884,7 +1892,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           disabled={buttonIsDisabled}
           onConfirm={onButtonClick}
           messagePrompts={node.text}
-          {...node.attrs}
+          className={nodeClassName(node)}
+          {...nodeAttrsClean(node.attrs)}
           serializations={{
             ...fallbackComponents,
             ...serializations,

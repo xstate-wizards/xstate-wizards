@@ -51,8 +51,7 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
             <div>
               <ConfirmButton
                 width="100%"
-                size="sm"
-                buttonType="white"
+                className="xw--btn-sm xw--btn-white"
                 messagePrompts={[
                   `← Redo This Section`,
                   `← Yes, Start ${machineMeta?.title ? `"${machineMeta?.title}"` : "Section"} Over`,
