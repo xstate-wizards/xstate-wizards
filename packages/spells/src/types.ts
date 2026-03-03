@@ -78,7 +78,7 @@ export type TContentDefinition = {
   onClick?: Function; // standard onClick override
   event?: string | Record<string, any>; // machine transition config
   assign?: Function | string; // context assignment handling
-  attrs?: Record<string, any>; // Pass values like data-ids, style, disabled checking fn, other attributes
+  attrs?: Record<string, any>; // Pass values like className, style, disabled checking fn, other attributes
   disabled?: Function; // can't destructure like other attributes
   selected?: Function; // mostly for inputCheckboxButton so we can invert/change color when selected
   items?: (TContentDefinition | TContentTableDefinition)[];
