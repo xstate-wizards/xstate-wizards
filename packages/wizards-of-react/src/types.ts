@@ -11,7 +11,7 @@ export type TWizardRunnerProps = {
   };
   models?: TWizardModelsMap;
   navigate: TWizardNavigate;
-  navigationUnblockCheck?: ({ location: Location }) => boolean;
+  navigationUnblockCheck?: (args: { location: Location }) => boolean;
   serializations?: TWizardSerializations;
   spellKey?: string;
   spellMap: TSpellMap;
@@ -29,8 +29,8 @@ export type TWizardRunnerProps = {
   onWizardContextPrep?: (preppedContext: Record<string, any>) => Record<string, any>;
   onWizardChange?: (state: $TSFixMe) => void;
   onWizardError?: $TSFixMe;
-  onWizardFinal?: ({ finalEvent, machine }: $TSFixMe) => void; // finalEvent is just machine.event. legacy
-  onWizardProgress?: ({ progressPercentage: number, machine: $TSFixMe }) => void; // TODO: should find the right way to type xstate machine state
+  onWizardFinal?: (args: { finalEvent: any; machine: any }) => void; // finalEvent is just machine.event. legacy
+  onWizardProgress?: (args: { progressPercentage: number; machine: any }) => void;
   onMount?: () => void;
   onUnmount?: () => void;
   useNavigationBlocker?: $TSFixMe; // useBlock
@@ -41,7 +41,7 @@ export type TWizardStateMachineManagerProps = {
   spellMap?: TSpellMap;
   serializations?: TWizardSerializations;
   navigate: TWizardNavigate;
-  navigationUnblockCheck?: ({ location: Location }) => boolean;
+  navigationUnblockCheck?: (args: { location: Location }) => boolean;
   onMachineChange?: TWizardRunnerProps["onWizardChange"];
   onMachineFinal?: TWizardRunnerProps["onWizardFinal"];
   onMachineProgress?: TWizardRunnerProps["onWizardProgress"];

@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { Interpreter } from "xstate";
-import { useMachine, useService } from "@xstate/react";
+import { useMachine, useSelector } from "@xstate/react";
 import { ID_GENERAL } from "@xstate-wizards/spells";
 
 import { WizardStateViewer } from "./WizardStateViewer";
@@ -23,57 +22,68 @@ import { TWizardStateMachineManagerProps } from "../types";
  *
  * Pt.2 - NestedMachineNode
  * <NestedMachineNode /> handles drilling down for the farther down child when nested machines are encountered.
- * Since we never should write parallel states, we can easily recursively drill into interpreter Map()s w/ getChildInterpreter.
- * Even though we're drilling down these interpreters, and using them for new state/meta, the reference to the top most machine is preserved
+ * Since we never should write parallel states, we can easily recursively drill into actor children w/ getChildActor.
+ * Even though we're drilling down these actors, and using them for new state/meta, the reference to the top most machine is preserved
  * and updates, and final states being reached will still be recognized by the overall machine
  *
  */
 
-// getChildInterpreter - Function for recurrsively going through an interpreted machine and finding the deepest child interpreter
-function getChildInterpreter(interpreter) {
-  if (interpreter.children.size > 1) {
+// getChildActor - Function for recursively going through an actor and finding the deepest child actor
+// v5: uses snapshot.children (plain object) instead of interpreter.children (Map)
+function getChildActor(actorRef) {
+  const snapshot = actorRef.getSnapshot();
+  const children = snapshot?.children ?? {};
+  const childKeys = Object.keys(children);
+
+  if (childKeys.length > 1) {
     throw new Error(
-      "getChildInterpreter: More than 1 child was found. DO NOT USE PARALLEL NESTED MACHINES FOR INTERVIEWS"
+      "getChildActor: More than 1 child was found. DO NOT USE PARALLEL NESTED MACHINES FOR INTERVIEWS"
     );
   }
 
-  const child = interpreter.children.values().next().value;
-  if (child && child instanceof Interpreter) {
-    return getChildInterpreter(child);
+  if (childKeys.length === 1) {
+    const child = children[childKeys[0]];
+    // v5: duck-type check replaces instanceof Interpreter
+    if (child && typeof child.getSnapshot === "function") {
+      return getChildActor(child);
+    }
   }
 
-  // If no child exists, return the current interpreter
-  return interpreter;
+  // If no child exists, return the current actor
+  return actorRef;
 }
 
-// <NestedMachineNode /> - After grabbing the deepest child interpreter, our interview state/content is driven by that machine
+// <NestedMachineNode /> - After grabbing the deepest child actor, our interview state/content is driven by that machine
 const NestedMachineNode = (props) => {
   // SETUP
-  const [s, t, topMostMachineInterpreter] = props.machine;
+  const [, , topMostMachineActorRef] = props.machine;
   // Drill down for the childmost state node
-  if (!getChildInterpreter(topMostMachineInterpreter)) return null;
-  // @ts-ignore
-  const childInterpreter = getChildInterpreter(topMostMachineInterpreter);
-  // ON MOUNT: subscribe to machine/interpreter and pass back up state events
+  const childActorRef = getChildActor(topMostMachineActorRef);
+  // ON MOUNT: subscribe to machine/actor and pass back up state events
   useEffect(() => {
-    const subscription = childInterpreter.subscribe((state) => {
-      if (typeof props.onMachineChange === "function") props?.onMachineChange?.(state);
+    if (!childActorRef) return;
+    const subscription = childActorRef.subscribe((snapshot) => {
+      if (typeof props.onMachineChange === "function") props?.onMachineChange?.(snapshot);
     });
     return subscription.unsubscribe;
-  }, [childInterpreter]);
-  const [state, transition] = useService(childInterpreter);
-  // @ts-ignore
-  const meta = state.meta[Object.keys(state.meta).find((k) => k.includes(state.value))];
+  }, [childActorRef]);
+  // v5: useSelector reads snapshot from an existing actorRef (useActor expects logic, not a ref)
+  const state = useSelector(childActorRef, (snapshot) => snapshot) as any;
+  if (!childActorRef || !state) return null;
+  const send = childActorRef.send;
+  // v5: state.getMeta() replaces state.meta
+  const meta = typeof state.getMeta === "function" ? state.getMeta() : (state.meta || {});
+  const stateMeta = meta[Object.keys(meta).find((k) => k.includes(state.value as string))];
   // If we're in a done transition, we don't have any content to render. Just return null and let it resolve
-  if (state.done) return null;
+  // v5: snapshot.status === "done" replaces state.done
+  if (state.status === "done") return null;
   // RENDER
   return (
     <WizardStateViewer
-      // @ts-expect-error
-      key={state.value}
-      meta={meta}
+      key={state.value as string}
+      meta={stateMeta}
       state={state}
-      transition={transition}
+      transition={send}
       translate={props.translate}
       machineMeta={props.machineMeta}
       serializations={props.serializations}
@@ -87,17 +97,22 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
   const { useNavigationBlocker } = props;
 
   const machine = useMachine(props.machine);
-  const [state, transition, interpreter] = machine;
+  const [state, send, actorRef] = machine;
 
+  // v5: state.getMeta() replaces state.meta
+  // Fallback for environments where duplicate xstate instances produce snapshots without getMeta
+  const allMeta = typeof state.getMeta === "function" ? state.getMeta() : (state.meta || {});
   // @ts-ignore
-  const stateMeta = state.meta[Object.keys(state.meta).find((k) => k.includes(state.value))] || {};
-  const machineMeta = interpreter?.machine?.meta;
+  const stateMeta = allMeta[Object.keys(allMeta).find((k) => k.includes(state.value))] || {};
+  // v5: machine-level meta is now in context.__machineMeta
+  const machineMeta = state.context?.__machineMeta;
   const [progressPercentage, setProgressPercentage] = useState(stateMeta.progress);
   const [sections, setSections] = useState(machineMeta?.sectionsBar);
 
   // Prevent user navigations while the machine state is not considered "done"
   // (if the machine is configured to skip the blocker, or the state is done, let anything happen)
-  const enableNavigationBlocker = !machineMeta?.skipNavigationBlocker && !state.done;
+  // v5: state.status === "done" replaces state.done
+  const enableNavigationBlocker = !machineMeta?.skipNavigationBlocker && state.status !== "done";
   // Expect a navigation blocker like react-router v5 useBlocker passed in
   useNavigationBlocker?.(
     (params) => {
@@ -127,44 +142,44 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     props.navigationUnblockCheck
   );
 
-  // ON MOUNT: subscribe to machine/interpreter and pass back up state events
+  // ON MOUNT: subscribe to machine/actor and pass back up state events
   useEffect(() => {
-    const subscription = interpreter.subscribe((state) => {
-      if (typeof props.onMachineChange === "function") props?.onMachineChange?.(state);
+    const subscription = actorRef.subscribe((snapshot) => {
+      if (typeof props.onMachineChange === "function") props?.onMachineChange?.(snapshot);
     });
     return subscription.unsubscribe;
-  }, [interpreter]);
+  }, [actorRef]);
 
   // ON STATE CHANGE: DONE
   useEffect(() => {
-    // If not done...
-    if (!state.done) return;
+    // v5: state.status === "done" replaces state.done
+    if (state.status !== "done") return;
     // If done...
     async function handleInterviewDone() {
       // --- Save Progress (ensure that any onDone handlers occur after saving to database)
       if (props.onMachineProgress) {
-        // state.done should always === true if we made it past the above conditional
         props.onMachineProgress({ machine: state, progressPercentage: stateMeta.progress });
       }
       // --- onDone
       // Setup done values to pass back
-      const finalPayload = { finalEvent: state.event, machine: state };
+      const finalPayload = { finalEvent: state.context?.__lastEvent, machine: state };
       props.onMachineFinal?.({ ...finalPayload });
     }
     handleInterviewDone();
-  }, [state.done]);
+  }, [state.status]);
 
   // ON STATE CHANGE: VALUE (aka interview node change)
   useEffect(() => {
     // --- on progress bubbled up (skip final states, because that's in other useEffect)
-    if (!state.done) props.onMachineProgress?.({ machine: state, progressPercentage: stateMeta.progress });
+    if (state.status !== "done") props.onMachineProgress?.({ machine: state, progressPercentage: stateMeta.progress });
     // --- progress percentage bar (only update if increasing. ignore back buttons/review jumping)
     if (stateMeta.progress && stateMeta.progress > progressPercentage) {
       setProgressPercentage(stateMeta.progress);
     }
     // --- set sections highlights (set active to true once we pass states/sections). highlight if this state is current/passed
     if (machineMeta?.sectionsBar != null && sections) {
-      const listOfMachineStates = Object.keys(interpreter.machine.states);
+      // v5: access machine states via actorRef.logic.config.states
+      const listOfMachineStates = Object.keys(actorRef.logic?.config?.states ?? {});
       setSections(
         sections.reduce(
           (arr, section) => [
@@ -197,7 +212,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     );
 
   // RENDER
-  const WizardWrap = props.serializations?.components?.WizardWrap ?? WizardWrapFrame;
+  const WizardWrap: any = props.serializations?.components?.WizardWrap ?? WizardWrapFrame;
 
   //TODO: ideally shouldn't be handling translations here like this
   const processedSections = sections?.map((section) =>
@@ -205,16 +220,15 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
   );
 
   const processedTitle =
-    typeof machineMeta?.title === "function" ? machineMeta.title(props.translate) : machineMeta.title;
+    typeof machineMeta?.title === "function" ? machineMeta.title(props.translate) : machineMeta?.title;
 
   // --- If interview node
   if (stateMeta.nodeType === ID_GENERAL) {
     return (
       <WizardWrap
-        // @ts-expect-error
-        key={state.value}
+        key={state.value as string}
         data-wiz-entry-machine-id={props.machine.id}
-        data-wiz-entry-machine-state={props.machine.config.initial}
+        data-wiz-entry-machine-state={props.machine.config?.initial}
         data-wiz-machine-id={props.machine.id}
         data-wiz-machine-state={state.value}
         data-test-id={state.value}
@@ -227,7 +241,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
         <WizardStateViewer
           meta={stateMeta}
           state={state}
-          transition={transition}
+          transition={send}
           translate={props.translate}
           machineMeta={machineMeta}
           serializations={props.serializations}
@@ -241,10 +255,9 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     if (stateMeta.nodeType === spellKey) {
       return (
         <WizardWrap
-          // @ts-expect-error
-          key={state.value}
+          key={state.value as string}
           data-wiz-entry-machine-id={props.machine.id}
-          data-wiz-entry-machine-state={props.machine.config.initial}
+          data-wiz-entry-machine-state={props.machine.config?.initial}
           data-wiz-machine-id={spellKey}
           data-wiz-machine-state={state.value}
           data-test-id={state.value}
