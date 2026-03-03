@@ -1,7 +1,7 @@
-const datefns = require("date-fns"); // can't seem to import *
+import * as datefns from "date-fns";
 import jsonLogic from "json-logic-js";
 import { createLocalId } from "../../models/idHelpers";
-const lodash = require("lodash"); // import * causes runtime err
+import * as lodash from "lodash";
 import { $TSFixMe } from "../../types";
 import { logger } from "../../wizardDebugger";
 
@@ -13,8 +13,9 @@ jsonLogic.add_operation("Object", Object);
 jsonLogic.add_operation("String", String);
 // --- extra libs (others)
 jsonLogic.add_operation("Date", Date);
-jsonLogic.add_operation("date-fns", datefns);
-jsonLogic.add_operation("lodash", lodash);
+// Spread module namespaces into plain objects (Module namespace objects lack hasOwnProperty)
+jsonLogic.add_operation("date-fns", { ...datefns } as any);
+jsonLogic.add_operation("lodash", { ...lodash } as any);
 // @ts-expect-error
 jsonLogic.add_operation("Math", Math);
 

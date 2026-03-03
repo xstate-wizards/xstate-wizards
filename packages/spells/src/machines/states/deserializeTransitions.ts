@@ -5,9 +5,13 @@ const eachRecursive = (obj) => {
     // IF seeing assignmentSerialization, remap assignment
     if (k === "assignmentSerialization") {
       obj.assignment = {
-        [obj.assignmentSerialization.assignKey]: (context, event) =>
+        [obj.assignmentSerialization.assignKey]: ({ context, event }) =>
           evalJsonLogic(obj.assignmentSerialization.jsonLogic, { context, event }),
       };
+      // IF seeing cond, remap to guard (v4 → v5 compat)
+    } else if (k === "cond") {
+      obj.guard = obj.cond;
+      delete obj.cond;
       // IF another obj, continue the dive
     } else if (typeof obj[k] == "object" && obj[k] !== null) {
       eachRecursive(obj[k]);
