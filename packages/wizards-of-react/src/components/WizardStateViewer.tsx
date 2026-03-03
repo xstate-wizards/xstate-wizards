@@ -22,9 +22,9 @@ import { logger } from "../wizardDebugger";
 // Tried useRef() instead of dom selection seems proper but I keep getting current = null... so using refs might be more reliable tbh, idk
 const clickBackButton = throttle(
   () => {
-    if (typeof document !== "undefined" && document.querySelector("button.x-wizard__header-back-button")) {
+    if (typeof document !== "undefined" && document.querySelector("button.xw--header-back-btn")) {
       // @ts-ignore
-      document.querySelector("button.x-wizard__header-back-button")?.click?.();
+      document.querySelector("button.xw--header-back-btn")?.click?.();
     }
   },
   200,

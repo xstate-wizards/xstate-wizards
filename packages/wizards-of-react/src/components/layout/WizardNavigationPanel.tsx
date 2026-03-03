@@ -30,13 +30,13 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
   // RENDER
   return (
     <>
-      <div className="x-wizard__header__navigation-options" onClick={() => setShowOptions(!showOptions)}>
+      <div className="xw--nav-options" onClick={() => setShowOptions(!showOptions)}>
         ☰
       </div>
       {showOptions && (
-        <div className="x-wizard__header__navigation-options-dropdown" onMouseLeave={() => setShowOptions(false)}>
+        <div className="xw--nav-dropdown" onMouseLeave={() => setShowOptions(false)}>
           {allowBack !== false && (
-            <div className="navigation-options-dropdown back-button">
+            <div className="xw--nav-dropdown xw--back-btn">
               <button onClick={() => triggerBack()}>← Back</button>
             </div>
           )}

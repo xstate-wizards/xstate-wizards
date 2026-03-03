@@ -3,7 +3,7 @@ import { useMachine, useSelector } from "@xstate/react";
 import { ID_GENERAL } from "@xstate-wizards/spells";
 
 import { WizardStateViewer } from "./WizardStateViewer";
-import { WizardWrapFrame } from "./layout/WizardWrap";
+import { WizardWrap } from "./layout/WizardWrap";
 import { logger } from "../wizardDebugger";
 import { TWizardStateMachineManagerProps } from "../types";
 
@@ -121,7 +121,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
       // if this was a "Back" browser event, and the interview has a back button
       // present, stay blocked and click "back" button instead.
       const interviewBackButton =
-        typeof document !== "undefined" && document.querySelector("button.x-wizard__header-back-button");
+        typeof document !== "undefined" && document.querySelector("button.xw--header-back-btn");
       if (action === "POP" && interviewBackButton) {
         // @ts-ignore
         interviewBackButton?.click?.();
@@ -212,7 +212,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     );
 
   // RENDER
-  const WizardWrap: any = props.serializations?.components?.WizardWrap ?? WizardWrapFrame;
+  const WizardWrapComponent: any = props.serializations?.components?.WizardWrap ?? WizardWrap;
 
   //TODO: ideally shouldn't be handling translations here like this
   const processedSections = sections?.map((section) =>
@@ -225,7 +225,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
   // --- If interview node
   if (stateMeta.nodeType === ID_GENERAL) {
     return (
-      <WizardWrap
+      <WizardWrapComponent
         key={state.value as string}
         data-wiz-entry-machine-id={props.machine.id}
         data-wiz-entry-machine-state={props.machine.config?.initial}
@@ -247,14 +247,14 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
           serializations={props.serializations}
           navigate={props.navigate}
         />
-      </WizardWrap>
+      </WizardWrapComponent>
     );
   }
   // --- if nested machine
   for (const spellKey of Object.keys(props.spellMap)) {
     if (stateMeta.nodeType === spellKey) {
       return (
-        <WizardWrap
+        <WizardWrapComponent
           key={state.value as string}
           data-wiz-entry-machine-id={props.machine.id}
           data-wiz-entry-machine-state={props.machine.config?.initial}
@@ -275,7 +275,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
             navigate={props.navigate}
             onMachineChange={props?.onMachineChange}
           />
-        </WizardWrap>
+        </WizardWrapComponent>
       );
     }
   }
