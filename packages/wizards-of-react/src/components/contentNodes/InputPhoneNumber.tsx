@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { COUNTRY_CALLING_CODES, parseTel } from "tel-fns";
 import { Input } from "./fallbacks/Input";
 import { Select } from "./fallbacks/Select";
@@ -61,17 +60,16 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   };
 
   return (
-    <StyledInputPhoneNumberWrapper
-      data-test-label={props["data-test-label"]} // DEPRECATED
+    <div
+      className="xw--phone-input-wrapper"
+      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       {allowSelectingCountryCode === false ? (
-        <StyledUSCode>+{defaultCountryCode}</StyledUSCode>
+        <span className="xw--phone-us-code">+{defaultCountryCode}</span>
       ) : (
         <Select
           disabled={disabled}
-          //isValid={isValid}
-          // @ts-ignore
           size={size}
           value={countryCode}
           onChange={(e) => setCountryCode(e.target.value)}
@@ -86,54 +84,14 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
             ))}
         </Select>
       )}
-      <StyledInputPhoneNumber
+      <Input
+        className="xw--phone-input"
         type="tel"
-        // @ts-ignore
         size={size}
         placeholder={countryCode === "+1" ? "(###) ###-####" : "### ### ###"}
         value={phoneNumberDisplay}
         onChange={handleOnChange}
       />
-    </StyledInputPhoneNumberWrapper>
+    </div>
   );
 };
-
-export const StyledInputPhoneNumberWrapper = styled.div`
-  display: flex;
-  height: auto;
-  & > select,
-  & > input {
-    flex-grow: 1;
-    margin: 0;
-  }
-  & > select {
-    max-width: 120px;
-    margin: 0;
-    margin-bottom: 0 !important; // YIKES
-  }
-`;
-
-export const StyledInputPhoneNumber = styled(Input)`
-  display: flex;
-  height: auto;
-  & > select,
-  & > input {
-    flex-grow: 1;
-    margin: 0;
-  }
-  & > select {
-    max-width: 120px;
-    margin: 0;
-    margin-bottom: 0 !important; // YIKES
-  }
-`;
-
-const StyledUSCode = styled.span`
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  white-space: nowrap;
-  font-size: 16px;
-  min-height: 1.2em;
-  padding: 0px 16px;
-`;

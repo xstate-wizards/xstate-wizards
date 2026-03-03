@@ -10,7 +10,6 @@ import {
   subYears,
 } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, formatDate, parseDate } from "@xstate-wizards/spells";
 import { logger } from "../../wizardDebugger";
 import { Select as FallbackSelect } from "./fallbacks/Select";
@@ -81,8 +80,9 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   }, []);
 
   return (
-    <StyledSelectDatePicker
-      data-test-label={props["data-test-label"]} // DEPRECATED
+    <div
+      className="xw--date-picker"
+      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       <Select
@@ -162,10 +162,6 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
             </option>
           ))}
       </Select>
-    </StyledSelectDatePicker>
+    </div>
   );
 };
-
-const StyledSelectDatePicker = styled.div`
-  display: flex;
-`;

@@ -5,7 +5,6 @@
  * splitting, etc.
  */
 import React from "react";
-import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, templateFunctionToValue } from "@xstate-wizards/spells";
 import { A as FallbackA } from "../contentNodes/fallbacks/A";
 

@@ -1,23 +1,14 @@
-import styled from "styled-components";
-import { wizardTheme } from "../../../theme";
-import { InputSizesCSS } from "./InputSizesCSS";
-import { InputStatesCSS } from "./InputStatesCSS";
+import React from "react";
 
-type TTextareaCSS = {
-  width?: string;
-};
-
-export const Textarea = styled.textarea<TTextareaCSS>`
-  width: ${(props) => props.width || "100%"};
-  outline: none;
-  padding: 0.8em 1em;
-  font-size: 0.9em;
-  border: 1px solid ${wizardTheme.colors.white[300]};
-  border-bottom: 2px solid ${wizardTheme.colors.white[300]};
-  border-radius: 4px;
-  &::placeholder {
-    color: ${wizardTheme.colors.gray[900]};
-  }
-  ${InputStatesCSS}
-  ${InputSizesCSS}
-`;
+export const Textarea = React.forwardRef<HTMLTextAreaElement, any>(
+  ({ className, size, isValid, width, style, ...props }, ref) => (
+    <textarea
+      ref={ref}
+      className={`xw--textarea ${className || ""}`}
+      data-size={size}
+      data-invalid={isValid === false ? "" : undefined}
+      style={width ? { ...style, width } : style}
+      {...props}
+    />
+  )
+);

@@ -1,6 +1,5 @@
-import styled from "styled-components";
 import React from "react";
-import { InputRow } from "../styled/InputRow.div";
+import { InputRow } from "./InputRow";
 import { TWizardSerializations } from "@xstate-wizards/spells";
 import { Select as FallbackSelect } from "./fallbacks/Select";
 
@@ -20,7 +19,6 @@ const roundToHundreth = (x): number => {
   return y - (y % (precision === undefined ? 1 : +precision));
 };
 
-// TODO: refactor to a functional component
 export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onChange, size, value, ...props }) => {
   // Styled/Component Refs
   const Select = props.serializations?.components?.Select ?? FallbackSelect;
@@ -34,10 +32,8 @@ export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onCha
     onChange?.(newValue);
   };
 
-  // TODO: reimplement size={size} on <Select/> bc it represents length of visible list.
-  // this was a styling prop passed through
   return (
-    <StyledAgeInput>
+    <InputRow className="xw--age-input">
       <Select
         value={Math.trunc(Number(value || 0))}
         disabled={disabled}
@@ -66,13 +62,6 @@ export const AgeInput: React.FC<TAgeInputProps> = ({ dataTestId, disabled, onCha
             </option>
           ))}
       </Select>
-    </StyledAgeInput>
+    </InputRow>
   );
 };
-
-const StyledAgeInput = styled(InputRow)`
-  width: 100%;
-  select {
-    width: 100%;
-  }
-`;
