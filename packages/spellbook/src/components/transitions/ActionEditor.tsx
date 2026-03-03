@@ -1,8 +1,13 @@
 import { cloneDeep, omit } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { ActionTypes } from "xstate";
 import { $TSFixMe } from "@xstate-wizards/spells";
+
+// v5: ActionTypes removed from xstate. Define locally for spellbook editor UI.
+const ActionTypes = {
+  Send: "xstate.send" as const,
+  Assign: "xstate.assign" as const,
+};
 import { JsonLogicBuilder } from "../logic/JsonLogicBuilder";
 import { VariableSelector } from "../logic/VariableSelector";
 
