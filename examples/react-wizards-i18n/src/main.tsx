@@ -1,3 +1,4 @@
+import "@xstate-wizards/wizards-of-react/styles.css";
 import i18next, { t } from "i18next";
 import { initReactI18next } from "react-i18next";
 import React from "react";

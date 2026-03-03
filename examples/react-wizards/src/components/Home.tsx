@@ -90,6 +90,6 @@ const StyledHome = styled.div`
     border-radius: 8px;
     overflow: hidden;
     box-shadow: rgb(50 50 223 / 25%) 0px 50px 100px -20px, rgb(0 0 0 / 30%) 0px 30px 60px -30px;
-    padding: 24px;
+    padding: 0;
   }
 `;

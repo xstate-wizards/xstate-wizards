@@ -6,7 +6,6 @@ import { putUser, selectUser } from "../models/user";
 import { wizardSerializations } from "../wizards/wizardSerializations";
 import { ID_EXAMPLE_SCREENER } from "../spells/exampleScreener";
 import { wizardModelMap } from "../wizards/wizardModelMap";
-import { WizardWrapFrame } from "@xstate-wizards/wizards-of-react";
 
 type TScreenerProps = {
   onClose: () => void;
@@ -23,13 +22,7 @@ export const Screener: React.FC<TScreenerProps> = ({ onClose }) => {
       spellKey={ID_EXAMPLE_SCREENER}
       spellMap={spellMap}
       models={wizardModelMap}
-      serializations={{
-        ...wizardSerializations,
-        components: {
-          ...wizardSerializations.components,
-          WizardWrap: WizardWrapFrame,
-        },
-      }}
+      serializations={wizardSerializations}
       navigate={navigate}
       sessionEnabled={false}
       onWizardFinal={({ machine }) => {
