@@ -206,7 +206,7 @@ export const machineMapping = createSpell({
           // example of inline modification of the machine context
           actions: [
             assign({
-              states: (ctx) => ({ ...ctx.states, developerExperience: { viewedOutline: true } }),
+              states: ({ context }) => ({ ...context.states, developerExperience: { viewedOutline: true } }),
             }),
           ],
         },

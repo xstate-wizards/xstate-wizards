@@ -17,8 +17,9 @@ import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 
 export const ID_EXAMPLE_INTERVIEW = "exampleInterview";
 const updateFavoritePet = () =>
-  assign((ctx, ev: any) => {
-    let curctx: any = ctx;
+  assign(({ context, event }: { context: any; event: any }) => {
+    const ev = event;
+    let curctx: any = context;
     if (ev.assignConfig.modelName === "Pet" && ev.assignConfig.path === "isFavorite" && ev.assignValue === true) {
       Object.values(curctx.resources.Pet).forEach((pet: any) => {
         if (pet.id !== ev.assignConfig.id) {
@@ -116,8 +117,8 @@ export const machineMapping = createSpell({
       on: {
         BACK: INTERVIEW_INTRO_STATE,
         SUBMIT: "humanTestYear",
-        CLICKED_PI_BUTTON: { actions: [assign((ctx: any) => _.set(ctx, "states.showPiTest", true))] },
-        SHOW_INPUT_TIMEOUT: { actions: [assign((ctx: any) => _.set(ctx, "states.showPiTest", true))] },
+        CLICKED_PI_BUTTON: { actions: [assign(({ context }: { context: any }) => _.set(context, "states.showPiTest", true))] },
+        SHOW_INPUT_TIMEOUT: { actions: [assign(({ context }: { context: any }) => _.set(context, "states.showPiTest", true))] },
       },
     },
     humanTestYear: {
@@ -349,7 +350,7 @@ export const machineMapping = createSpell({
         { type: "button", text: "No", event: "NO" },
       ],
       on: {
-        BACK: [{ target: "petsAsk", cond: (ctx) => getPets(ctx)?.length === 0 }, { target: "petsEditor" }],
+        BACK: [{ target: "petsAsk", cond: ({ context }) => getPets(context)?.length === 0 }, { target: "petsEditor" }],
         YES: "hobbiesList",
         NO: "faq",
       },
@@ -397,11 +398,11 @@ export const machineMapping = createSpell({
     hobbyEditor: {
       key: ID_EXAMPLE_SPAWNED_MACHINE,
       context: (ctx, ev) => ({
-        hobbyId: ev?.data?.hobbyId,
+        hobbyId: ev?.data?.hobbyId ?? ev?.hobbyId,
         showDelete: true,
       }),
       onDone: [
-        { target: "hobbiesList", cond: (ctx, ev) => ev?.data?.finalEvent?.type === "BACK" },
+        { target: "hobbiesList", cond: ({ event }) => event?.output?.finalEvent?.type === "BACK" || event?.output?.finalEvent?.type === "CANCEL" },
         { target: "hobbiesList", actions: ["mergeEventDataResources"] },
       ],
     },

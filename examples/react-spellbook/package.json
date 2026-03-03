@@ -1,17 +1,18 @@
 {
   "name": "xstate-wizards-examples-react-spellbook",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "build": "parcel build index.html",
-    "dev": "parcel index.html",
+    "build": "vite build",
+    "dev": "vite",
     "yalclink": "npx yalc link @xstate-wizards/spells && npx yalc link @xstate-wizards/wizards-of-react && npx yalc link @xstate-wizards/spellbook"
   },
   "dependencies": {
-    "@xstate-wizards/spellbook": "^0.6.8",
-    "@xstate-wizards/spells": "^0.5.28",
+    "@xstate-wizards/spellbook": "^0.6.13",
+    "@xstate-wizards/spells": "^0.8.16",
     "lodash": "^4.17.21",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5",
@@ -19,9 +20,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "parcel-bundler": "^1.12.5",
-    "typescript": "^4.3.2"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.0.0"
   }
 }
