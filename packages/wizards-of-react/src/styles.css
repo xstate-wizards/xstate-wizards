@@ -1,0 +1,1892 @@
+/* ==========================================================================
+   xstate-wizards / wizards-of-react
+   CSS Custom Properties + Component Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties
+   -------------------------------------------------------------------------- */
+
+.xw--wrap {
+  /* Color Primitives — Blue */
+  --xw--color-blue-100: #191A9B;
+  --xw--color-blue-200: #2527BC;
+  --xw--color-blue-300: #2C2EE0;
+  --xw--color-blue-400: #2F51F8;
+  --xw--color-blue-500: #3C5DFF;
+  --xw--color-blue-600: #7C93FF;
+  --xw--color-blue-700: #BFCAFF;
+  --xw--color-blue-800: #EBEFFF;
+  --xw--color-blue-900: #FAFBFF;
+
+  /* Color Primitives — White */
+  --xw--color-white-100: #D0D0D4;
+  --xw--color-white-300: #E4E4E6;
+  --xw--color-white-500: #F0F1F2;
+  --xw--color-white-600: #F4F4F5;
+  --xw--color-white-700: #F7F7FA;
+  --xw--color-white-800: #FBFBFC;
+  --xw--color-white-900: #FFFFFF;
+
+  /* Color Primitives — Gray */
+  --xw--color-gray-300: #2E2E39;
+  --xw--color-gray-400: #32383E;
+  --xw--color-gray-500: #4D555B;
+  --xw--color-gray-600: #52585E;
+  --xw--color-gray-700: #656A6F;
+  --xw--color-gray-800: #8E8E9B;
+  --xw--color-gray-900: #9999A5;
+
+  /* Color Primitives — Black */
+  --xw--color-black-100: #000000;
+  --xw--color-black-300: #232624;
+
+  /* Color Primitives — Red */
+  --xw--color-red-100: #A50C3F;
+  --xw--color-red-300: #DB0F53;
+  --xw--color-red-500: #E5145A;
+  --xw--color-red-900: #ffeef0;
+
+  /* Color Primitives — Yellow */
+  --xw--color-yellow-100: #D7AF00;
+  --xw--color-yellow-300: #E9C31D;
+  --xw--color-yellow-400: #FFD82B;
+  --xw--color-yellow-500: #FFE81C;
+  --xw--color-yellow-700: #FFF069;
+  --xw--color-yellow-900: #FFF59C;
+
+  /* Color Primitives — Green */
+  --xw--color-green-100: #0EA35F;
+  --xw--color-green-300: #05C476;
+  --xw--color-green-500: #17DC83;
+  --xw--color-green-900: #D0EFE1;
+  --xw--color-green-1000: #E6FFED;
+
+  /* Color Primitives — Purple */
+  --xw--color-purple-100: #682DC7;
+  --xw--color-purple-300: #7A39E3;
+  --xw--color-purple-500: #9350FF;
+  --xw--color-purple-900: #F0E6FF;
+
+  /* Color Primitives — Orange */
+  --xw--color-orange-400: #F66161;
+  --xw--color-orange-500: #FF863B;
+
+  /* Color Primitives — Pink */
+  --xw--color-pink-300: #CA4972;
+  --xw--color-pink-500: #F65C8C;
+
+  /* Semantic Tokens */
+  --xw--primary: var(--xw--color-blue-500);
+  --xw--primary-hover: var(--xw--color-blue-300);
+  --xw--primary-border: var(--xw--color-blue-300);
+  --xw--text-color: var(--xw--color-gray-500);
+  --xw--text-heading: var(--xw--color-black-300);
+  --xw--text-link: var(--xw--color-blue-500);
+  --xw--text-link-hover: var(--xw--color-blue-100);
+  --xw--surface-bg: var(--xw--color-white-900);
+  --xw--surface-border: var(--xw--color-white-500);
+  --xw--surface-border-strong: var(--xw--color-white-300);
+  --xw--radius: 4px;
+  --xw--font-family: sans-serif;
+  --xw--shadow-sm: 0 2px 4px 0 rgba(228, 228, 230, 1);
+  --xw--shadow-md: 0 4px 16px 0 rgba(228, 228, 230, 1);
+
+  /* Layout */
+  --xw--body-max-width: 600px;
+  --xw--header-height: 46px;
+  --xw--header-bg: var(--xw--color-blue-900);
+  --xw--z-dropdown: 1000;
+  --xw--z-sticky-banner: 25;
+}
+
+/* --------------------------------------------------------------------------
+   Base / Reset (scoped to .xw--wrap)
+   -------------------------------------------------------------------------- */
+
+.xw--wrap {
+  position: relative;
+  color: var(--xw--text-color);
+  font-size: 1em;
+  line-height: 150%;
+  font-family: var(--xw--font-family);
+}
+
+.xw--wrap *,
+.xw--wrap *::before,
+.xw--wrap *::after {
+  box-sizing: border-box;
+}
+
+.xw--wrap h1,
+.xw--wrap h2,
+.xw--wrap h3,
+.xw--wrap h4,
+.xw--wrap h5,
+.xw--wrap h6 {
+  margin: 0;
+}
+
+.xw--wrap ul {
+  list-style-type: none;
+}
+
+.xw--wrap ul,
+.xw--wrap ol {
+  padding: 0;
+}
+
+.xw--wrap a {
+  color: var(--xw--text-link);
+  text-decoration: none;
+}
+
+.xw--wrap button,
+.xw--wrap input,
+.xw--wrap select,
+.xw--wrap textarea {
+  font-family: var(--xw--font-family);
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Header
+   -------------------------------------------------------------------------- */
+
+.xw--wrap .xw--header {
+  height: var(--xw--header-height);
+  width: 100%;
+  padding: 0.6em 0.25em 0.4em;
+  text-align: center;
+  background: var(--xw--header-bg);
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--xw--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--header {
+    height: 54px;
+    font-size: 11px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Body
+   -------------------------------------------------------------------------- */
+
+.xw--wrap .xw--body {
+  max-width: var(--xw--body-max-width);
+  padding: 3em 1.5em;
+  margin: 0 auto;
+  margin-bottom: 53px;
+}
+
+.xw--wrap .xw--body > h2,
+.xw--wrap .xw--body > h3,
+.xw--wrap .xw--body > h4,
+.xw--wrap .xw--body > h5 {
+  text-align: center;
+}
+
+.xw--wrap .xw--body > h6 {
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--body {
+    padding: 2em 1em;
+  }
+  .xw--wrap .xw--body > h2,
+  .xw--wrap .xw--body > h3,
+  .xw--wrap .xw--body > h4,
+  .xw--wrap .xw--body > h5,
+  .xw--wrap .xw--body > h6,
+  .xw--wrap .xw--body > p {
+    text-align: left;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Back Button (inside header)
+   -------------------------------------------------------------------------- */
+
+.xw--wrap .xw--body > button.xw--header-back-btn {
+  position: absolute;
+  top: 8px;
+  left: calc(1.5em + 32px + 8px);
+  width: 88px;
+  height: 32px;
+  max-height: 32px;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  opacity: 1;
+  background: white;
+  border: 2px solid var(--xw--color-blue-800);
+  cursor: pointer;
+  color: var(--xw--text-color);
+}
+
+.xw--wrap .xw--body > button.xw--header-back-btn:hover,
+.xw--wrap .xw--body > button.xw--header-back-btn:disabled {
+  opacity: 1;
+  background: white;
+  border: 2px solid var(--xw--color-blue-800);
+  cursor: pointer;
+  color: var(--xw--text-color);
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--body > button.xw--header-back-btn {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Navigation Options
+   -------------------------------------------------------------------------- */
+
+.xw--wrap .xw--body > div.xw--nav-options {
+  position: absolute;
+  top: 8px;
+  left: 1.3em;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  opacity: 1;
+  background: white;
+  border: 2px solid var(--xw--color-blue-800);
+  border-radius: var(--xw--radius);
+  cursor: pointer;
+  color: var(--xw--text-color);
+}
+
+.xw--wrap .xw--body > div.xw--nav-options svg {
+  height: 18px;
+  width: 18px;
+}
+
+.xw--wrap .xw--body > div.xw--nav-options svg path {
+  fill: var(--xw--text-color);
+  stroke: var(--xw--text-color);
+}
+
+.xw--wrap .xw--body > div.xw--nav-dropdown {
+  position: absolute;
+  top: calc(8px + 32px);
+  left: 1.3em;
+  z-index: var(--xw--z-dropdown);
+  padding: 0.5em;
+  background: var(--xw--header-bg);
+  border-radius: var(--xw--radius);
+  box-shadow: var(--xw--shadow-md);
+}
+
+.xw--wrap .xw--body > div.xw--nav-dropdown button,
+.xw--wrap .xw--body > div.xw--nav-dropdown button:disabled,
+.xw--wrap .xw--body > div.xw--nav-dropdown button:hover {
+  width: 100%;
+  padding: 0.5em 1em;
+  margin: 0.75em 0;
+  opacity: 1;
+  background: white;
+  border: 2px solid var(--xw--color-blue-800);
+  border-radius: var(--xw--radius);
+  cursor: pointer;
+  color: var(--xw--text-color);
+  font-weight: 700;
+}
+
+@media (min-width: 721px) {
+  .xw--wrap .xw--body div.xw--nav-dropdown .xw--back-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--body div.xw--nav-options {
+    top: 12px;
+    left: 1.3em;
+    margin: 0;
+  }
+  .xw--wrap .xw--body div.xw--nav-dropdown {
+    top: calc(12px + 32px);
+    left: 1.3em;
+    right: 1.3em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Progress Bar
+   -------------------------------------------------------------------------- */
+
+.xw--progress-bar {
+  position: absolute;
+  top: var(--xw--header-height);
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--xw--color-green-900);
+}
+
+.xw--progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 0 4px 4px 0;
+  width: var(--xw--progress, 0%);
+  background: var(--xw--color-green-500);
+}
+
+.xw--progress-bar .xw--progress-counter {
+  position: absolute;
+  top: -33px;
+  right: 2.75em;
+  background: var(--xw--color-green-500);
+  color: white;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.xw--progress-bar .xw--progress-flag {
+  position: absolute;
+  top: -30px;
+  right: 0.5em;
+}
+
+.xw--progress-bar .xw--progress-flag svg {
+  height: 32px;
+  width: 32px;
+}
+
+.xw--progress-bar .xw--progress-flag svg path {
+  fill: var(--xw--color-green-100);
+}
+
+@media (max-width: 720px) {
+  .xw--progress-bar {
+    top: 54px;
+  }
+  .xw--progress-bar .xw--progress-counter {
+    top: -38px;
+    font-size: 12px;
+    right: 1.5em;
+  }
+  .xw--progress-bar .xw--progress-flag {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Section Bar
+   -------------------------------------------------------------------------- */
+
+.xw--section-bar {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  background: var(--xw--color-white-800);
+  font-size: 12px;
+}
+
+.xw--section-bar .xw--section-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.xw--section-bar .xw--section-tag {
+  height: 100%;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  margin: 6px 6px 0;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  font-weight: 600;
+}
+
+.xw--section-bar .xw--section-tag.xw--highlight {
+  color: var(--xw--color-green-300);
+  border-bottom: 2px solid var(--xw--color-green-300);
+}
+
+.xw--section-bar .xw--section-tag:not(.xw--highlight) {
+  color: var(--xw--color-gray-900);
+  border-bottom: 2px solid var(--xw--color-white-300);
+}
+
+.xw--section-bar .xw--section-tag:first-of-type {
+  margin: 6px 6px 0 12px;
+}
+
+.xw--section-bar .xw--section-tag:last-of-type {
+  margin: 6px 12px 0 6px;
+}
+
+@media (max-width: 720px) {
+  .xw--section-bar[data-overflow] .xw--section-scroll {
+    display: inline-flex;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout — Resources Updates Warning
+   -------------------------------------------------------------------------- */
+
+.xw--resources-warning {
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: var(--xw--z-sticky-banner);
+}
+
+.xw--resources-warning > div {
+  width: 450px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 4px 16px;
+}
+
+.xw--resources-warning > div p {
+  background: #fff;
+  border-radius: var(--xw--radius);
+  margin: 8px auto;
+  padding: 4px 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Content Node Shared Styles
+   -------------------------------------------------------------------------- */
+
+.xw--wrap .xw--body > table,
+.xw--wrap .xw--body > div:not(.xw--node-input):not(.xw--node-row):not(.xw--node-row) {
+  margin-bottom: 1em;
+}
+
+.xw--wrap .xw--body > button,
+.xw--wrap .xw--body > a.xw--btn-link {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  font-weight: 500;
+}
+
+.xw--wrap .xw--body > button button,
+.xw--wrap .xw--body > a.xw--btn-link button {
+  width: 100%;
+}
+
+.xw--wrap .xw--body > p,
+.xw--wrap .xw--body ul > li,
+.xw--wrap .xw--body ol > li {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.xw--wrap .xw--body > p > p,
+.xw--wrap .xw--body ul > li > p,
+.xw--wrap .xw--body ol > li > p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.xw--wrap .xw--body ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.xw--wrap .xw--body ol {
+  padding-left: 20px;
+}
+
+/* Content Node Row */
+.xw--wrap .xw--node-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+
+.xw--wrap .xw--node-row > h4,
+.xw--wrap .xw--node-row > h5,
+.xw--wrap .xw--node-row > h6 {
+  margin: 0.3em 0;
+}
+
+.xw--wrap .xw--node-row > button {
+  max-height: 34px;
+  margin: 0.3em 0;
+}
+
+.xw--wrap .xw--node-row.always-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--node-row > div,
+  .xw--wrap .xw--node-row > div > div {
+    width: 100%;
+  }
+  .xw--wrap .xw--node-row > div button,
+  .xw--wrap .xw--node-row > div > div button {
+    width: 100%;
+  }
+  .xw--wrap .xw--node-row:not(.always-inline) {
+    flex-direction: column;
+    justify-content: initial;
+    align-items: flex-start;
+  }
+}
+
+/* Content Node Input */
+.xw--wrap .xw--node-required {
+  margin-left: 3px;
+  color: var(--xw--color-red-500);
+}
+
+.xw--wrap .xw--node-label {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.xw--wrap .xw--node-input {
+  flex-basis: 0;
+  flex-grow: 1;
+  margin: 0.2em 0;
+}
+
+.xw--wrap .xw--node-input small {
+  font-weight: 500;
+}
+
+.xw--wrap .xw--node-input label small {
+  display: block;
+  margin: 1em 0 0.25em;
+}
+
+.xw--wrap .xw--node-input textarea {
+  font-size: 14px;
+  line-height: 150%;
+  font-family: var(--xw--font-family);
+}
+
+.xw--wrap .xw--node-input input[type="date"]:not(:disabled) {
+  background: white;
+}
+
+.xw--wrap .xw--node-input.xw--invalid .xw--node-validation {
+  color: var(--xw--color-red-500);
+}
+
+.xw--wrap .xw--node-input > label,
+.xw--wrap .xw--node-input .xw--node-label {
+  font-weight: 700;
+}
+
+.xw--wrap .xw--node-input > label small,
+.xw--wrap .xw--node-input .xw--node-label small {
+  padding-bottom: 0.3em;
+}
+
+.xw--wrap .xw--node-input > label.checkbox,
+.xw--wrap .xw--node-input .xw--node-label.checkbox {
+  margin: 0.5em;
+}
+
+.xw--wrap .xw--node-input > label.checkbox small,
+.xw--wrap .xw--node-input .xw--node-label.checkbox small {
+  margin: 0;
+}
+
+.xw--wrap .xw--node-byline {
+  font-size: 13px;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.xw--wrap .xw--node-input.checkbox {
+  padding-top: 0.2em;
+}
+
+.xw--wrap .xw--node-input.checkbox small {
+  padding-top: 0.3em;
+}
+
+/* JSON Array */
+.xw--wrap .xw--node-input.xw--json-array {
+  margin-bottom: 0.5em;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel {
+  border: 1px solid var(--xw--surface-border);
+  padding: 1em;
+  margin-bottom: 1em;
+  border-radius: var(--xw--radius);
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel__header button {
+  padding: 0.1em 0.4em;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs.row {
+  display: flex;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs.row label {
+  flex-grow: 1;
+  padding-right: 6px;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs.row label:last-of-type {
+  padding-right: 0;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs.row label.checkbox {
+  flex-grow: 0;
+}
+
+@media (max-width: 720px) {
+  .xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs.row {
+    flex-direction: column;
+  }
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs > button {
+  margin-left: 6px;
+  margin-top: 18px;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-panel-inputs label small {
+  margin-top: 0;
+}
+
+.xw--wrap .xw--node-input.xw--json-array.xs .xw--json-panel {
+  margin-bottom: 0.5em;
+  padding: 0.75em 0;
+  border: 0;
+}
+
+.xw--wrap .xw--node-input.xw--json-array .xw--json-add {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Typography — Headings
+   -------------------------------------------------------------------------- */
+
+.xw--h0 {
+  color: var(--xw--text-heading);
+  font-size: 60px;
+  font-weight: 800;
+  line-height: 60px;
+  letter-spacing: -0.5px;
+}
+
+.xw--h1 {
+  color: var(--xw--text-heading);
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 58px;
+  letter-spacing: -0.5px;
+}
+
+.xw--h2 {
+  color: var(--xw--text-heading);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 48px;
+}
+
+.xw--h3 {
+  color: var(--xw--text-heading);
+  font-size: 2em;
+  font-weight: 600;
+  line-height: 45px;
+}
+
+.xw--h4 {
+  color: var(--xw--text-heading);
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 36px;
+}
+
+.xw--h5 {
+  color: var(--xw--text-heading);
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.5em;
+}
+
+.xw--h6 {
+  color: var(--xw--text-heading);
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.5em;
+}
+
+@media screen and (max-width: 45em) {
+  .xw--h0 { font-size: 44px; line-height: 140%; }
+  .xw--h1 { font-size: 40px; line-height: 140%; }
+  .xw--h2 { font-size: 32px; line-height: 140%; }
+  .xw--h3 { font-size: 27px; line-height: 140%; }
+  .xw--h4 { font-size: 23px; line-height: 140%; }
+  .xw--h5 { font-size: 18px; line-height: 140%; }
+  .xw--h6 { font-size: 13px; line-height: 140%; }
+}
+
+/* --------------------------------------------------------------------------
+   Typography — Paragraph
+   -------------------------------------------------------------------------- */
+
+.xw--p {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Typography — Link
+   -------------------------------------------------------------------------- */
+
+.xw--a,
+.xw--a:visited,
+.xw--a:active {
+  color: var(--xw--text-link);
+  text-decoration: none;
+}
+
+.xw--a:hover {
+  color: var(--xw--text-link-hover);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Typography — Small
+   -------------------------------------------------------------------------- */
+
+.xw--small {
+  font-size: 13px;
+  line-height: 100%;
+  padding: 0 0.25em 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   Typography — HR
+   -------------------------------------------------------------------------- */
+
+.xw--hr {
+  margin: 1.5em 0;
+  border: 1px solid var(--xw--color-white-600);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.xw--btn {
+  box-sizing: border-box;
+  background: var(--xw--primary);
+  border: 1px solid var(--xw--primary);
+  border-bottom: 3px solid var(--xw--primary-border);
+  color: var(--xw--color-white-900);
+  border-radius: var(--xw--radius);
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: background 250ms, border 250ms, color 250ms, opacity 250ms;
+}
+
+.xw--btn path {
+  fill: var(--xw--color-white-900);
+}
+
+.xw--btn svg {
+  position: relative;
+  top: 2px;
+  right: 3px;
+  max-height: 18px;
+}
+
+.xw--btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Button Sizes */
+.xw--btn,
+.xw--btn[data-size="md"] {
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+}
+
+.xw--btn[data-size="md"] svg,
+.xw--btn:not([data-size]) svg {
+  height: 1em;
+  width: 1em;
+}
+
+.xw--btn[data-size="xs"] {
+  padding: 0.3em 0.6em;
+  font-size: 0.8em;
+}
+
+.xw--btn[data-size="xs"] svg {
+  height: 0.8em;
+  width: 0.8em;
+}
+
+.xw--btn[data-size="sm"] {
+  padding: 0.5em 1em;
+  font-size: 0.8em;
+}
+
+.xw--btn[data-size="sm"] svg {
+  height: 0.8em;
+  width: 0.8em;
+}
+
+.xw--btn[data-size="lg"] {
+  padding: 0.8em 1.4em;
+  font-size: 1.4em;
+}
+
+.xw--btn[data-size="lg"] svg {
+  height: 1.2em;
+  width: 1.2em;
+  margin-left: 0.5em;
+}
+
+.xw--btn[data-size="xl"] {
+  width: 100%;
+  padding: 1em 2em;
+  font-size: 1.6em;
+  text-align: center;
+}
+
+.xw--btn[data-size="xl"] svg {
+  height: 1.2em;
+  width: 1.2em;
+  margin: 0 0.25em;
+}
+
+/* Button Variants — Primary (default) */
+.xw--btn:not([data-variant]):not([data-inverted]):hover,
+.xw--btn[data-variant="primary"]:not([data-inverted]):hover {
+  background: var(--xw--primary-hover);
+}
+
+.xw--btn:not([data-variant]):not([data-inverted]):disabled,
+.xw--btn[data-variant="primary"]:not([data-inverted]):disabled {
+  background: var(--xw--primary-hover);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Button Variants — Primary Inverted */
+.xw--btn:not([data-variant])[data-inverted],
+.xw--btn[data-variant="primary"][data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--primary);
+  color: var(--xw--primary);
+}
+
+.xw--btn:not([data-variant])[data-inverted] path,
+.xw--btn[data-variant="primary"][data-inverted] path {
+  fill: var(--xw--primary);
+}
+
+/* Button Variants — White */
+.xw--btn[data-variant="white"]:not([data-inverted]) {
+  background: var(--xw--color-white-900);
+  border: 1px solid var(--xw--color-white-300);
+  border-bottom: 3px solid var(--xw--color-white-300);
+  color: var(--xw--primary);
+}
+
+.xw--btn[data-variant="white"]:not([data-inverted]):disabled {
+  border: 1px solid var(--xw--surface-border);
+  border-bottom: 3px solid var(--xw--color-white-300);
+  color: rgba(44, 46, 224, 0.5);
+}
+
+.xw--btn[data-variant="white"]:not([data-inverted]):focus {
+  outline: none;
+  border: 1px solid var(--xw--primary);
+  border-bottom: 3px solid var(--xw--primary-border);
+}
+
+/* Button Variants — White Inverted */
+.xw--btn[data-variant="white"][data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--color-white-900);
+  color: var(--xw--color-white-900);
+  opacity: 1;
+}
+
+.xw--btn[data-variant="white"][data-inverted]:disabled {
+  opacity: 0.6;
+}
+
+.xw--btn[data-variant="white"][data-inverted]:focus {
+  outline: none;
+}
+
+/* Button Variants — Warning */
+.xw--btn[data-variant="warning"]:not([data-inverted]) {
+  background: var(--xw--color-red-500);
+  border: 1px solid var(--xw--color-red-300);
+  border-bottom: 3px solid var(--xw--color-red-100);
+  color: white;
+}
+
+.xw--btn[data-variant="warning"]:not([data-inverted]):hover {
+  background: var(--xw--color-red-300);
+}
+
+.xw--btn[data-variant="warning"]:not([data-inverted]):disabled {
+  background: var(--xw--color-red-100);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Button Variants — Warning Inverted */
+.xw--btn[data-variant="warning"][data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--color-red-500);
+  color: var(--xw--color-red-500);
+  opacity: 1;
+}
+
+.xw--btn[data-variant="warning"][data-inverted] path {
+  fill: var(--xw--color-red-500);
+}
+
+.xw--btn[data-variant="warning"][data-inverted]:disabled {
+  opacity: 0.6;
+}
+
+.xw--btn[data-variant="warning"][data-inverted]:focus {
+  outline: none;
+}
+
+/* Button Variants — Success */
+.xw--btn[data-variant="success"]:not([data-inverted]) {
+  background: var(--xw--color-green-500);
+  border: 1px solid var(--xw--color-green-500);
+  border-bottom: 3px solid var(--xw--color-green-300);
+  color: white;
+}
+
+.xw--btn[data-variant="success"]:not([data-inverted]):hover {
+  background: var(--xw--color-green-300);
+  border: 1px solid var(--xw--color-green-300);
+  border-bottom: 3px solid var(--xw--color-green-100);
+}
+
+.xw--btn[data-variant="success"]:not([data-inverted]):disabled {
+  background: var(--xw--color-green-300);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Button Variants — Success Inverted */
+.xw--btn[data-variant="success"][data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--color-green-500);
+  color: var(--xw--color-green-300);
+}
+
+.xw--btn[data-variant="success"][data-inverted] path {
+  fill: var(--xw--color-green-500);
+}
+
+.xw--btn[data-variant="success"][data-inverted]:disabled {
+  color: rgba(5, 196, 118, 0.5);
+}
+
+/* Button Variants — Default (gray) */
+.xw--btn[data-variant="default"]:not([data-inverted]) {
+  background: var(--xw--color-gray-900);
+  border: 1px solid var(--xw--color-gray-900);
+  border-bottom: 3px solid var(--xw--color-gray-700);
+  color: white;
+}
+
+.xw--btn[data-variant="default"]:not([data-inverted]):hover {
+  background: var(--xw--color-gray-800);
+  border: 1px solid var(--xw--color-gray-900);
+  border-bottom: 3px solid var(--xw--color-gray-500);
+}
+
+.xw--btn[data-variant="default"]:not([data-inverted]):disabled {
+  background: var(--xw--color-gray-800);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Button Variants — Default Inverted */
+.xw--btn[data-variant="default"][data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--color-gray-900);
+  color: var(--xw--color-gray-500);
+}
+
+.xw--btn[data-variant="default"][data-inverted] path {
+  fill: var(--xw--color-gray-500);
+}
+
+.xw--btn[data-variant="default"][data-inverted]:disabled {
+  border: 1px solid rgba(153, 153, 165, 0.5);
+  color: rgba(77, 85, 91, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Inputs
+   -------------------------------------------------------------------------- */
+
+.xw--input {
+  width: 100%;
+  outline: none;
+  padding: 0.8em 1em;
+  font-size: 0.9em;
+  border: 1px solid var(--xw--surface-border);
+  border-radius: var(--xw--radius);
+}
+
+.xw--input::placeholder {
+  color: var(--xw--color-gray-800);
+}
+
+.xw--input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  max-height: 18px;
+  max-width: 18px;
+}
+
+/* Input States */
+.xw--input:disabled {
+  background: var(--xw--color-white-700);
+}
+
+.xw--input[data-invalid] {
+  box-shadow: inset 0 -1px 1px var(--xw--color-red-500);
+  color: var(--xw--color-red-500);
+}
+
+/* Input Sizes */
+.xw--input[data-size="xs"],
+.xw--input[data-size="sm"] {
+  padding: 0.8em 0.5em;
+  font-size: 0.8em;
+}
+
+.xw--input[data-size="sm"] {
+  font-size: 1em;
+}
+
+.xw--input:not([data-size]),
+.xw--input[data-size="md"] {
+  padding: 0.8em 0.5em;
+  font-size: 1em;
+}
+
+.xw--input[data-size="lg"] {
+  padding: 0.8em;
+  font-size: 1.2em;
+}
+
+.xw--input[data-size="xl"] {
+  width: 100%;
+  padding: 0.8em 0.5em;
+  font-size: 1.6em;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Select
+   -------------------------------------------------------------------------- */
+
+.xw--select {
+  width: 100%;
+  outline: none;
+  padding: 0.8em 1em;
+  font-size: 0.9em;
+  border: 1px solid var(--xw--surface-border);
+  border-bottom: 2px solid var(--xw--surface-border-strong);
+  appearance: none;
+  border-radius: var(--xw--radius);
+  background: var(--xw--surface-bg);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--xw--color-white-300) 50%),
+    linear-gradient(135deg, var(--xw--color-white-300) 50%, transparent 50%),
+    linear-gradient(to right, var(--xw--color-white-300), var(--xw--color-white-300));
+  background-position: calc(100% - 20px) calc(1.25em), calc(100% - 15px) calc(1.25em), calc(100% - 2.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 2em;
+  background-repeat: no-repeat;
+}
+
+.xw--select::placeholder {
+  color: var(--xw--color-gray-900);
+}
+
+/* Select States */
+.xw--select:disabled {
+  background-color: var(--xw--color-white-700);
+}
+
+.xw--select[data-invalid] {
+  box-shadow: inset 0 -1px 1px var(--xw--color-red-500);
+  color: var(--xw--color-red-500);
+}
+
+/* Select Sizes */
+.xw--select[data-size="xs"],
+.xw--select[data-size="sm"] {
+  padding: 0.8em 0.5em;
+  font-size: 0.8em;
+}
+
+.xw--select[data-size="sm"] {
+  font-size: 1em;
+}
+
+.xw--select:not([data-size]),
+.xw--select[data-size="md"] {
+  padding: 0.8em 0.5em;
+  font-size: 1em;
+}
+
+.xw--select[data-size="lg"] {
+  padding: 0.8em;
+  font-size: 1.2em;
+}
+
+.xw--select[data-size="xl"] {
+  width: 100%;
+  padding: 0.8em 0.5em;
+  font-size: 1.6em;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Textarea
+   -------------------------------------------------------------------------- */
+
+.xw--textarea {
+  width: 100%;
+  outline: none;
+  padding: 0.8em 1em;
+  font-size: 0.9em;
+  border: 1px solid var(--xw--surface-border-strong);
+  border-bottom: 2px solid var(--xw--surface-border-strong);
+  border-radius: var(--xw--radius);
+}
+
+.xw--textarea::placeholder {
+  color: var(--xw--color-gray-900);
+}
+
+/* Textarea States */
+.xw--textarea:disabled {
+  background: var(--xw--color-white-700);
+}
+
+.xw--textarea[data-invalid] {
+  box-shadow: inset 0 -1px 1px var(--xw--color-red-500);
+  color: var(--xw--color-red-500);
+}
+
+/* Textarea Sizes */
+.xw--textarea[data-size="xs"],
+.xw--textarea[data-size="sm"] {
+  padding: 0.8em 0.5em;
+  font-size: 0.8em;
+}
+
+.xw--textarea[data-size="sm"] {
+  font-size: 1em;
+}
+
+.xw--textarea:not([data-size]),
+.xw--textarea[data-size="md"] {
+  padding: 0.8em 0.5em;
+  font-size: 1em;
+}
+
+.xw--textarea[data-size="lg"] {
+  padding: 0.8em;
+  font-size: 1.2em;
+}
+
+.xw--textarea[data-size="xl"] {
+  width: 100%;
+  padding: 0.8em 0.5em;
+  font-size: 1.6em;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Table
+   -------------------------------------------------------------------------- */
+
+.xw--table {
+  width: 100%;
+  border-spacing: 0;
+  text-align: left;
+  border-radius: 2px;
+}
+
+.xw--table thead {
+  background: var(--xw--color-white-700);
+}
+
+.xw--table tbody {
+  background: var(--xw--surface-bg);
+}
+
+.xw--table tbody tr.divider {
+  height: 12px;
+}
+
+.xw--table tbody tr.divider td {
+  background: var(--xw--color-white-700);
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  font-weight: 500;
+}
+
+.xw--table th,
+.xw--table td {
+  border: 1px solid var(--xw--surface-border);
+}
+
+.xw--table th {
+  border-bottom: 1px solid var(--xw--surface-border-strong);
+}
+
+.xw--table p {
+  margin: 0;
+}
+
+/* Table Sizes */
+.xw--table:not([data-size]) p {
+  font-size: 0.9em;
+}
+
+.xw--table:not([data-size]) th,
+.xw--table:not([data-size]) td {
+  padding: 0.5em 0.8em;
+}
+
+.xw--table[data-size="sm"] th {
+  font-size: 13px;
+}
+
+.xw--table[data-size="sm"] td {
+  font-size: 12px;
+}
+
+.xw--table[data-size="sm"] td > input {
+  font-size: initial;
+}
+
+.xw--table[data-size="sm"] th,
+.xw--table[data-size="sm"] td {
+  padding: 0.3em 0.5em;
+}
+
+.xw--table[data-size="xs"] th {
+  font-size: 12px;
+}
+
+.xw--table[data-size="xs"] td {
+  font-size: 11px;
+}
+
+.xw--table[data-size="xs"] td > input {
+  font-size: initial;
+}
+
+.xw--table[data-size="xs"] th,
+.xw--table[data-size="xs"] td {
+  padding: 0.2em 0.4em;
+}
+
+/* Table Row Status */
+.xw--table tr.success > td:first-of-type {
+  border-left: 4px solid var(--xw--color-green-500);
+  margin-left: -4px;
+}
+
+.xw--table tr.warning > td:first-of-type {
+  border-left: 4px solid var(--xw--color-orange-500);
+  margin-left: -4px;
+}
+
+.xw--table tr.critical > td:first-of-type {
+  border-left: 4px solid var(--xw--color-red-500);
+  margin-left: -4px;
+}
+
+/* --------------------------------------------------------------------------
+   Callout
+   -------------------------------------------------------------------------- */
+
+.xw--callout {
+  padding: 0.5em 1em;
+  margin-top: 0.5em !important;
+  margin-bottom: 1em !important;
+  background: var(--xw--color-blue-900);
+  border-radius: var(--xw--radius);
+  border: 1px solid var(--xw--color-blue-700);
+  box-shadow: var(--xw--shadow-sm);
+}
+
+.xw--callout[data-clickable] {
+  cursor: pointer;
+}
+
+.xw--callout small {
+  color: var(--xw--color-gray-700);
+  font-weight: 700;
+}
+
+/* Callout Variants */
+.xw--callout[data-variant="error"] {
+  background: var(--xw--color-red-900);
+  border-color: var(--xw--color-red-900);
+  box-shadow: none;
+}
+
+.xw--callout[data-variant="error"] small {
+  color: var(--xw--color-red-500);
+}
+
+.xw--callout[data-variant="error"] small svg {
+  stroke: var(--xw--color-red-500);
+  width: 1em;
+  height: 1em;
+}
+
+.xw--callout[data-variant="warning"] {
+  background: var(--xw--color-yellow-900);
+  border-color: var(--xw--color-yellow-700);
+  box-shadow: none;
+}
+
+.xw--callout[data-variant="warning"] small {
+  color: var(--xw--text-color);
+}
+
+.xw--callout[data-variant="warning"] small svg {
+  stroke: var(--xw--color-yellow-700);
+  width: 1em;
+  height: 1em;
+}
+
+/* --------------------------------------------------------------------------
+   Card
+   -------------------------------------------------------------------------- */
+
+.xw--card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--xw--radius);
+  margin: 1em 0;
+  box-shadow: none;
+  border: 1px solid var(--xw--surface-border);
+  border-bottom: 3px solid var(--xw--surface-border);
+  background: var(--xw--surface-bg);
+  padding: 1em 2em;
+}
+
+/* --------------------------------------------------------------------------
+   Input Row (inline grouped inputs)
+   -------------------------------------------------------------------------- */
+
+.xw--input-row {
+  display: inline-grid;
+  grid-auto-flow: column;
+  width: 100%;
+}
+
+.xw--input-row div.label {
+  grid-row: 1;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.xw--input-row div.input {
+  grid-row: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xw--input-row > div > div,
+.xw--input-row > div > label {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: repeat(2, 1fr);
+  align-items: end;
+  height: 100%;
+}
+
+.xw--input-row input,
+.xw--input-row button {
+  border-radius: 0;
+}
+
+.xw--input-row button {
+  width: 100%;
+  height: 100%;
+}
+
+.xw--input-row > div:first-of-type input,
+.xw--input-row > div:first-of-type button {
+  border-radius: 0.25em 0 0 0.25em;
+}
+
+.xw--input-row > div:last-of-type input,
+.xw--input-row > div:last-of-type button {
+  border-radius: 0 0.25em 0.25em 0;
+}
+
+@media (max-width: 45em) {
+  .xw--input-row {
+    grid-auto-flow: row;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Video Holder
+   -------------------------------------------------------------------------- */
+
+.xw--video-holder {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xw--video-holder span,
+.xw--video-holder iframe {
+  max-height: var(--xw--video-height, 320px);
+  min-height: var(--xw--video-height, 320px);
+  width: 100%;
+  padding: 0 2px;
+}
+
+@media (max-width: 45em) {
+  .xw--video-holder span,
+  .xw--video-holder iframe {
+    max-height: var(--xw--video-height-mobile, 220px);
+    min-height: var(--xw--video-height-mobile, 220px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Checkbox Button
+   -------------------------------------------------------------------------- */
+
+.xw--checkbox-btn {
+  box-sizing: border-box;
+  border-radius: var(--xw--radius);
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: background 250ms, border 250ms, color 250ms, opacity 250ms;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  background: var(--xw--color-white-900);
+  border: 1px solid var(--xw--color-white-300);
+  border-bottom: 3px solid var(--xw--color-white-300);
+  color: var(--xw--primary);
+}
+
+.xw--checkbox-btn[data-inverted] {
+  background: transparent;
+  border: 1px solid var(--xw--primary);
+  color: var(--xw--primary);
+}
+
+.xw--checkbox-btn[data-disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.xw--checkbox-btn {
+  text-align: center;
+  justify-content: space-between;
+}
+
+.xw--checkbox-btn > .xw--cb-check {
+  margin-right: 6px;
+  width: 28px;
+}
+
+.xw--checkbox-btn > .xw--cb-check .xw--cb-box {
+  height: 18px;
+  width: 18px;
+  border-radius: 4px;
+  border: 1px solid var(--xw--primary);
+}
+
+.xw--checkbox-btn > .xw--cb-check .xw--cb-box.xw--cb-radio {
+  border-radius: 9px;
+}
+
+.xw--checkbox-btn > .xw--cb-text {
+  width: 100%;
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Inline Button Wrapper
+   -------------------------------------------------------------------------- */
+
+.xw--inline-btn-wrapper {
+  display: inline-flex;
+  gap: 8px;
+  margin: 1em 0;
+}
+
+.xw--inline-btn-wrapper > button,
+.xw--inline-btn-wrapper > a {
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Image / Illustration Wrappers
+   -------------------------------------------------------------------------- */
+
+.xw--image-wrapper {
+  text-align: center;
+}
+
+.xw--image-wrapper img {
+  max-width: 100%;
+  border-radius: var(--xw--radius);
+}
+
+.xw--image-wrapper[data-shadow] img {
+  box-shadow: var(--xw--shadow-md);
+}
+
+.xw--illustration-wrapper {
+  text-align: center;
+}
+
+.xw--illustration-wrapper svg {
+  max-width: 100%;
+  max-height: 320px;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Address Suggestions
+   -------------------------------------------------------------------------- */
+
+.xw--address-suggestions {
+  position: relative;
+}
+
+.xw--address-suggestions > div {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  background: var(--xw--surface-bg);
+  border: 1px solid var(--xw--surface-border);
+  border-radius: var(--xw--radius);
+  box-shadow: var(--xw--shadow-md);
+}
+
+.xw--address-suggestions > div > div {
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.xw--address-suggestions > div > div:hover {
+  background: var(--xw--color-blue-900);
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Resources List
+   -------------------------------------------------------------------------- */
+
+.xw--resources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.xw--resources-list.xw--empty {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Countdown Node
+   -------------------------------------------------------------------------- */
+
+.xw--countdown-node {
+  text-align: center;
+  padding: 1em;
+}
+
+.xw--countdown-node .xw--countdown-timer {
+  font-size: 2em;
+  font-weight: 700;
+  color: var(--xw--text-heading);
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Multi-Select Button List
+   -------------------------------------------------------------------------- */
+
+.xw--multi-select-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1em 0;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Currency Input
+   -------------------------------------------------------------------------- */
+
+.xw--currency-input {
+  display: flex;
+  align-items: stretch;
+}
+
+.xw--currency-symbol {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5em;
+  background: var(--xw--color-white-700);
+  border: 1px solid var(--xw--surface-border);
+  border-right: none;
+  border-radius: var(--xw--radius) 0 0 var(--xw--radius);
+  font-weight: 600;
+  color: var(--xw--text-color);
+}
+
+.xw--currency-input .xw--input {
+  border-radius: 0 var(--xw--radius) var(--xw--radius) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Phone Input
+   -------------------------------------------------------------------------- */
+
+.xw--phone-input-wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+.xw--phone-input-wrapper .xw--input {
+  border-radius: 0 var(--xw--radius) var(--xw--radius) 0;
+}
+
+.xw--phone-us-code {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5em;
+  background: var(--xw--color-white-700);
+  border: 1px solid var(--xw--surface-border);
+  border-right: none;
+  border-radius: var(--xw--radius) 0 0 var(--xw--radius);
+  font-weight: 500;
+  font-size: 0.9em;
+  color: var(--xw--text-color);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Date Picker
+   -------------------------------------------------------------------------- */
+
+.xw--date-picker {
+  display: flex;
+  gap: 4px;
+}
+
+.xw--date-picker .xw--select {
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Select With Other
+   -------------------------------------------------------------------------- */
+
+.xw--select-with-other {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .xw--select-with-other {
+    flex-direction: column;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Age Input
+   -------------------------------------------------------------------------- */
+
+.xw--age-input {
+  display: inline-grid;
+  grid-auto-flow: column;
+}
+
+.xw--age-input div.label {
+  grid-row: 1;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.xw--age-input div.input {
+  grid-row: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xw--age-input > div > div,
+.xw--age-input > div > label {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: repeat(2, 1fr);
+  align-items: end;
+  height: 100%;
+}
+
+.xw--age-input input,
+.xw--age-input button,
+.xw--age-input select {
+  border-radius: 0;
+}
+
+.xw--age-input > div:first-of-type input,
+.xw--age-input > div:first-of-type button,
+.xw--age-input > div:first-of-type select {
+  border-radius: 0.25em 0 0 0.25em;
+}
+
+.xw--age-input > div:last-of-type input,
+.xw--age-input > div:last-of-type button,
+.xw--age-input > div:last-of-type select {
+  border-radius: 0 0.25em 0.25em 0;
+}
+
+@media (max-width: 45em) {
+  .xw--age-input {
+    grid-auto-flow: row;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Internal — Countdown Timer (SVG circle animation)
+   -------------------------------------------------------------------------- */
+
+.xw--countdown {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.xw--countdown-svg {
+  transform: scaleX(-1);
+}
+
+.xw--countdown-circle {
+  fill: none;
+  stroke: none;
+}
+
+.xw--countdown-elapsed {
+  stroke-width: 7px;
+  stroke: var(--xw--color-blue-900);
+  transition: 1s linear all;
+}
+.xw--countdown-elapsed.done {
+  color: var(--xw--color-blue-500);
+  stroke: currentColor;
+}
+.xw--countdown-elapsed.progressing {
+  color: var(--xw--color-blue-500);
+}
+
+.xw--countdown-remaining {
+  stroke-width: 8px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  stroke: currentColor;
+}
+.xw--countdown-remaining.done {
+  color: var(--xw--color-blue-500);
+}
+.xw--countdown-remaining.progressing {
+  color: var(--xw--color-blue-500);
+}
+
+.xw--countdown-label {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--xw--color-blue-500);
+}
+.xw--countdown-label svg {
+  height: 24px;
+  width: 24px;
+}
+.xw--countdown-label svg path {
+  fill: var(--xw--color-blue-500);
+}
