@@ -198,7 +198,7 @@ export const machineMapping = createSpell({
               label: "Pick your age!",
               assign: { path: "age" },
               validations: ["required"],
-              attrs: { size: "sm" },
+              attrs: { className: "xw--input-sm" },
             },
             {
               type: "input",
@@ -208,7 +208,7 @@ export const machineMapping = createSpell({
               // defaultCountryCode: 1,
               assign: { path: "phoneNumber" },
               validations: [], // "validPhoneNumber" is now built in. We'll see a validation err only if its a bad input
-              attrs: { size: "sm" },
+              attrs: { className: "xw--input-sm" },
             },
             {
               type: "multiSelect",
@@ -220,7 +220,7 @@ export const machineMapping = createSpell({
                 { text: "Blue", value: "blue" },
               ],
               validations: [],
-              attrs: { size: "sm" },
+              attrs: { className: "xw--select-sm" },
             },
           ],
         },

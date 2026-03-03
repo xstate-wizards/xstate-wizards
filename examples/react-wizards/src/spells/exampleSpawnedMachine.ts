@@ -90,7 +90,7 @@ export const machineMapping = createSpell({
             },
             country: { enabled: true, validations: ["required"] },
           },
-          attrs: { size: "sm" },
+          attrs: { className: "xw--input-sm" },
         },
 
         { type: "hr" },

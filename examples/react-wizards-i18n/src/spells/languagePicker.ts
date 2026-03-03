@@ -7,7 +7,7 @@ const CONTENT_NODE_SUBMIT_DEFERRED = (t) => ({
   buttonType: "submit",
   text: t("continue"),
   event: "SUBMIT",
-  attrs: { size: "lg", width: "100%" },
+  attrs: { className: "xw--btn-lg", width: "100%" },
   disabledByFreshDelay: true,
 });
 
