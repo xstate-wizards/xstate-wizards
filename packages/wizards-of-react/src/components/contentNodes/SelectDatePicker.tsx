@@ -21,7 +21,7 @@ type TSelectDatePickerProps = {
   size?: string;
   onChange: (date: Date) => void;
   serializations: TWizardSerializations;
-  dateDisabled: ({ date: Date }) => boolean;
+  dateDisabled: (args: { date: Date }) => boolean;
   dateStart?: Date | string;
   dateEnd?: Date | string;
 };

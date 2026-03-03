@@ -1,11 +1,10 @@
 # node artifacts
 node_modules
-.yalc
-yalc.lock
 
 # build artifacts
 dist
 .cache
+*.tsbuildinfo
 
 # test artifacts
 coverage/

@@ -36,30 +36,37 @@ export function setupInvokedMachineState({
 }: TSetupInvokedMachineStateProps) {
   logger.debug("Invoking Machine: ", { id: key, spellMap });
   // VALIDATE
-  // TODO: get these working lol
   if (!key) logger.error("Invalid invoke config: Missing 'key'");
   if (!spellMap[key]) logger.error(`Invalid invoke config: Machine/spell doesn't exist for key '${key}'`);
 
   // SETUP
+  // v5: We create the child machine at config time and pass dynamic context via input.
+  // The child machine is created with empty context - actual context comes via input.
+  const childMachine = spellMap[key].createMachine(
+    { resources: {}, resourcesUpdates: {} },
+    { initial, spellMap, serializations, meta }
+  );
+
   const constructedState = {
     entry,
     exit,
     invoke: {
       id: key,
-      src: (ctx, event) => {
+      // v5: src is the machine directly, input provides dynamic context
+      src: childMachine,
+      input: ({ context: ctx, event }) => {
         // --- if xstate.init, we did not get invoked by a parent, so kick us back
-        // TODO: WE SHOULD BE HYDRATING THE FULL MACHINE TREE SO A USER CAN CONTINUE
         if (event.type === "xstate.init") {
-          return Promise.resolve({ finalEvent: { type: "BACK" } });
+          return { __skipInvoke: true };
         }
 
-        const getContextFromJsonLogic = (context) => {
+        const getContextFromJsonLogic = (contextConfig) => {
           return (
-            Object.keys(context ?? {})?.reduce((obj, key) => {
-              if (isJsonLogic(context[key])) {
-                obj[key] = evalJsonLogic(context[key], { context: ctx, event });
-              } else if (typeof context[key] === "object") {
-                obj[key] = getContextFromJsonLogic(context[key]);
+            Object.keys(contextConfig ?? {})?.reduce((obj, key) => {
+              if (isJsonLogic(contextConfig[key])) {
+                obj[key] = evalJsonLogic(contextConfig[key], { context: ctx, event });
+              } else if (typeof contextConfig[key] === "object") {
+                obj[key] = getContextFromJsonLogic(contextConfig[key]);
               }
               return obj;
             }, {}) ?? {}
@@ -68,18 +75,18 @@ export function setupInvokedMachineState({
 
         const invokedContext = typeof context === "function" ? context?.(ctx, event) : getContextFromJsonLogic(context);
 
-        return spellMap[key].createMachine(
-          {
-            resources: cloneDeep(ctx.resources),
-            resourcesUpdates: cloneDeep(ctx.resourcesUpdates),
-            ...(invokedContext ?? {}),
-          },
-          { initial, spellMap, serializations, meta }
-        );
+        return {
+          resources: cloneDeep(ctx.resources),
+          resourcesUpdates: cloneDeep(ctx.resourcesUpdates),
+          ...(invokedContext ?? {}),
+        };
       },
       onDone: [
         meta?.allowStartOver
-          ? { target: "cancel", cond: (ctx, ev) => ev?.data?.finalEvent?.type === "START_OVER" }
+          ? {
+              target: "cancel",
+              cond: ({ event }) => event?.output?.finalEvent?.type === "START_OVER",
+            }
           : null,
         ...onDone,
       ].filter((od) => od),
@@ -89,6 +96,7 @@ export function setupInvokedMachineState({
     meta: { nodeType: key, test: test || (() => null) },
   };
   // --- Deserialize (traverse entry/on actions and handle assign templates/json-logic)
+  // deserializeTransitions also remaps cond → guard
   if (constructedState.entry) constructedState.entry = deserializeTransitions(constructedState.entry);
   if (constructedState.exit) constructedState.exit = deserializeTransitions(constructedState.exit);
 

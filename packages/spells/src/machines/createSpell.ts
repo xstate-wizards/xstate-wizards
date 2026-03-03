@@ -1,5 +1,5 @@
 import { cloneDeep, merge, omit } from "lodash";
-import { createMachine } from "xstate";
+import { assign, createMachine } from "xstate";
 import { INTERVIEW_INTRO_STATE } from "../constants/stateTargets";
 import { TSpellInstructions, TPrepparedSpellMapping } from "../types";
 import { prepMachineContextWithResources } from "./context/contextHelpers";
@@ -69,8 +69,22 @@ export const createSpell = ({
             (session?.machineState && machineStates[session?.machineState]) != null
               ? session?.machineState
               : initial ?? config?.initial ?? INTERVIEW_INTRO_STATE,
-          context: machineContext,
-          meta: machineMeta,
+          // v5: context is a factory function; receives input from parent invoke
+          context: ({ input }: { input: any }) => ({
+            __lastEvent: null,
+            // v5: machine-level meta moved to context
+            __machineMeta: machineMeta,
+            ...machineContext,
+            // If invoked by a parent, merge input into context
+            ...(input && !input.__skipInvoke ? input : {}),
+          }),
+          // v5: output at machine level replaces data on individual final states
+          output: ({ context }) => ({
+            finalCtx: omit(context, ["__lastEvent", "__machineMeta"]),
+            finalEvent: context.__lastEvent,
+            resources: cloneDeep(context.resources),
+            resourcesUpdates: cloneDeep(context.resourcesUpdates),
+          }),
           states: machineStates,
         },
         {

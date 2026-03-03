@@ -3,8 +3,9 @@
 
 import { $TSFixMe } from "../types";
 import { PHONE_NUMBER_TYPES } from "../constants/phoneNumberTypes";
+import libphonenumber from "google-libphonenumber";
 
-const PNF = require("google-libphonenumber").PhoneNumberFormat;
+const PNF = libphonenumber.PhoneNumberFormat;
 
 type TParseTel = {
   error: $TSFixMe;
@@ -32,7 +33,7 @@ type TParseTel = {
 
 export const parseTel = (inputPhoneNumber: string, inputRegionCode?: string): TParseTel => {
   // Not sure if we need to be calling getInstance within the function but w/e
-  const phoneNumberUtil = require("google-libphonenumber").PhoneNumberUtil.getInstance();
+  const phoneNumberUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
   // Evaluate results off the bat so a dev doesn't have to know which instance has which func
   let inputPhoneNumberCleaned: string;

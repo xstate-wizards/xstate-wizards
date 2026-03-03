@@ -167,11 +167,11 @@ describe("generateValidationMap", () => {
       // --- expect resource 1
       expect(vm[`resources.Thing[${testResourceIdOne}].name`]).toStrictEqual({
         dirty: false,
-        validationError: "You need to fill this in.",
+        validationError: "Required.",
       });
       expect(vm[`resources.Thing[${testResourceIdOne}].age`]).toStrictEqual({
         dirty: false,
-        validationError: "You need to fill this in.",
+        validationError: "Required.",
       });
       expect(vm[`resources.Thing[${testResourceIdOne}].value`]).toStrictEqual({ dirty: false, validationError: null });
       expect(vm[`resources.Thing[${testResourceIdOne}].isApproved`]).toStrictEqual({
@@ -182,7 +182,7 @@ describe("generateValidationMap", () => {
       expect(vm[`resources.Thing[${testResourceIdTwo}].name`]).toStrictEqual({ dirty: false, validationError: null });
       expect(vm[`resources.Thing[${testResourceIdTwo}].age`]).toStrictEqual({
         dirty: false,
-        validationError: "You need to fill this in.",
+        validationError: "Required.",
       });
       expect(vm[`resources.Thing[${testResourceIdTwo}].value`]).toStrictEqual({ dirty: false, validationError: null });
       expect(vm[`resources.Thing[${testResourceIdTwo}].isApproved`]).toStrictEqual({

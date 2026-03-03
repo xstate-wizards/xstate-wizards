@@ -1,4 +1,8 @@
 import { DragControls, Reorder, useDragControls } from "framer-motion";
+
+// Cast framer-motion Reorder components to work around React types version mismatch
+const ReorderGroup = Reorder.Group as any;
+const ReorderItem = Reorder.Item as any;
 import React, { useState } from "react";
 import styled from "styled-components";
 import { SpellSectionsEditor } from "./SpellSectionsEditor";
@@ -18,12 +22,12 @@ export function ReorderIcon({ dragControls }: Props) {
 const Item = ({ value }) => {
   const controls = useDragControls();
   return (
-    <Reorder.Item value={value} dragListener={false} dragControls={controls} as="div">
+    <ReorderItem value={value} dragListener={false} dragControls={controls} as="div">
       <ReorderIcon dragControls={controls} />
       <a href={`#${value.stateName}`}>
         {value.state?.key ? "↔︎" : "◗"} {value.stateName}
       </a>
-    </Reorder.Item>
+    </ReorderItem>
   );
 };
 
@@ -46,7 +50,7 @@ export const SpellStatesEditorMiniMap = ({ config, statesList, onConfigUpdate, o
         <small className="sections-bar__trigger" onClick={() => setIsSectionsEditing(true)}>
           [+] Sections
         </small>
-        <Reorder.Group
+        <ReorderGroup
           key="statesOrder"
           axis="y"
           values={statesList}
@@ -68,7 +72,7 @@ export const SpellStatesEditorMiniMap = ({ config, statesList, onConfigUpdate, o
               <Item key={state.stateName} value={state} />
             </li>
           ))}
-        </Reorder.Group>
+        </ReorderGroup>
       </StyledSpellStatesMiniMap>
     </>
   );

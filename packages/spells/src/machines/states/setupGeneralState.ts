@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { assign } from "xstate";
+import { assign, fromCallback } from "xstate";
 import { TGeneralStateNodeProps, TWizardSerializations } from "../../types";
 import { logger } from "../../wizardDebugger";
 import { evalJsonLogic } from "../functions/evalJsonLogic";
@@ -35,7 +35,8 @@ export function setupGeneralState(
   };
 
   // Setup event listeners and ASSIGN_CONTEXT for input changes
-  const assignContextActions = [assign((ctx, ev) => omit(ev, ["type"]))];
+  // v5: assign(({ context, event }) => ...) replaces assign((ctx, ev) => ...)
+  const assignContextActions = [assign(({ event }) => omit(event, ["type"]))];
   if (on && on.ASSIGN_CONTEXT && Object.keys(on.ASSIGN_CONTEXT).length >= 1) {
     logger.warning(
       '"ASSIGN_CONTEXT" is a special transition for updating machine context. Only actions will be considered and appended. Please be careful.'
@@ -58,16 +59,34 @@ export function setupGeneralState(
   // --- if its an obj, wholely attach
   if (invoke) {
     if (typeof invoke === "function") {
-      constructedState.invoke = { src: invoke };
+      // v5: wrap v4-style callback invoke `(ctx, ev) => (callback) => cleanup` with fromCallback
+      constructedState.invoke = {
+        src: fromCallback(({ sendBack, input }: { sendBack: any; input: any }) => {
+          const result = invoke(input.context, input.event);
+          if (typeof result === "function") {
+            // v4 callback service returns a cleanup function (or non-function like a timeout ID)
+            const cleanup = result(sendBack);
+            // Only return cleanup if it's actually a function (v5 expects function or void)
+            if (typeof cleanup === "function") {
+              return cleanup;
+            }
+          }
+        }),
+        input: ({ context, event }: { context: any; event: any }) => ({ context, event }),
+      };
       // --- check if a serialized function is being referenced. if so, run it and send data to event handler (if type was given)
     } else if (invoke?.srcSerialized?.jsonLogic != null) {
+      // v5: callback-style invokes use fromCallback
       constructedState.invoke = {
-        src: (ctx, ev) => async (transition) => {
-          const data = await evalJsonLogic(invoke?.srcSerialized?.jsonLogic, { context: ctx, event: ev });
-          if (invoke?.srcSerialized?.transitionEventType) {
-            transition({ type: invoke?.srcSerialized?.transitionEventType, data });
-          }
-        },
+        src: fromCallback(({ sendBack, input }: { sendBack: any; input: any }) => {
+          (async () => {
+            const data = await evalJsonLogic(invoke?.srcSerialized?.jsonLogic, { context: input.context, event: input.event });
+            if (invoke?.srcSerialized?.transitionEventType) {
+              sendBack({ type: invoke?.srcSerialized?.transitionEventType, data });
+            }
+          })();
+        }),
+        input: ({ context, event }: { context: any; event: any }) => ({ context, event }),
       };
     } else if (typeof invoke === "object" && invoke != null) {
       constructedState.invoke = invoke;

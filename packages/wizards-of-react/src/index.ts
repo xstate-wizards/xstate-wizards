@@ -13,5 +13,5 @@ export { WizardPuppeteerUtils } from "./testing/wizardPuppeteerUtils";
 // TYPES
 export * from "./types";
 
-// EXPOSED XSTATE (saves people from having to separately install xstate as a dependency, since the version lock matters atm)
-export { assign, send } from "xstate";
+// EXPOSED XSTATE (saves people from having to separately install xstate as a dependency)
+export { assign } from "xstate";

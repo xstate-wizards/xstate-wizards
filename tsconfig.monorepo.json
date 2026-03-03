@@ -5,8 +5,6 @@
     { "path": "./packages/spellbook" },
     { "path": "./packages/spells" },
     { "path": "./packages/tel-fns" },
-    { "path": "./packages/wizards-of-react" },
-    { "path": "./packages/wizards-of-svelte" },
-    { "path": "./packages/wizards-of-vue" },
+    { "path": "./packages/wizards-of-react" }
   ]
 }

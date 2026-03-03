@@ -6,16 +6,17 @@ import { assign } from "xstate";
 // =================
 const actions: TWizardSerializations["actions"] = {
   mergeEventDataResources,
+  // v5: assign(({ context, event }) => ...) replaces assign((ctx, ev) => ...)
   "Screener.incrementWizardScore": assign({
-    states: (ctx) => ({ ...ctx.states, wizardScore: ctx.states.wizardScore + 1 }),
+    states: ({ context }) => ({ ...context.states, wizardScore: context.states.wizardScore + 1 }),
   }),
   "Screener.incrementWizardScoreBy": assign({
-    states: (ctx, ev) => ({
-      ...ctx.states,
-      wizardScore: ctx.states.wizardScore + Math.max(Number(ev?.data?.incrementBy) || 0),
+    states: ({ context, event }: { context: any; event: any }) => ({
+      ...context.states,
+      wizardScore: context.states.wizardScore + Math.max(Number(event?.data?.incrementBy) || 0),
     }),
   }),
-  "Screener.isInterested": assign({ states: (ctx) => ({ ...ctx.states, isInterestedInInterview: true }) }),
+  "Screener.isInterested": assign({ states: ({ context }) => ({ ...context.states, isInterestedInInterview: true }) }),
   // --- models (auto-generate from loader modelNames)
   // Models.User.create...
   // Models.User.delete...

@@ -3,7 +3,7 @@ import { INTERVIEW_REVIEW_STATE } from "./stateTargets";
 // Transition Templates
 export const IN_REVIEW_TRANSITION = {
   target: INTERVIEW_REVIEW_STATE,
-  cond: (ctx) => ctx?.states?.[INTERVIEW_REVIEW_STATE] === true,
+  cond: ({ context }) => context?.states?.[INTERVIEW_REVIEW_STATE] === true,
 };
 
 // Buttons

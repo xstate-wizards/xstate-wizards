@@ -1,11 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Interview } from "./components/Interview";
 import { Outline } from "./components/Outline";
 
-ReactDOM.render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
@@ -14,6 +14,5 @@ ReactDOM.render(
         <Route path="/outline" element={<Outline />} />
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

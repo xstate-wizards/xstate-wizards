@@ -75,15 +75,15 @@ export const WizardRunner = ({
     [spellMap]
   );
   for (const modelName of machineModelNames) {
-    serializations.actions[`Models.${modelName}.create`] = assign((ctx) =>
-      upsertResourceOnContext(ctx, { modelName, id: createLocalId() })
+    // v5: assign(({ context, event }) => ...) replaces assign((ctx, ev) => ...)
+    serializations.actions[`Models.${modelName}.create`] = assign(({ context }) =>
+      upsertResourceOnContext(context, { modelName, id: createLocalId() })
     );
-    serializations.actions[`Models.${modelName}.update`] = assign((ctx, ev: $TSFixMe) =>
-      updateResourceOnContext(ctx, { modelName, id: ev.data.id, props: ev.data })
+    serializations.actions[`Models.${modelName}.update`] = assign(({ event }: { event: $TSFixMe }) =>
+      updateResourceOnContext(event.context ?? {}, { modelName, id: event.data?.id ?? event.id, props: event.data ?? event })
     );
-    serializations.actions[`Models.${modelName}.delete`] = assign((ctx, ev) =>
-      // @ts-expect-error
-      deleteResourceOnContext(ctx, { modelName, id: ev?.data?.id })
+    serializations.actions[`Models.${modelName}.delete`] = assign(({ context, event }: { context: $TSFixMe; event: $TSFixMe }) =>
+      deleteResourceOnContext(context, { modelName, id: event?.data?.id ?? event?.id })
     );
   }
 

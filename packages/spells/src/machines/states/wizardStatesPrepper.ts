@@ -1,4 +1,5 @@
 import { cloneDeep } from "lodash";
+import { assign } from "xstate";
 import { TSpellMap, TWizardSerializations, TSpellConfig, $TSFixMe } from "../../types";
 import { CANCEL_STATE, SAVE_STATE, CANCEL_STATE_WITH_CONFIRMATION } from "../../constants/stateTargets";
 import { flattenContentNodes } from "./flattenContentNodes";
@@ -75,23 +76,11 @@ export function wizardStatesPrepper({
     // ===================
     // STATES: FINAL
     if (states[key]?.type === "final") {
-      // --- CANCEL (make sure we pass back a final event)
-      if (key === CANCEL_STATE && states[key]?.data === undefined) {
-        states[key].data = (ctx, ev) => ({
-          // finalCtx: ctx, // don't pass ctx back, avoids accessing/merging data thrown away
-          finalEvent: ev,
-        });
-      }
-      // --- SAVE
-      if (key === SAVE_STATE && states[key]?.data === undefined) {
-        states[key].data = (ctx, ev) => ({
-          finalCtx: ctx,
-          finalEvent: ev,
-          // TODO: we should just refactor merge/handler functions to use finalCtx instead of resources
-          resources: cloneDeep(ctx.resources),
-          resourcesUpdates: cloneDeep(ctx.resourcesUpdates),
-        });
-      }
+      // v5: output is machine-level (in createSpell.ts), not per-final-state.
+      // We capture the triggering event via entry action so output can read it.
+      // Remove any v4-style data property and add entry to capture __lastEvent.
+      delete states[key].data;
+      states[key].entry = assign({ __lastEvent: ({ event }) => event });
       // Return to ignore other configs
       return states;
     }

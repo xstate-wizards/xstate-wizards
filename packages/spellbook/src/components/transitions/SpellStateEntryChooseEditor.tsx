@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { ActionTypes } from "xstate";
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
+
+// v5: ActionTypes removed from xstate. Define locally for spellbook editor UI.
+const ActionTypes = {
+  Choose: "xstate.choose" as const,
+};
 import { SpellStateEventTransitionsEditor } from "./SpellStateEventTransitionsEditor";
 
 type TSpellStateEntryChooseEditorProps = {
