@@ -215,7 +215,7 @@
    Layout — Back Button (inside header)
    -------------------------------------------------------------------------- */
 
-.xw--wrap .xw--body > button.xw--header-back-btn {
+.xw--wrap .xw--body > button[data-xw="menu-back-btn"] {
   position: absolute;
   top: 8px;
   left: calc(1.5em + 32px + 8px);
@@ -234,8 +234,8 @@
   color: var(--xw--text-color);
 }
 
-.xw--wrap .xw--body > button.xw--header-back-btn:hover,
-.xw--wrap .xw--body > button.xw--header-back-btn:disabled {
+.xw--wrap .xw--body > button[data-xw="menu-back-btn"]:hover,
+.xw--wrap .xw--body > button[data-xw="menu-back-btn"]:disabled {
   opacity: 1;
   background: white;
   border: 2px solid var(--xw--color-blue-800);
@@ -244,7 +244,7 @@
 }
 
 @media (max-width: 720px) {
-  .xw--wrap .xw--body > button.xw--header-back-btn {
+  .xw--wrap .xw--body > button[data-xw="menu-back-btn"] {
     display: none;
   }
 }

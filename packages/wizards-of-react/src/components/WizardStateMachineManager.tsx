@@ -121,7 +121,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
       // if this was a "Back" browser event, and the interview has a back button
       // present, stay blocked and click "back" button instead.
       const interviewBackButton =
-        typeof document !== "undefined" && document.querySelector("button.xw--header-back-btn");
+        typeof document !== "undefined" && document.querySelector('button[data-xw="menu-back-btn"]');
       if (action === "POP" && interviewBackButton) {
         // @ts-ignore
         interviewBackButton?.click?.();
