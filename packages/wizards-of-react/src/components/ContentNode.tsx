@@ -84,7 +84,7 @@ const fallbackComponents = {
 // Helper: build className from node.className + node.attrs?.className + extras, and strip styling props from attrs
 const STYLING_PROPS = ["size", "variant", "buttonType", "inverted", "isValid", "styleType", "className"];
 function nodeClassName(node: any, ...extras: (string | false | null | undefined)[]): string {
-  return [node?.attrs?.className, ...extras].filter(Boolean).join(" ");
+  return [node?.classNames, node?.attrs?.className, ...extras].filter(Boolean).join(" ");
 }
 function nodeAttrsClean(attrs: Record<string, any> | undefined): any {
   return attrs ? omit(attrs, STYLING_PROPS) : {};
@@ -1325,9 +1325,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <Button
                   style={{ marginBottom: "10px", flex: 0 }}
                   type="button"
-                  size="xs"
-                  buttonType="warning"
-                  inverted
+                  className="xw__btn-xs xw__btn-warning xw__btn-inverted"
                   onClick={() => inputOnChange([...jsonArrayValue.slice(0, jsonI), ...jsonArrayValue.slice(jsonI + 1)])}
                 >
                   X
@@ -1339,9 +1337,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             <div className="xw__json-add">
               <Button
                 type="button"
-                size="sm"
-                buttonType="default"
-                inverted
+                className="xw__btn-sm xw__btn-default xw__btn-inverted"
                 onClick={() => inputOnChange(jsonArrayValue.concat({}))}
               >
                 {`+ Add ${node?.config?.addLabel || ""}`.trim()}
