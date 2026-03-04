@@ -11,6 +11,13 @@
   right: 0;
   left: 0;
   bottom: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.xw-sb__spellbook button,
+.xw-sb__spellbook input,
+.xw-sb__spellbook select,
+.xw-sb__spellbook textarea {
+  font-family: inherit;
 }
 
 .xw-sb__spellbook *::-webkit-scrollbar {
