@@ -1,5 +1,5 @@
-import { ID_LANGUAGE_PICKER, machineMapping as machineLanguagePicker } from "./languagePicker";
+import { ID_INLINE_I18N, machineMapping as machineInlineI18n } from "./inlineI18n";
 
 export const spellMap = {
-  [ID_LANGUAGE_PICKER]: machineLanguagePicker,
+  [ID_INLINE_I18N]: machineInlineI18n,
 };
