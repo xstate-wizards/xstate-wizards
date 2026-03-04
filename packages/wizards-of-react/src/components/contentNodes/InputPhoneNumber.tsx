@@ -10,7 +10,6 @@ type TInputPhoneNumberProps = {
   value: string;
   defaultCountryCode?: number;
   allowSelectingCountryCode?: boolean;
-  "data-test-label"?: string;
   "data-wiz-label"?: string;
 };
 
@@ -59,7 +58,6 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   return (
     <div
       className="xw__phone-input-wrapper"
-      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       {allowSelectingCountryCode === false ? (

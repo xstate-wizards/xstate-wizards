@@ -24,8 +24,7 @@ export type TWizardRunnerProps = {
     machine?: $TSFixMe;
     progressPercentage?: number;
   }) => void;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  translate?: Function;
+  locale?: string; // e.g. "en", "es" — for resolving inline i18n translations
   onWizardContextPrep?: (preppedContext: Record<string, any>) => Record<string, any>;
   onWizardChange?: (state: $TSFixMe) => void;
   onWizardError?: $TSFixMe;
@@ -37,22 +36,19 @@ export type TWizardRunnerProps = {
 };
 
 export type TWizardStateMachineManagerProps = {
-  machine: $TSFixMe; // TODO: MachineConfig<InterviewContext, InterviewStates, InterviewEvent>??? https://github.com/davidkpiano/xstate/discussions/1719
+  machine: $TSFixMe;
   spellMap?: TSpellMap;
   serializations?: TWizardSerializations;
   navigate: TWizardNavigate;
   navigationUnblockCheck?: (args: { location: Location }) => boolean;
   onMachineChange?: TWizardRunnerProps["onWizardChange"];
+  onMachineError?: (err: any) => void;
   onMachineFinal?: TWizardRunnerProps["onWizardFinal"];
   onMachineProgress?: TWizardRunnerProps["onWizardProgress"];
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  translate: Function;
   useNavigationBlocker?: $TSFixMe;
 };
 
 export type TWizardStateViewerProps = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  translate: Function;
   machineMeta: any;
   meta: any;
   state: any;

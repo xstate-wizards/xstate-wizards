@@ -27,7 +27,6 @@ export const CurrencyInput: React.FC<TCurrencyInputProps> = ({
         disabled={disabled}
         onChange={onChange}
         data-test-id={dataTestId}
-        data-test-label={props["data-test-label"]}
         data-wiz-label={props["data-wiz-label"]}
       />
     </div>

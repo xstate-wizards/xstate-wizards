@@ -20,6 +20,7 @@ import { TWizardRunnerProps } from "../types";
 import { logger, useWizardDebugger } from "../wizardDebugger";
 import { useWindowFocusEffect } from "../hooks/useWindowFocusEffect";
 import { WizardStateMachineManager } from "./WizardStateMachineManager";
+import { WizardLocaleProvider } from "./WizardLocaleContext";
 
 const CACHE_SESSION_LAST_PROGRESS_AT: Record<number, number> = {};
 
@@ -27,6 +28,7 @@ export const WizardRunner = ({
   configInitial,
   configExitTo,
   debugConfig,
+  locale,
   models = {},
   navigate,
   navigationUnblockCheck,
@@ -45,7 +47,6 @@ export const WizardRunner = ({
   sessionRequestProgress,
   spellKey,
   spellMap,
-  translate,
   useNavigationBlocker,
 }: TWizardRunnerProps) => {
   // SETUP
@@ -251,6 +252,7 @@ export const WizardRunner = ({
   // RENDER
   // ==========================
   return initialMachineContext !== undefined ? (
+    <WizardLocaleProvider value={locale}>
     <div style={showInterviewInactive ? { overflow: "hidden", height: "100vh" } : null}>
       <WizardStateMachineManager
         // Machine (from either of 2 methods)
@@ -273,7 +275,6 @@ export const WizardRunner = ({
         )}
         spellMap={spellMap}
         serializations={serializations}
-        translate={translate}
         navigate={navigate}
         navigationUnblockCheck={navigationUnblockCheck}
         onMachineChange={(state) => {
@@ -293,5 +294,6 @@ export const WizardRunner = ({
       />
       {showInterviewInactive && SessionInactiveOverlay != null ? <SessionInactiveOverlay /> : null}
     </div>
+    </WizardLocaleProvider>
   ) : null;
 };

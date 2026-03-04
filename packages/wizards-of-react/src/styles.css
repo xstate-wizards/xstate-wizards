@@ -1536,6 +1536,7 @@
    Internal — Checkbox Button
    -------------------------------------------------------------------------- */
 
+/* Selected state: solid primary background */
 .xw__checkbox-btn {
   box-sizing: border-box;
   border-radius: var(--xw--radius);
@@ -1543,20 +1544,23 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  text-align: center;
   font-weight: 500;
   transition: background 250ms, border 250ms, color 250ms, opacity 250ms;
   padding: 0.6em 1.2em;
   font-size: 1em;
+  background: var(--xw--primary);
+  border: 1px solid var(--xw--primary);
+  border-bottom: 3px solid color-mix(in srgb, var(--xw--primary) 80%, black);
+  color: var(--xw--color-white-900);
+}
+
+/* Unselected state: outlined */
+.xw__checkbox-btn.xw__cb-inverted {
   background: var(--xw--color-white-900);
   border: 1px solid var(--xw--color-white-300);
   border-bottom: 3px solid var(--xw--color-white-300);
-  color: var(--xw--primary);
-}
-
-.xw__checkbox-btn.xw__cb-inverted {
-  background: transparent;
-  border: 1px solid var(--xw--primary);
   color: var(--xw--primary);
 }
 
@@ -1565,21 +1569,22 @@
   cursor: not-allowed;
 }
 
-.xw__checkbox-btn {
-  text-align: center;
-  justify-content: space-between;
-}
-
 .xw__checkbox-btn>.xw__cb-check {
   margin-right: 6px;
   width: 28px;
+  flex-shrink: 0;
+}
+
+.xw__checkbox-btn>.xw__cb-check svg {
+  width: 18px;
+  height: 18px;
 }
 
 .xw__checkbox-btn>.xw__cb-check .xw__cb-box {
   height: 18px;
   width: 18px;
   border-radius: 4px;
-  border: 1px solid var(--xw--primary);
+  border: 1px solid currentColor;
 }
 
 .xw__checkbox-btn>.xw__cb-check .xw__cb-box.xw__cb-radio {
