@@ -10,15 +10,14 @@ import {
   subYears,
 } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations, formatDate, parseDate } from "@xstate-wizards/spells";
 import { logger } from "../../wizardDebugger";
 import { Select as FallbackSelect } from "./fallbacks/Select";
 
 type TSelectDatePickerProps = {
+  className?: string;
   disabled?: boolean;
   value: Date;
-  size?: string;
   onChange: (date: Date) => void;
   serializations: TWizardSerializations;
   dateDisabled: (args: { date: Date }) => boolean;
@@ -31,9 +30,9 @@ type TSelectDatePickerProps = {
  * Simpler date picking dropdowns
  */
 export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
+  className,
   disabled,
   onChange,
-  size = "sm",
   value,
   serializations,
   ...props
@@ -81,14 +80,15 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   }, []);
 
   return (
-    <StyledSelectDatePicker
-      data-test-label={props["data-test-label"]} // DEPRECATED
+    <div
+      className="xw__date-picker"
+      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       <Select
+        className={className}
         value={month ?? ""}
         disabled={disabled}
-        size={size}
         onChange={(e) => {
           const newMonth = Number(e.target.value);
           setMonth(newMonth);
@@ -115,9 +115,9 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
           ))}
       </Select>
       <Select
+        className={className}
         value={day ?? ""}
         disabled={disabled || month == null}
-        size={size}
         onChange={(e) => {
           const newDay = Number(e.target.value);
           setDay(newDay);
@@ -140,9 +140,9 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
           ))}
       </Select>
       <Select
+        className={className}
         value={year ?? ""}
         disabled={disabled}
-        size={size}
         onChange={(e) => {
           const newYear = Number(e.target.value);
           setYear(newYear);
@@ -162,10 +162,6 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
             </option>
           ))}
       </Select>
-    </StyledSelectDatePicker>
+    </div>
   );
 };
-
-const StyledSelectDatePicker = styled.div`
-  display: flex;
-`;

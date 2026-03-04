@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { COUNTRY_CALLING_CODES, parseTel } from "tel-fns";
 import { Input } from "./fallbacks/Input";
 import { Select } from "./fallbacks/Select";
-import { TComponentSize } from "./fallbacks/types";
 
 type TInputPhoneNumberProps = {
+  className?: string;
   disabled?: boolean;
-  isValid?: boolean;
   onChange: (value: string, validations: Record<string, boolean>) => void;
-  size?: TComponentSize;
   value: string;
   defaultCountryCode?: number;
   allowSelectingCountryCode?: boolean;
@@ -19,11 +16,10 @@ type TInputPhoneNumberProps = {
 
 export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   allowSelectingCountryCode,
+  className,
   defaultCountryCode = 1,
   disabled,
-  isValid,
   onChange,
-  size,
   value,
   ...props
 }) => {
@@ -61,18 +57,17 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
   };
 
   return (
-    <StyledInputPhoneNumberWrapper
-      data-test-label={props["data-test-label"]} // DEPRECATED
+    <div
+      className="xw__phone-input-wrapper"
+      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       {allowSelectingCountryCode === false ? (
-        <StyledUSCode>+{defaultCountryCode}</StyledUSCode>
+        <span className="xw__phone-us-code">+{defaultCountryCode}</span>
       ) : (
         <Select
+          className={className}
           disabled={disabled}
-          //isValid={isValid}
-          // @ts-ignore
-          size={size}
           value={countryCode}
           onChange={(e) => setCountryCode(e.target.value)}
         >
@@ -86,54 +81,13 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
             ))}
         </Select>
       )}
-      <StyledInputPhoneNumber
+      <Input
+        className={`xw__phone-input ${className || ""}`}
         type="tel"
-        // @ts-ignore
-        size={size}
         placeholder={countryCode === "+1" ? "(###) ###-####" : "### ### ###"}
         value={phoneNumberDisplay}
         onChange={handleOnChange}
       />
-    </StyledInputPhoneNumberWrapper>
+    </div>
   );
 };
-
-export const StyledInputPhoneNumberWrapper = styled.div`
-  display: flex;
-  height: auto;
-  & > select,
-  & > input {
-    flex-grow: 1;
-    margin: 0;
-  }
-  & > select {
-    max-width: 120px;
-    margin: 0;
-    margin-bottom: 0 !important; // YIKES
-  }
-`;
-
-export const StyledInputPhoneNumber = styled(Input)`
-  display: flex;
-  height: auto;
-  & > select,
-  & > input {
-    flex-grow: 1;
-    margin: 0;
-  }
-  & > select {
-    max-width: 120px;
-    margin: 0;
-    margin-bottom: 0 !important; // YIKES
-  }
-`;
-
-const StyledUSCode = styled.span`
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  white-space: nowrap;
-  font-size: 16px;
-  min-height: 1.2em;
-  padding: 0px 16px;
-`;

@@ -98,8 +98,8 @@ const contentResourceEditorFunctional = [
   },
   {
     type: "forEach",
-    items: (ctx) => Object.values(ctx.resources.Thing),
-    content: (ctx, item) => [
+    items: ({ context }) => Object.values(context.resources.Thing),
+    content: ({ context, item }) => [
       {
         type: "row",
         content: [

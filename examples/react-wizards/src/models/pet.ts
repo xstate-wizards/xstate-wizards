@@ -21,5 +21,5 @@ export const deletePet = async (petId: TLocalPetModel) => {
 };
 
 // Simple grabber for Pets. An example can be more complex
-export const selectPets = (ctx) => Object.values(ctx.resources?.Pet ?? {});
-export const removePet = (ctx) => Object.values(ctx.resources?.Pet ?? {});
+export const selectPets = (ctx: any) => Object.values(ctx.resources?.Pet ?? {});
+export const removePet = (ctx: any) => Object.values(ctx.resources?.Pet ?? {});

@@ -28,7 +28,7 @@ const actions: TWizardSerializations["actions"] = {
 const functions: TWizardSerializations["functions"] = {
   selectUser: (ctx: $TSFixMe, key: string) => {
     // console.warn("selectUser: ", cloneDeep(ctx), key);
-    const user = Object.values(ctx.resources?.User ?? {})?.[0];
+    const user: any = Object.values(ctx.resources?.User ?? {})?.[0];
     return key ? user?.[key] : user;
   },
   waitSeconds: (seconds: number, callback?: Promise<any>) =>

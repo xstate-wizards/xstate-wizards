@@ -1,13 +1,13 @@
-import { CONTENT_NODE_SUBMIT, createSpell, INTERVIEW_INTRO_STATE } from "@xstate-wizards/spells";
+import { CONTENT_NODE_SUBMIT, createSpell, INTERVIEW_INTRO_STATE, TTranslateFn } from "@xstate-wizards/spells";
 
 export const ID_LANGUAGE_PICKER = "languagePicker";
 
-const CONTENT_NODE_SUBMIT_DEFERRED = (t) => ({
+const CONTENT_NODE_SUBMIT_DEFERRED = (t: TTranslateFn) => ({
   type: "button",
   buttonType: "submit",
   text: t("continue"),
   event: "SUBMIT",
-  attrs: { size: "lg", width: "100%" },
+  attrs: { className: "xw__btn-lg", width: "100%" },
   disabledByFreshDelay: true,
 });
 
@@ -18,7 +18,10 @@ export const machineMapping = createSpell({
     initial: INTERVIEW_INTRO_STATE,
     title: (t) => t("title"),
     exitTo: "/",
-    sectionsBar: [{ name: (t) => t("sectionBar"), trigger: "awpType" }],
+    sectionsBar: [
+      { name: (t) => t("sectionBar1"), trigger: INTERVIEW_INTRO_STATE },
+      { name: (t) => t("sectionBar2"), trigger: "secondState" },
+    ],
   },
   editor: {},
   models: {
@@ -35,31 +38,25 @@ export const machineMapping = createSpell({
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
-      content: (ctx, t) => {
-        return [
-          {
-            type: "h3",
-            text: t("h3"),
-          },
-          { type: "h3", text: t("h1") },
-          { type: "p", text: t("p") },
-          {
-            type: "input",
-            inputType: "text",
-            label: t("label"),
-            assign: { path: "email" },
-            validations: ["required", "validEmail"],
-          },
-          CONTENT_NODE_SUBMIT,
-          CONTENT_NODE_SUBMIT_DEFERRED(t),
-        ];
-      },
+      content: ({ context }, t) => [
+        { type: "h3", text: t!("h3") },
+        { type: "p", text: t!("p") },
+        {
+          type: "input",
+          inputType: "text",
+          label: t!("label"),
+          assign: { path: "email" },
+          validations: ["required", "validEmail"],
+        },
+        CONTENT_NODE_SUBMIT,
+        CONTENT_NODE_SUBMIT_DEFERRED(t!),
+      ],
       on: {
         SUBMIT: "secondState",
       },
     },
     secondState: {
-      content: (ctx, t) => [{ type: "p", text: t("p2") }],
+      content: ({ context }, t) => [{ type: "p", text: t!("p2") }],
       on: {},
     },
   },

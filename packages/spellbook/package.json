@@ -1,12 +1,16 @@
 {
   "name": "@xstate-wizards/spellbook",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Mark Hansen",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles.css": "./dist/styles.css"
+  },
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && tsc -b tsconfig.json",
+    "build": "npm run clean && tsc -b tsconfig.json && cp src/styles.css dist/",
     "prepublishOnly": "NODE_ENV=production npm run clean && npm run build",
     "major": "npm version major --no-git-tag-version && npm publish",
     "minor": "npm version minor --no-git-tag-version && npm publish",
@@ -15,15 +19,14 @@
     "test:ci": "vitest run"
   },
   "dependencies": {
-    "@xstate-wizards/spells": "^1.0.0",
-    "@xstate-wizards/wizards-of-react": "^1.0.0",
+    "@xstate-wizards/spells": "^2.0.0",
+    "@xstate-wizards/wizards-of-react": "^2.0.0",
     "date-fns": "^2.4.1",
     "framer-motion": "^6.4.3",
     "lodash": "^4.17.20",
     "pretty-print-json": "^1.2.5",
-    "styled-components": "^5.2.3",
     "xstate": "^5.28.0",
-    "zustand": "^4.5.0"
+    "zustand": "^5.0.0"
   },
   "peerDependencies": {
     "react": "^18.0.0"
@@ -32,7 +35,6 @@
     "@types/lodash": "^4.14.182",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@types/styled-components": "^5.1.25",
     "react": "^18.0.0",
     "typescript": "^5.5.0"
   }

@@ -1,14 +1,14 @@
-import createVanilla from "zustand/vanilla";
-import create from "zustand";
+import { createStore } from "zustand/vanilla";
+import { useStore } from "zustand";
 
 type TSidebarStore = {
   isCollapsed: boolean;
   setIsCollapsed: (isCollapsed: boolean) => void;
 };
 
-export const sidebarStore = createVanilla<TSidebarStore>((set, get) => ({
+export const sidebarStore = createStore<TSidebarStore>((set, get) => ({
   isCollapsed: false,
   setIsCollapsed: (isCollapsed) => set({ isCollapsed }),
 }));
 
-export const useSidebar = create(sidebarStore);
+export const useSidebar = () => useStore(sidebarStore);

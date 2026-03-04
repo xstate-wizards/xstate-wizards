@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { SAVE_STATE, CANCEL_STATE, $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { reorderArrayItem, REORDER_DIRECTION, removeArrayItem } from "../../utils";
 import { JsonLogicBuilder } from "../logic/JsonLogicBuilder";
@@ -30,7 +30,7 @@ export const SpellStateEventTransitionsEditor: React.FC<TSpellStateEventTransiti
   transitions,
 }) => {
   return (
-    <StyledSpellStateEventTransitionEditor>
+    <div className="xw-sb__event-transitions">
       {transitions?.map((transition, transitionIndex, transitionArr) => (
         <div key={`${transition.target}-${transitionIndex}`} className="transition">
           <div className="transition__details">
@@ -190,80 +190,6 @@ export const SpellStateEventTransitionsEditor: React.FC<TSpellStateEventTransiti
           </div>
         </div>
       ))}
-    </StyledSpellStateEventTransitionEditor>
+    </div>
   );
 };
-
-const StyledSpellStateEventTransitionEditor = styled.div`
-  display: flex;
-  min-width: 100%;
-  flex-direction: column;
-  .transition {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    margin-bottom: 0.2em;
-  }
-  .transition__details {
-    display: flex;
-    flex-grow: 1;
-    & > label {
-      display: flex;
-      flex-grow: 1;
-      flex-direction: column;
-      justify-content: center;
-      select,
-      input {
-        // flex-grow: 1;
-        // height: 100%;
-      }
-    }
-    .transition__details__target {
-      max-width: 110px;
-      select {
-        max-width: 100%;
-      }
-    }
-    .transition__details__logic-holder {
-      // min-width: 100%;
-      // width: 100%;
-    }
-    .transition__details__logic-holder,
-    .transition__details__actions,
-    .transition__details__target {
-      & > small {
-        font-size: 10px;
-        position: relative;
-        bottom: -2px;
-      }
-    }
-  }
-  .transition__details__actions {
-    margin: 0 4px;
-  }
-  .transition__details__actions__list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    .transition__details__actions__list__item {
-      display: flex;
-    }
-  }
-  .transition__row-buttons {
-    display: flex;
-    align-items: flex-end;
-    button {
-      max-height: 26px;
-      font-size: 7px;
-    }
-  }
-  .add-transition {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-  }
-  .logic-holder {
-    width: 100%;
-    min-width: 100%;
-  }
-`;

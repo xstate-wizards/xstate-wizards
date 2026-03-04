@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import {
   $TSFixMe,
   TPrepparedSpellMapping,
@@ -96,7 +95,7 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
       ) : null}
 
       {/* EDITOR */}
-      <StyledSpellBook>
+      <div className="xw-sb__spellbook">
         {/* EDITOR -- SIDEBAR */}
         <SpellsSidebar
           onSpellCreate={async (spell) => {
@@ -108,7 +107,7 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
           spells={spells}
         />
         {/* EDITOR -- SPELL */}
-        <main className="spell-editor">
+        <main className="xw-sb__spell-editor">
           {editor.focusedSpellId && spells[editor.focusedSpellId] && (
             <SpellEditor
               key={`${editor.focusedSpellKey}-${editor.focusedSpellVersion}-${spells[editor.focusedSpellId]?.isActive}`}
@@ -137,40 +136,8 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
             />
           )}
         </main>
-      </StyledSpellBook>
+      </div>
     </>
   );
 };
 
-const StyledSpellBook = styled.div`
-  display: flex;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-
-  // SCROLLBARS
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  *::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  * {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  // SPELL EDITOR
-  .spell-editor {
-    width: 100%;
-    max-width: 100vw;
-    .editor__main {
-      display: flex;
-      justify-content: space-between;
-    }
-    .editor__flow {
-      width: 100%;
-    }
-  }
-`;

@@ -1,6 +1,5 @@
 import { omit } from "lodash";
 import React from "react";
-import styled from "styled-components";
 import { VariableInput, VariableInputNew } from "../logic/VariableInput";
 import { Dialog } from "../overlays/Dialog";
 import { JsonLogicBuilder } from "../logic/JsonLogicBuilder";
@@ -17,7 +16,7 @@ export const ContentNodeEventEditor = ({
 }) => {
   return (
     <Dialog trigger={<button onClick={console.log}>💥 Event: {event?.type}</button>}>
-      <StyledContentNodeEventEditor>
+      <div className="xw-sb__event-editor">
         <table>
           <tbody>
             <tr>
@@ -94,44 +93,7 @@ export const ContentNodeEventEditor = ({
             </tr>
           </tbody>
         </table>
-      </StyledContentNodeEventEditor>
+      </div>
     </Dialog>
   );
 };
-
-const StyledContentNodeEventEditor = styled.div`
-  padding: 0.5em;
-  .event-label {
-    min-width: 120px;
-    max-width: 120px;
-    width: 120px;
-  }
-  table {
-    width: 100%;
-  }
-  tr {
-    display: flex;
-    padding-bottom: 6px;
-    margin-bottom: 6px;
-    border-bottom: 2px solid #ccc;
-    td:first-of-type {
-      display: flex;
-      justify-content: flex-start;
-    }
-  }
-  .event-data__editor {
-    flex-grow: 1;
-    div {
-      width: 100%;
-    }
-    input {
-      width: 100%;
-    }
-    hr {
-      margin: 4px 0;
-    }
-    .event-data__editor__buttons {
-      display: flex;
-    }
-  }
-`;

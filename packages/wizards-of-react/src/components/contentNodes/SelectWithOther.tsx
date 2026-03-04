@@ -1,6 +1,4 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import styled from "styled-components";
-import { wizardTheme } from "../../theme";
 import { CurrencyInput } from "./CurrencyInput";
 import { Input as FallbackInput } from "./fallbacks/Input";
 import { Select as FallbackSelect } from "./fallbacks/Select";
@@ -37,7 +35,7 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
   );
 
   return (
-    <Container>
+    <div className="xw__select-with-other">
       <Select ref={selectRef} onChange={onChangeSelectHandler} {...props} value={showOther ? OTHER_VALUE : props.value}>
         {children}
         <option value={OTHER_VALUE}>Other:</option>
@@ -46,24 +44,6 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
       {showOther && props.type !== "currency" && (
         <Input onChange={onChange} placeholder={props.type === "number" ? "123..." : "Aa..."} {...props} />
       )}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  @media (max-width: ${(props) => wizardTheme.breakpoints[500]}) {
-    flex-direction: column;
-  }
-  & > *:first-child {
-    flex-grow: 0;
-    flex-shrink: 2;
-  }
-  & > *:nth-child(2) {
-    flex-grow: 1;
-
-    @media (min-width: ${(props) => wizardTheme.breakpoints[500]}) {
-      margin-left: 20px;
-    }
-  }
-`;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+
 import { $TSFixMe } from "@xstate-wizards/spells";
 import { JsonView } from "../logic/JsonView";
 
@@ -18,7 +18,7 @@ type TPreviewHistoryItemInspectorProps = { item: TPreviewHistoryItem | TPreviewH
 export const PreviewHistoryItemInspector: React.FC<TPreviewHistoryItemInspectorProps> = ({ item }) => {
   const [isContextVisible, setIsContextVisible] = useState(false);
   return (
-    <StyledPreviewHistoryItemInspector>
+    <div className="xw-sb__preview-history-item">
       <div className="preview__inspector__key" onClick={() => setIsContextVisible(!isContextVisible)}>
         {(item as TPreviewHistoryError).error != null && (
           <>
@@ -42,34 +42,6 @@ export const PreviewHistoryItemInspector: React.FC<TPreviewHistoryItemInspectorP
           <JsonView json={item.context} />
         </div>
       )}
-    </StyledPreviewHistoryItemInspector>
+    </div>
   );
 };
-
-const StyledPreviewHistoryItemInspector = styled.div`
-  margin-bottom: 0.25em;
-  border-radius: 4px;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-  .preview__inspector__key {
-    padding: 0.2em 0.75em;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-  }
-  .preview__inspector__details {
-    padding: 0;
-  }
-  .preview__inspector__key__type {
-    font-size: 12px;
-    font-weight: 900;
-  }
-  .preview__inspector__key__key {
-    font-size: 10px;
-    font-weight: 900;
-    color: #aaa;
-  }
-`;

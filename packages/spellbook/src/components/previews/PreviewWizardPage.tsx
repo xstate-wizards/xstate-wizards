@@ -1,7 +1,7 @@
 import { format, isBefore, subSeconds } from "date-fns";
 import { cloneDeep, keyBy } from "lodash";
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
+
 import {
   $TSFixMe,
   createSpell,
@@ -82,13 +82,13 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
 
   // RENDER
   return !foundSpell ? null : (
-    <StyledPreviewWizardPage key={`${editor.focusedSpellKey}-${editor.focusedSpellVersion}`}>
-      <div className="spell-editor__header">
-        <div className="spell-editor__header__lead">
-          <div className="spell-editor__header__logo">
+    <div className="xw-sb__preview-page" key={`${editor.focusedSpellKey}-${editor.focusedSpellVersion}`}>
+      <div className="xw-sb__spell-editor__header">
+        <div className="xw-sb__spell-editor__header__lead">
+          <div className="xw-sb__spell-editor__header__logo">
             <h4 onClick={() => preview.setIsPreviewDedicated(false)}>✨🔮✨</h4>
           </div>
-          <div className="spell-editor__header__title">
+          <div className="xw-sb__spell-editor__header__title">
             <h4>{foundSpell?.key} </h4>
             <div>
               <select value={foundSpell?.version} onChange={(e) => selectNewVersion(e.target.value)}>
@@ -112,7 +112,7 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
               )}
             </div>
             <div>
-              <small className="spell-editor__header__directory">
+              <small className="xw-sb__spell-editor__header__directory">
                 /{foundSpellInstruction?.editor?.directory?.join("/")}
               </small>
               <small>--</small>
@@ -131,14 +131,14 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
           </div>
         </div>
         {/* ACTIONS */}
-        <div className="spell-editor__header__actions">
+        <div className="xw-sb__spell-editor__header__actions">
           <button onClick={() => setIsPreviewHistoryVisible(!isPreviewHistoryVisible)}>
             {isPreviewHistoryVisible ? "Hide" : "Show"} History Inspector
           </button>
         </div>
       </div>
-      <div className="preview__wiz">
-        <div className="preview__wiz__runner">
+      <div className="xw-sb__preview__wiz">
+        <div className="xw-sb__preview__wiz__runner">
           <PreviewWizardErrorBoundary>
             <WizardRunner
               configInitial={foundSpell.config.initial}
@@ -181,8 +181,8 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
           </PreviewWizardErrorBoundary>
         </div>
         {isPreviewHistoryVisible && (
-          <div className="preview__wiz__inspector">
-            <div className="preview__wiz__inspector__header">
+          <div className="xw-sb__preview__wiz__inspector">
+            <div className="xw-sb__preview__wiz__inspector__header">
               <small>Events History</small>
             </div>
             {previewHistory.map((item: $TSFixMe, index) => (
@@ -191,100 +191,6 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
           </div>
         )}
       </div>
-    </StyledPreviewWizardPage>
+    </div>
   );
 };
-
-const StyledPreviewWizardPage = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #f5f5f5;
-  .spell-editor__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0;
-    background: #111;
-    color: white;
-    .spell-editor__header__lead {
-      display: flex;
-    }
-    .spell-editor__header__logo {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 0 1em;
-      background-color: #000;
-      // background-color: #fde74c;
-      // background-image: linear-gradient(319deg, #fde74c 0%, #32ff7a 37%, #2fcbe0 100%);
-    }
-    .spell-editor__header__title {
-      display: flex;
-      border-left: 2px solid white;
-      padding-left: 1em;
-      align-items: center;
-      height: 48px;
-      h4 {
-        display: flex;
-        select {
-          margin-left: 4px;
-        }
-      }
-      & > div {
-        display: flex;
-        margin-left: 1em;
-        small {
-          margin-left: 0.5em;
-          font-size: 10px;
-        }
-      }
-      button {
-        margin-left: 4px;
-      }
-    }
-    .spell-editor__header__directory {
-      font-weight: 900;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .spell-editor__header__actions {
-      margin-right: 1em;
-      button {
-        margin-left: 0.25em;
-      }
-      .divider {
-        margin: 0 4px;
-        color: #ccc;
-      }
-    }
-  }
-
-  .preview__wiz {
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-    display: flex;
-    .preview__wiz__runner {
-      width: 100%;
-      flex-grow: 1;
-      overflow-y: scroll;
-    }
-    .preview__wiz__inspector {
-      background: #e5e5e5;
-      min-width: 480px;
-      max-width: 480px;
-      width: 480px;
-      padding: 1em;
-      overflow: scroll;
-    }
-    .preview__wiz__inspector__header {
-      margin-bottom: 0.5em;
-      font-size: 12px;
-      font-weight: 900;
-      color: #999;
-    }
-  }
-`;

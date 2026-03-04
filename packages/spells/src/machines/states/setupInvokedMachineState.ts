@@ -73,7 +73,7 @@ export function setupInvokedMachineState({
           );
         };
 
-        const invokedContext = typeof context === "function" ? context?.(ctx, event) : getContextFromJsonLogic(context);
+        const invokedContext = typeof context === "function" ? context?.({ context: ctx, event }) : getContextFromJsonLogic(context);
 
         return {
           resources: cloneDeep(ctx.resources),

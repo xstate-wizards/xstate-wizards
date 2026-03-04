@@ -140,7 +140,7 @@ test.describe("Screener -> Interview E2E Flow", () => {
     await expect(page.getByText("sub-machine, spawned in isolation")).toBeVisible();
     await typeInput(page, "Description", "Playing guitar");
     // Date select - fill in the 3 date selects (month/day/year)
-    const dateSelects = page.locator('.content-node__input.date select');
+    const dateSelects = page.locator('.xw--node-input.date select');
     if (await dateSelects.count() >= 3) {
       await dateSelects.nth(0).selectOption({ index: 1 }); // First non-empty month
       await dateSelects.nth(1).selectOption({ index: 1 }); // First non-empty day

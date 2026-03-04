@@ -30,13 +30,13 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
   // RENDER
   return (
     <>
-      <div className="x-wizard__header__navigation-options" onClick={() => setShowOptions(!showOptions)}>
+      <div className="xw__nav-options" onClick={() => setShowOptions(!showOptions)}>
         ☰
       </div>
       {showOptions && (
-        <div className="x-wizard__header__navigation-options-dropdown" onMouseLeave={() => setShowOptions(false)}>
+        <div className="xw__nav-dropdown" onMouseLeave={() => setShowOptions(false)}>
           {allowBack !== false && (
-            <div className="navigation-options-dropdown back-button">
+            <div className="xw__nav-dropdown xw__back-btn">
               <button onClick={() => triggerBack()}>← Back</button>
             </div>
           )}
@@ -51,8 +51,7 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
             <div>
               <ConfirmButton
                 width="100%"
-                size="sm"
-                buttonType="white"
+                className="xw__btn-sm xw__btn-white"
                 messagePrompts={[
                   `← Redo This Section`,
                   `← Yes, Start ${machineMeta?.title ? `"${machineMeta?.title}"` : "Section"} Over`,

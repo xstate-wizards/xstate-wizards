@@ -41,7 +41,8 @@ export function setupGeneralState(
     logger.warning(
       '"ASSIGN_CONTEXT" is a special transition for updating machine context. Only actions will be considered and appended. Please be careful.'
     );
-    if (Array.isArray(on.ASSIGN_CONTEXT.actions)) assignContextActions.push(...on.ASSIGN_CONTEXT.actions);
+    const ac = on.ASSIGN_CONTEXT;
+    if (typeof ac === "object" && !Array.isArray(ac) && Array.isArray(ac.actions)) assignContextActions.push(...(ac.actions as any[]));
   }
   constructedState.on = { ...on, ASSIGN_CONTEXT: { actions: assignContextActions } };
 
@@ -62,7 +63,7 @@ export function setupGeneralState(
       // v5: wrap v4-style callback invoke `(ctx, ev) => (callback) => cleanup` with fromCallback
       constructedState.invoke = {
         src: fromCallback(({ sendBack, input }: { sendBack: any; input: any }) => {
-          const result = invoke(input.context, input.event);
+          const result = invoke({ context: input.context, event: input.event });
           if (typeof result === "function") {
             // v4 callback service returns a cleanup function (or non-function like a timeout ID)
             const cleanup = result(sendBack);

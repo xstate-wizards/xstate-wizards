@@ -1,6 +1,5 @@
 import { difference, omit } from "lodash";
 import React from "react";
-import styled from "styled-components";
 import { $TSFixMe } from "@xstate-wizards/spells";
 import { removeArrayItem, updateArrayItem } from "../../utils";
 
@@ -49,7 +48,7 @@ export const VariableInput = ({ attrKey, attrValue, onUpdate, options }) => {
   // console.log("VariableInput: ", { attrKey, attrValue, onUpdate, options });
   const option = options?.find((config) => config.key === attrKey);
   return (
-    <StyledVariableInput>
+    <div className="xw-sb__variable-input">
       {/* IF DEFINED */}
       {typeof attrValue === "string" || option?.type === "text" ? (
         <input type="text" value={attrValue} onChange={(e) => onUpdate(e.target.value)} />
@@ -117,44 +116,6 @@ export const VariableInput = ({ attrKey, attrValue, onUpdate, options }) => {
           <small onClick={() => onUpdate([])}>+ Arr</small>
         </>
       )}
-    </StyledVariableInput>
+    </div>
   );
 };
-
-const StyledVariableInput = styled.div`
-  .variable-input__object {
-    display: flex;
-    flex-direction: column;
-  }
-  .variable-input__object__key-value {
-    display: flex;
-    width: 100%;
-    & > div.variable-input__object__key-value__key {
-      display: flex;
-      width: 80px;
-      min-width: 80px;
-      max-width: 80px;
-    }
-    & > *:not(div.variable-input__object__key-value__key) {
-      width: 100%;
-      input {
-        width: 100%;
-      }
-    }
-  }
-  .variable-input__array__item {
-    display: flex;
-    margin-bottom: 8px;
-    padding: 4px;
-    border-left: 2px solid #ccc;
-    & > div:not(.variable-input__array__item__actions) {
-      flex-grow: 1;
-    }
-    .variable-input__array__item__actions {
-      width: 32px;
-      margin-right: 4px;
-      display: flex;
-      flex-direction: column;
-    }
-  }
-`;

@@ -2,9 +2,7 @@
 
 import React, { useState } from "react";
 import { useInterval } from "react-use";
-import styled from "styled-components";
 import { TWizardSerializations } from "@xstate-wizards/spells";
-import { wizardTheme } from "../../theme";
 import { IconCheck as FallbackIconCheck } from "./fallbacks/Icons";
 
 const FULL_DASH_ARRAY = 283;
@@ -49,13 +47,13 @@ export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props
   }, COUNTDOWN_INTERVAL);
 
   return (
-    <StyledCountdownTimer>
-      <svg className="countdown__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g className="countdown__circle">
-          <circle className={`countdown__path-elapsed ${status}`} cx="50" cy="50" r="45" />
+    <div className="xw__countdown">
+      <svg className="xw__countdown-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g className="xw__countdown-circle">
+          <circle className={`xw__countdown-elapsed ${status}`} cx="50" cy="50" r="45" />
           <path
             strokeDasharray={strokeDashArray}
-            className={`countdown__path-remaining ${status}`}
+            className={`xw__countdown-remaining ${status}`}
             d="
               M 50, 50
               m -45, 0
@@ -65,7 +63,7 @@ export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props
           />
         </g>
       </svg>
-      <span className={`countdown__label ${status}`}>
+      <span className={`xw__countdown-label ${status}`}>
         {Math.floor(timeLeft / 1000) === 0 ? (
           <>
             <IconCheck />
@@ -74,70 +72,6 @@ export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props
           Math.floor(timeLeft / 1000)
         )}
       </span>
-    </StyledCountdownTimer>
+    </div>
   );
 };
-
-const StyledCountdownTimer = styled.div`
-  position: relative;
-  width: 48px;
-  height: 48px;
-
-  .countdown__svg {
-    transform: scaleX(-1);
-  }
-
-  .countdown__circle {
-    fill: none;
-    stroke: none;
-  }
-
-  .countdown__path-elapsed {
-    stroke-width: 7px;
-    stroke: ${wizardTheme.colors.blue[900]};
-    transition: 1s linear all;
-  }
-  .countdown__path-elapsed.done {
-    color: ${wizardTheme.colors.blue[500]};
-    stroke: currentColor;
-  }
-  .countdown__path-elapsed.progressing {
-    color: ${wizardTheme.colors.blue[500]};
-  }
-
-  .countdown__path-remaining {
-    stroke-width: 8px;
-    stroke-linecap: round;
-    transform: rotate(90deg);
-    transform-origin: center;
-    transition: 1s linear all;
-    fill-rule: nonzero;
-    stroke: currentColor;
-  }
-  .countdown__path-remaining.done {
-    color: ${wizardTheme.colors.blue[500]};
-  }
-  .countdown__path-remaining.progressing {
-    color: ${wizardTheme.colors.blue[500]};
-  }
-
-  .countdown__label {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: ${wizardTheme.colors.blue[500]};
-    svg {
-      height: 24px;
-      width: 24px;
-      path {
-        fill: ${wizardTheme.colors.blue[500]};
-      }
-    }
-  }
-`;

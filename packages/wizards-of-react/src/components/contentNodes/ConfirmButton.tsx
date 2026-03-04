@@ -3,23 +3,19 @@ import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { Button as FallbackButton } from "./fallbacks/Button";
 
 type TConfirmButtonProps = {
-  buttonType?: string;
+  className?: string;
   disabled?: boolean;
-  inverted?: boolean;
   serializations: TWizardSerializations;
   messagePrompts: string[];
-  onConfirm: () => void;
-  size?: string;
+  onConfirm: (e?: any) => void;
   width?: string;
 };
 
 export const ConfirmButton: React.FC<TConfirmButtonProps> = ({
-  buttonType,
+  className,
   disabled,
-  inverted,
   messagePrompts,
   onConfirm,
-  size,
   width,
   ...props
 }) => {
@@ -38,10 +34,8 @@ export const ConfirmButton: React.FC<TConfirmButtonProps> = ({
   return (
     <Button
       disabled={disabled}
-      size={size}
+      className={className}
       width={width}
-      buttonType={buttonType}
-      inverted={inverted}
       onClick={handleClick}
     >
       {messagePrompts[messageIndex]}

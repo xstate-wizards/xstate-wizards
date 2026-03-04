@@ -1,6 +1,5 @@
 import { intersection, omit } from "lodash";
 import React, { Fragment } from "react";
-import styled from "styled-components";
 import { $TSFixMe } from "@xstate-wizards/spells";
 
 type TJsonSchemaBuilderProps = {
@@ -24,7 +23,7 @@ export const JsonSchemaBuilder: React.FC<TJsonSchemaBuilderProps> = ({ schema, o
 
   // RENDER
   return (
-    <StyledJsonSchemaBuilder>
+    <div className="xw-sb__json-schema">
       {Object.keys(schema?.properties ?? {})
         .sort()
         .map((property) => (
@@ -191,46 +190,6 @@ export const JsonSchemaBuilder: React.FC<TJsonSchemaBuilderProps> = ({ schema, o
           </small>
         </div>
       </div>
-    </StyledJsonSchemaBuilder>
+    </div>
   );
 };
-
-const StyledJsonSchemaBuilder = styled.div`
-  .json-schema__property {
-    display: flex;
-    margin-bottom: 8px;
-    padding: 0 8px;
-    border-left: 2px solid #ccc;
-  }
-  .json-schema__property__key {
-    display: flex;
-    min-width: 150px;
-    max-width: 150px;
-    overflow: hidden;
-    font-weight: 900;
-    &.add-property:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  }
-  .json-schema__property__config {
-    display: flex;
-  }
-  .json-schema__property__config__type {
-    margin-right: 24px;
-  }
-  .json-schema__property__config__default {
-    font-style: italic;
-    input {
-      margin-left: 8px;
-    }
-  }
-  .json-schema__object-properties-editor {
-    margin-left: 64px;
-    margin-bottom: 18px;
-    border-bottom: 2px dashed #eee;
-  }
-  .json-schema__property__config__delete {
-    margin-right: 24px;
-  }
-`;

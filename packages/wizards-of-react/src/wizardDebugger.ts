@@ -1,5 +1,5 @@
-import create from "zustand";
-import createVanilla from "zustand/vanilla";
+import { useStore } from "zustand";
+import { createStore } from "zustand/vanilla";
 
 export type TWizardDebuggerStore = {
   logging: boolean;
@@ -8,14 +8,14 @@ export type TWizardDebuggerStore = {
   setSkipSaves: (logging: boolean) => void;
 };
 
-export const wizardDebuggerStore = createVanilla<TWizardDebuggerStore>((set, get) => ({
+export const wizardDebuggerStore = createStore<TWizardDebuggerStore>((set, get) => ({
   logging: false,
   setLogging: (logging: boolean) => set({ logging: logging ?? false }),
   skipSaves: null,
   setSkipSaves: (skipSaves: boolean) => set({ skipSaves: skipSaves ?? false }),
 }));
 
-export const useWizardDebugger = create(wizardDebuggerStore);
+export const useWizardDebugger = () => useStore(wizardDebuggerStore);
 
 // TODO: console.debug/log/etc. need to sync up with spells package logging. Just gonna log everything for now
 export const logger = {

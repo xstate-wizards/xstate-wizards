@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 
 // v5: ActionTypes removed from xstate. Define locally for spellbook editor UI.
@@ -26,7 +26,7 @@ export const SpellStateEntryChooseEditor: React.FC<TSpellStateEntryChooseEditorP
   states,
 }) => {
   return (
-    <StyledSpellStateEntryChooseEditor>
+    <div className="xw-sb__entry-choose">
       <div>
         <div className="on-event">
           <SpellStateEventTransitionsEditor
@@ -62,39 +62,6 @@ export const SpellStateEntryChooseEditor: React.FC<TSpellStateEntryChooseEditorP
           </div>
         </div>
       )}
-    </StyledSpellStateEntryChooseEditor>
+    </div>
   );
 };
-
-const StyledSpellStateEntryChooseEditor = styled.div`
-  padding: 0 1em 0.5em;
-  background: #f0f0f0;
-  overflow-x: scroll;
-  .on-event {
-    display: flex;
-    padding-bottom: 0.2em;
-    margin-bottom: 0.2em;
-    .on-event__name {
-      min-width: 80px;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      padding-top: 0.2em;
-      font-weight: 900;
-      font-size: 14px;
-      div {
-        display: flex;
-        justify-content: flex-start;
-      }
-      button {
-        font-size: 10px;
-      }
-    }
-    .on-event__transitions {
-      display: flex;
-      width: 100%;
-    }
-  }
-  .entry__add button {
-    font-size: 12px;
-  }
-`;

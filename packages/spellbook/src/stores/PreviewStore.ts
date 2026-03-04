@@ -1,5 +1,5 @@
-import createVanilla from "zustand/vanilla";
-import create from "zustand";
+import { createStore } from "zustand/vanilla";
+import { useStore } from "zustand";
 import { searchParamGet, searchParamSet, SPELLBOOK_SEARCH_PARAMS } from "../utils";
 
 type TPreviewStore = {
@@ -9,7 +9,7 @@ type TPreviewStore = {
   setIsPreviewModal: (isPreviewModal: boolean) => void;
 };
 
-export const previewStore = createVanilla<TPreviewStore>((set, get) => ({
+export const previewStore = createStore<TPreviewStore>((set, get) => ({
   isPreviewDedicated: searchParamGet(SPELLBOOK_SEARCH_PARAMS.PREVIEW) === "true",
   isPreviewModal: false,
   setIsPreviewDedicated: (isPreviewDedicated) => {
@@ -19,4 +19,4 @@ export const previewStore = createVanilla<TPreviewStore>((set, get) => ({
   setIsPreviewModal: (isPreviewModal) => set({ isPreviewModal }),
 }));
 
-export const usePreview = create(previewStore);
+export const usePreview = () => useStore(previewStore);

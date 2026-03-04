@@ -3,8 +3,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { $TSFixMe } from "@xstate-wizards/spells";
 import {
   applyResourceInputToContext,
-  CONTENT_NODE_BACK,
-  CONTENT_NODE_PAUSE_AND_EXIT_TO,
   countContentNodes,
   createLocalId,
   flattenContentNodes,
@@ -22,9 +20,9 @@ import { logger } from "../wizardDebugger";
 // Tried useRef() instead of dom selection seems proper but I keep getting current = null... so using refs might be more reliable tbh, idk
 const clickBackButton = throttle(
   () => {
-    if (typeof document !== "undefined" && document.querySelector("button.x-wizard__header-back-button")) {
+    if (typeof document !== "undefined" && document.querySelector('button[data-xw="menu-back-btn"]')) {
       // @ts-ignore
-      document.querySelector("button.x-wizard__header-back-button")?.click?.();
+      document.querySelector('button[data-xw="menu-back-btn"]')?.click?.();
     }
   },
   200,
@@ -46,7 +44,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   translate,
 }) => {
   const [contextOnEntry] = useState(state.context);
-  const contentNodes = typeof meta.content === "function" ? meta.content(state.context, translate) : meta.content || [];
+  const contentNodes = typeof meta.content === "function" ? meta.content({ context: state.context }, translate) : meta.content || [];
   const [numContentNodes, setNumContentNodes] = useState(
     countContentNodes({ contentNodes, context: state.context, functions: serializations?.functions })
   );
@@ -190,7 +188,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
       {/* Top navigation options panel */}
       <NavigationPanel
         allowStartOver={machineMeta?.allowStartOver}
-        allowBack={contentNodes.some((cn) => cn?.attrs?.className === CONTENT_NODE_BACK.attrs.className)}
+        allowBack={contentNodes.some((cn) => cn?.attrs?.["data-xw"] === "menu-back-btn")}
         exitTo={machineMeta?.exitTo}
         machineMeta={machineMeta}
         serializations={serializations}
@@ -206,7 +204,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
             <ContentNode
               key={`${state.value}-${node.type}-${ni}`}
               node={
-                node?.attrs?.className === CONTENT_NODE_PAUSE_AND_EXIT_TO.attrs.className
+                node?.attrs?.["data-xw"] === "menu-pause-exit-btn"
                   ? { ...node, onClick: () => triggerExitTo(node.exitTo, node.exitState || {}) }
                   : node
               }

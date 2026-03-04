@@ -7,7 +7,6 @@ import {
 } from "@xstate-wizards/spells";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useEditor } from "../stores/EditorStore";
 import { usePreview } from "../stores/PreviewStore";
 import { useSidebar } from "../stores/SidebarStore";
@@ -72,24 +71,24 @@ export const SpellEditor: React.FC<TSpellEditorProps> = (props) => {
 
   // RENDER
   return (
-    <StyledSpellEditor>
-      <div className="spell-editor__header">
-        <div className="spell-editor__header__lead">
+    <div className="xw-sb__editor">
+      <div className="xw-sb__spell-editor__header">
+        <div className="xw-sb__spell-editor__header__lead">
           {sidebarStore.isCollapsed && (
             <div
-              className="spell-editor__header__logo"
+              className="xw-sb__spell-editor__header__logo"
               onClick={() => sidebarStore.setIsCollapsed(!sidebarStore.isCollapsed)}
             >
               <h4>✨🔮✨</h4>
             </div>
           )}
-          <div className="spell-editor__header__title">
+          <div className="xw-sb__spell-editor__header__title">
             <h4>
               {props.spell.key} v{props.spell.version}
             </h4>
             <div>
               <small
-                className="spell-editor__header__directory"
+                className="xw-sb__spell-editor__header__directory"
                 onClick={() => {
                   const inputNewSpellDirectory = prompt("What directory? Separate levels via commas");
                   if (inputNewSpellDirectory) {
@@ -112,21 +111,21 @@ export const SpellEditor: React.FC<TSpellEditorProps> = (props) => {
           </div>
         </div>
         {/* ACTIONS */}
-        <div className="spell-editor__header__actions">
+        <div className="xw-sb__spell-editor__header__actions">
           <button disabled={!isDirty} onClick={() => publishHandler({ increment: "major" })}>
             Save Breaking Update
           </button>
           <button disabled={!isDirty} onClick={() => publishHandler({ increment: "minor" })}>
             Save Minor Update
           </button>
-          <span className="divider"> | </span>
+          <span className="xw-sb__divider"> | </span>
           <button
             disabled={isDirty}
             onClick={() => props?.onActive(props.spell.id, props.spell.isActive != null ? !props.spell.isActive : true)}
           >
             {props.spell.isActive ? "Set Deactive" : "Set Active"}
           </button>
-          <span className="divider"> | </span>
+          <span className="xw-sb__divider"> | </span>
           <button
             disabled={isDirty}
             onClick={() => {
@@ -212,66 +211,7 @@ export const SpellEditor: React.FC<TSpellEditorProps> = (props) => {
           user={props.user}
         />
       </div>
-    </StyledSpellEditor>
+    </div>
   );
 };
 
-const StyledSpellEditor = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #f5f5f5;
-  .spell-editor__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0;
-    background: #fcfcfc;
-    border-bottom: 2px solid #f0f0f0;
-    .spell-editor__header__lead {
-      display: flex;
-    }
-    .spell-editor__header__logo {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 0 1em;
-      background-color: #000;
-      // background-color: #fde74c;
-      // background-image: linear-gradient(319deg, #fde74c 0%, #32ff7a 37%, #2fcbe0 100%);
-    }
-    .spell-editor__header__title {
-      display: flex;
-      flex-direction: column;
-      margin-left: 1em;
-      h4 {
-        position: relative;
-        bottom: -3px;
-      }
-      & > div {
-        display: flex;
-        small {
-          margin-right: 0.5em;
-          font-size: 10px;
-        }
-      }
-    }
-    .spell-editor__header__directory {
-      font-weight: 900;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .spell-editor__header__actions {
-      margin-right: 1em;
-      button {
-        margin-left: 0.25em;
-      }
-      .divider {
-        margin: 0 4px;
-        color: #ccc;
-      }
-    }
-  }
-`;

@@ -28,6 +28,6 @@ export const putUser = async ({ firstName, id, lastName, password }: TLocalUserM
 };
 
 // Simple grabber for users. An example can be more complex
-export const selectUser = (ctx) => {
+export const selectUser = (ctx: any): any => {
   return Object.values(ctx.resources?.User ?? {})?.[0];
 };

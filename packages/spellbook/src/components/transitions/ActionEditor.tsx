@@ -1,6 +1,6 @@
 import { cloneDeep, omit } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { $TSFixMe } from "@xstate-wizards/spells";
 
 // v5: ActionTypes removed from xstate. Define locally for spellbook editor UI.
@@ -33,7 +33,7 @@ export const ActionEditor: React.FC<TActionEditor> = ({
   state,
 }) => {
   return (
-    <StyledActionEditor>
+    <div className="xw-sb__action-editor">
       {/* DELETE */}
       <button
         // interestingly onClick causes the add btn to also fire onClick, so i had to add a key
@@ -184,10 +184,6 @@ export const ActionEditor: React.FC<TActionEditor> = ({
           </optgroup>
         </select>
       )}
-    </StyledActionEditor>
+    </div>
   );
 };
-
-const StyledActionEditor = styled.div`
-  display: flex;
-`;

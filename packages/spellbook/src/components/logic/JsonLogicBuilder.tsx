@@ -1,6 +1,5 @@
 import { castArray, cloneDeep } from "lodash";
 import React, { Fragment } from "react";
-import styled from "styled-components";
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { VariableSelector } from "./VariableSelector";
 
@@ -60,7 +59,7 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
 
   // RENDER
   return (
-    <StyledJsonLogicBuilder>
+    <div className="xw-sb__json-logic">
       {/* OPERATION */}
       <div className="logic__operation">
         <select value={existingOp} onChange={(e) => onUpdateOp(e.target.value)}>
@@ -158,38 +157,9 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
           </small>
         </div>
       </div>
-    </StyledJsonLogicBuilder>
+    </div>
   );
 };
-
-const StyledJsonLogicBuilder = styled.div`
-  display: flex;
-  padding-left: 2px;
-  border-left: 2px solid #ccc;
-  margin-left: 2px;
-  // padding-right: 2px;
-  // border-right: 2px solid #ccc;
-  // margin-right: 2px;
-  input,
-  select {
-    flex-grow: 1;
-    max-width: 100px;
-  }
-  .logic__args {
-    display: flex;
-    flex-direction: column;
-  }
-  .logic__args__actions {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    u {
-      margin: 0 2px;
-      cursor: pointer;
-    }
-  }
-`;
-
 // json-logic operators
 // https://jsonlogic.com/operations.html
 const OPERATORS = {
