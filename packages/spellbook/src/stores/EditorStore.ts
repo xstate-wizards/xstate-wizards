@@ -1,5 +1,5 @@
-import createVanilla from "zustand/vanilla";
-import create from "zustand";
+import { createStore } from "zustand/vanilla";
+import { useStore } from "zustand";
 import { searchParamGet, SPELLBOOK_SEARCH_PARAMS, searchParamSet } from "../utils";
 
 type TEditorStore = {
@@ -11,7 +11,7 @@ type TEditorStore = {
   setFocusedSpellVersion: (focusedSpellVersion?: string) => void;
 };
 
-export const editorStore = createVanilla<TEditorStore>((set, get) => ({
+export const editorStore = createStore<TEditorStore>((set, get) => ({
   // gets
   focusedSpellId: undefined,
   focusedSpellKey: searchParamGet(SPELLBOOK_SEARCH_PARAMS.SPELL_KEY) ?? undefined,
@@ -28,4 +28,4 @@ export const editorStore = createVanilla<TEditorStore>((set, get) => ({
   },
 }));
 
-export const useEditor = create(editorStore);
+export const useEditor = () => useStore(editorStore);

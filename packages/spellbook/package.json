@@ -23,7 +23,7 @@
     "pretty-print-json": "^1.2.5",
     "styled-components": "^5.2.3",
     "xstate": "^5.28.0",
-    "zustand": "^4.5.0"
+    "zustand": "^5.0.0"
   },
   "peerDependencies": {
     "react": "^18.0.0"

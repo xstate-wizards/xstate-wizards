@@ -24,7 +24,6 @@
     "tel-fns": "^0.0.5",
     "uuid": "^3.3.3",
     "xstate": "^5.28.0",
-    "zustand": "^4.5.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
