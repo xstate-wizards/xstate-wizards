@@ -3,8 +3,7 @@
   "private": true,
   "description": "Wizards for Complex Data Collection",
   "workspaces": [
-    "packages/*",
-    "examples/*"
+    "packages/*"
   ],
   "engines": {
     "node": ">=22.0.0"
@@ -29,9 +28,13 @@
   "scripts": {
     "clean:packages": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "dev:wizards": "npm run dev -w examples/react-wizards",
-    "dev:i18n": "npm run dev -w examples/react-wizards-i18n",
-    "dev:spellbook": "npm run dev -w examples/react-spellbook",
+    "build:examples": "cd examples/react-wizards && npm run build && cd ../react-wizards-i18n && npm run build && cd ../react-spellbook && npm run build",
+    "dev:wizards": "cd examples/react-wizards && npm run dev",
+    "dev:i18n": "cd examples/react-wizards-i18n && npm run dev",
+    "dev:spellbook": "cd examples/react-spellbook && npm run dev",
+    "preview:wizards": "cd examples/react-wizards && npm run preview",
+    "preview:i18n": "cd examples/react-wizards-i18n && npm run preview",
+    "preview:spellbook": "cd examples/react-spellbook && npm run preview",
     "test": "vitest run",
     "test:e2e": "npx playwright test"
   },

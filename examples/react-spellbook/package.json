@@ -4,17 +4,21 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "preview": "vite --config vite.preview.config.ts"
   },
   "dependencies": {
-    "@xstate-wizards/spellbook": "^0.6.13",
-    "@xstate-wizards/spells": "^0.8.16",
+    "@xstate-wizards/spellbook": "^3.0.1",
+    "@xstate-wizards/spells": "^3.0.1",
+    "@xstate-wizards/wizards-of-react": "^3.0.1",
+    "@xstate/react": "^4.0.0",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "xstate": "^5.28.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
