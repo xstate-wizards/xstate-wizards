@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "preview": "vite --config vite.preview.config.ts"
   },
   "dependencies": {
     "@xstate-wizards/spells": "^0.8.16",
