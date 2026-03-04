@@ -19,5 +19,5 @@ export const deleteHobby = async (hobbyId: TLocalHobbyModel) => {
 };
 
 // Simple grabber for Hobbies. An example can be more complex
-export const selectHobbies = (ctx) => Object.values(ctx.resources?.Hobby ?? {});
-export const removeHobby = (ctx) => Object.values(ctx.resources?.Hobby ?? {});
+export const selectHobbies = (ctx: any) => Object.values(ctx.resources?.Hobby ?? {});
+export const removeHobby = (ctx: any) => Object.values(ctx.resources?.Hobby ?? {});

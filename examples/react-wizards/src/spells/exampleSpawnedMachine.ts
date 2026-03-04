@@ -25,7 +25,7 @@ export const machineMapping = createSpell({
   editor: {},
   states: {
     editor: {
-      content: (ctx) => [
+      content: ({ context }: { context: any }) => [
         { type: "h4", text: "Hobby Editor" },
         {
           type: "small",
@@ -37,7 +37,7 @@ export const machineMapping = createSpell({
           type: "resourceEditor",
           config: {
             modelName: "Hobby",
-            resourceId: ctx.hobbyId,
+            resourceId: context.hobbyId,
             resourceDefaults: {},
           },
           content: [
@@ -66,14 +66,14 @@ export const machineMapping = createSpell({
           type: "input",
           inputType: "text",
           label: "Collaborator Name (Optional)",
-          assign: { modelName: "Hobby", id: ctx.hobbyId, path: "collaborator.name" },
+          assign: { modelName: "Hobby", id: context.hobbyId, path: "collaborator.name" },
           validations: ["required"],
         },
         // example of address
         { type: "h5", text: "Where do you do this hobby?" },
         {
           type: "address",
-          assign: { modelName: "Hobby", id: ctx.hobbyId, path: "address" },
+          assign: { modelName: "Hobby", id: context.hobbyId, path: "address" },
           config: {
             attention: { enabled: true, label: "In Care of Name (if any)" },
             // Configs check for defaults above, before falling back to true

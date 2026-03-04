@@ -32,7 +32,7 @@ export const machineMapping = createSpell({
   },
   states: {
     [INTERVIEW_INTRO_STATE]: {
-      content: (ctx) => [
+      content: ({ context }) => [
         { type: "h4", text: "Welcome!" },
         { type: "p", text: "This is a screener to help you evaluate the XState Wizard™️ in front of you." },
         {
@@ -43,7 +43,7 @@ export const machineMapping = createSpell({
           type: "resourceEditor",
           config: {
             modelName: "User",
-            resourceId: selectUser(ctx)?.id || createLocalId(),
+            resourceId: selectUser(context)?.id || createLocalId(),
             resourceDefaults: {},
           },
           content: [
@@ -62,7 +62,7 @@ export const machineMapping = createSpell({
         { type: "hr" },
         {
           type: "callout",
-          content: [{ type: "small", text: `Wizard Score: ${ctx?.states?.wizardScore ?? 0}` }],
+          content: [{ type: "small", text: `Wizard Score: ${context?.states?.wizardScore ?? 0}` }],
           attrs: { textAlign: "center" },
         },
       ],
@@ -81,10 +81,10 @@ export const machineMapping = createSpell({
         },
         // onDone: [{ target: "evaluationResult" }],
       },
-      content: (ctx) => [
+      content: ({ context }) => [
         {
           type: "h5",
-          text: `Great to meet you, ${selectUser(ctx)?.firstName}!`,
+          text: `Great to meet you, ${selectUser(context)?.firstName}!`,
           attrs: { textAlign: "center" },
         },
         { type: "p", text: "Let's explore some use cases!", attrs: { textAlign: "center" } },
@@ -96,7 +96,7 @@ export const machineMapping = createSpell({
       },
     },
     questionVolume: {
-      content: (ctx) => [
+      content: ({ context }) => [
         { type: "h5", text: "How many questions do you have to ask your users?" },
         { type: "p", text: "Err on the side of max questions, as if a user hits every branch of conditionals." },
         {
@@ -127,7 +127,7 @@ export const machineMapping = createSpell({
         { type: "hr" },
         {
           type: "callout",
-          content: [{ type: "small", text: `Wizard Score: ${ctx?.states?.wizardScore ?? 0}` }],
+          content: [{ type: "small", text: `Wizard Score: ${context?.states?.wizardScore ?? 0}` }],
           attrs: { textAlign: "center" },
         },
       ],
@@ -137,7 +137,7 @@ export const machineMapping = createSpell({
       },
     },
     questionComplexity: {
-      content: (ctx) => [
+      content: ({ context }) => [
         { type: "h5", text: "Do you find yourself asking users __complex__ questions?" },
         {
           type: "p",
@@ -148,7 +148,7 @@ export const machineMapping = createSpell({
         { type: "hr" },
         {
           type: "callout",
-          content: [{ type: "small", text: `Wizard Score: ${ctx?.states?.wizardScore ?? 0}` }],
+          content: [{ type: "small", text: `Wizard Score: ${context?.states?.wizardScore ?? 0}` }],
           attrs: { textAlign: "center" },
         },
       ],
@@ -160,7 +160,7 @@ export const machineMapping = createSpell({
       },
     },
     developerExperience: {
-      content: (ctx) => [
+      content: ({ context }) => [
         {
           type: "h5",
           text: "Do you care about developer experience and maintability?",
@@ -186,18 +186,18 @@ export const machineMapping = createSpell({
           type: "button",
           text: "Yes, I care about maintability.",
           event: "YES",
-          attrs: { disabled: ctx?.states?.developerExperience?.viewedOutline !== true },
+          attrs: { disabled: context?.states?.developerExperience?.viewedOutline !== true },
         },
         {
           type: "button",
           text: "Dev UX is not important.",
           event: "NO",
-          attrs: { disabled: ctx?.states?.developerExperience?.viewedOutline !== true },
+          attrs: { disabled: context?.states?.developerExperience?.viewedOutline !== true },
         },
         { type: "hr" },
         {
           type: "callout",
-          content: [{ type: "small", text: `Wizard Score: ${ctx?.states?.wizardScore ?? 0}` }],
+          content: [{ type: "small", text: `Wizard Score: ${context?.states?.wizardScore ?? 0}` }],
           attrs: { textAlign: "center" },
         },
       ],
@@ -228,7 +228,7 @@ export const machineMapping = createSpell({
       },
     },
     jsonLogicNeed: {
-      content: (ctx) => [
+      content: ({ context }) => [
         {
           type: "h5",
           text: "Does strict data collection with json schemas and serialized json-logic interest you?",
@@ -239,11 +239,11 @@ export const machineMapping = createSpell({
           type: "button",
           text: "No",
           event: "NO",
-          attrs: { className: "xw--btn-white", disabled: ctx?.states?.wizardScore !== 0 },
+          attrs: { className: "xw--btn-white", disabled: context?.states?.wizardScore !== 0 },
         },
         {
           type: "conditional",
-          conditional: (ctx) => ctx?.states?.wizardScore !== 0,
+          conditional: ({ context }) => context?.states?.wizardScore !== 0,
           options: {
             true: [
               {
@@ -262,7 +262,7 @@ export const machineMapping = createSpell({
         { type: "hr" },
         {
           type: "callout",
-          content: [{ type: "small", text: `Wizard Score: ${ctx?.states?.wizardScore ?? 0}` }],
+          content: [{ type: "small", text: `Wizard Score: ${context?.states?.wizardScore ?? 0}` }],
           attrs: { textAlign: "center" },
         },
       ],
@@ -288,7 +288,7 @@ export const machineMapping = createSpell({
       },
     },
     evaluationResult: {
-      content: (ctx) => [
+      content: ({ context }) => [
         { type: "h4", text: "XState Wizards will be useful!", attrs: { textAlign: "center" } },
         {
           type: "conditional",
@@ -301,7 +301,7 @@ export const machineMapping = createSpell({
                 type: "p",
                 // Crazy example of inline math using json-logic
                 // text: `You got a wizard score of <<<JSON_LOGIC('{"*":[2,{"Math.random":[]},{"var":["context.states.wizardScore"]}]}')>>>! This might be useful for you to explore.`,
-                text: `You got a **"I need to use XState Wizards"** score of **${ctx?.states?.wizardScore}**. It looks like it'll be of help to you!`,
+                text: `You got a **"I need to use XState Wizards"** score of **${context?.states?.wizardScore}**. It looks like it'll be of help to you!`,
               },
             ],
             false: [

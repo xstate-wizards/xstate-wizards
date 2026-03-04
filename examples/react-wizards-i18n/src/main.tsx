@@ -1,4 +1,5 @@
 import "@xstate-wizards/wizards-of-react/styles.css";
+import "./overrides.css";
 import i18next, { t } from "i18next";
 import { initReactI18next } from "react-i18next";
 import React from "react";
@@ -19,7 +20,8 @@ i18next.use(initReactI18next).init({
         button: "English",
         label: "English Email",
         continue: "English Continue",
-        sectionBar: "English Section",
+        sectionBar1: "English Email",
+        sectionBar2: "English Confirmation",
       },
     },
     es: {
@@ -33,7 +35,8 @@ i18next.use(initReactI18next).init({
         button: "Spanish",
         label: "Spanish Email",
         continue: "Spanish Continue",
-        sectionBar: "Spanish Section",
+        sectionBar1: "Spanish Email",
+        sectionBar2: "Spanish Confirmation",
       },
     },
   },

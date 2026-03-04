@@ -11,7 +11,7 @@ import {
 import _ from "lodash";
 import { assign } from "xstate";
 import { selectHobbies } from "../models/hobby";
-import { getPets, PET_TYPES } from "../models/pet";
+import { selectPets, PET_TYPES } from "../models/pet";
 import { selectUser } from "../models/user";
 import { ID_EXAMPLE_SPAWNED_MACHINE } from "./exampleSpawnedMachine";
 
@@ -91,7 +91,7 @@ export const machineMapping = createSpell({
         {
           type: "conditional",
           description: "swap 2 things",
-          conditional: (ctx) => ctx?.states?.showPiTest ?? false,
+          conditional: ({ context }) => context?.states?.showPiTest ?? false,
           options: {
             false: [
               {
@@ -154,7 +154,7 @@ export const machineMapping = createSpell({
       },
     },
     userName: {
-      content: (ctx) => [
+      content: ({ context }) => [
         CONTENT_NODE_BACK,
         { type: "h4", text: "Editing a data model: **User**" },
         { type: "p", text: "Use a 'resourceEditor' to wrap inputs so it's easier to update values." },
@@ -163,7 +163,7 @@ export const machineMapping = createSpell({
           config: {
             modelName: "User",
             // TODO: fix outline mode access/referene of serialized functions
-            resourceId: selectUser(ctx)?.id,
+            resourceId: selectUser(context)?.id,
             // resourceId: {
             //   selectUser: [{ var: ["context"] }, "id"],
             // },
@@ -249,8 +249,8 @@ export const machineMapping = createSpell({
       },
     },
     petsEditor: {
-      entry: (ctx, ev) => console.log("entry action"),
-      exit: (ctx, ev) => console.log("exit action"),
+      entry: ({ context, event }) => console.log("entry action"),
+      exit: ({ context, event }) => console.log("exit action"),
       content: [
         CONTENT_NODE_BACK,
         {
@@ -350,13 +350,13 @@ export const machineMapping = createSpell({
         { type: "button", text: "No", event: "NO" },
       ],
       on: {
-        BACK: [{ target: "petsAsk", cond: ({ context }) => getPets(context)?.length === 0 }, { target: "petsEditor" }],
+        BACK: [{ target: "petsAsk", cond: ({ context }) => selectPets(context)?.length === 0 }, { target: "petsEditor" }],
         YES: "hobbiesList",
         NO: "faq",
       },
     },
     hobbiesList: {
-      content: (ctx) => [
+      content: ({ context }) => [
         {
           type: "h4",
           text: "Unlike the pets section, adding a 'Hobby' model here will spawn a new state machine. Upon it resolving, we'll resolve its data payload back into the current machine's context.",
@@ -375,8 +375,8 @@ export const machineMapping = createSpell({
         },
         {
           type: "forEach",
-          items: selectHobbies(ctx),
-          content: (ctx, item) => [
+          items: selectHobbies(context),
+          content: ({ context, item }) => [
             {
               type: "row",
               content: [
@@ -397,8 +397,8 @@ export const machineMapping = createSpell({
     },
     hobbyEditor: {
       key: ID_EXAMPLE_SPAWNED_MACHINE,
-      context: (ctx, ev) => ({
-        hobbyId: ev?.data?.hobbyId ?? ev?.hobbyId,
+      context: ({ context, event }) => ({
+        hobbyId: event?.data?.hobbyId ?? event?.hobbyId,
         showDelete: true,
       }),
       onDone: [
