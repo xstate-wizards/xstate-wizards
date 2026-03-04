@@ -12,7 +12,7 @@ import { usePreview } from "./stores/PreviewStore";
 import { PreviewWizardModal } from "./components/previews/PreviewWizardModal";
 import { useEditor } from "./stores/EditorStore";
 import { PreviewWizardPage } from "./components/previews/PreviewWizardPage";
-import { SpellBookWizardWrap } from "./placeholders/SpellbookWizardWrap";
+
 
 type TSpellBookPropsSpells = {
   [id: number]: TSpellInstructions;
@@ -50,11 +50,6 @@ export const SpellBook: React.FC<TSpellBookProps> = ({
 }) => {
   const preppedSerializations: TWizardSerializations = {
     ...serializations,
-    components: {
-      ...serializations.components,
-      // @ts-ignore
-      WizardWrap: SpellBookWizardWrap,
-    },
   };
   const editor = useEditor();
   const preview = usePreview();
