@@ -3,13 +3,17 @@ import React from "react";
 
 export type $TSFixMe = any;
 
+// --- i18n ---
+// A string that may be localized: plain string for backwards compat, or a map of locale code -> translation.
+export type TLocalizedString = string | Record<string, string>;
+
 // --- Typed function signatures for content node callbacks ---
-// Translate function (for i18n support)
+/** @deprecated Use inline locale objects (TLocalizedString) instead of a translate function. */
 export type TTranslateFn = (key: string, params?: Record<string, any>) => string;
 // Base args matching XState v5 convention: { context, event }
 export type TContextArgs = { context: TCreateMachineContext; event?: any; item?: any; itemIndex?: number; items?: any[] };
-// Content function: receives { context } and optional translate fn
-export type TContentFn = (args: TContextArgs, translate?: TTranslateFn) => (TContentDefinition | TContentDefinition[])[];
+// Content function: receives { context }
+export type TContentFn = (args: TContextArgs) => (TContentDefinition | TContentDefinition[])[];
 // Callback receiving { context, event } (for disabled, selected, conditional, onClick, items, etc.)
 export type TContextFn<R = any> = (args: TContextArgs, ...extras: any[]) => R;
 
@@ -79,10 +83,10 @@ type TContentTableDefinition = {
 export type TContentDefinition = {
   type?: string;
   inputType?: string; // for inputs - number, text (I would love to deprecate this for 'typeInput')
-  text?: string;
+  text?: TLocalizedString;
   component?: React.FunctionComponent; // if comp, render
-  label?: string; // wrappers for inputs
-  labelByLine?: string; // extra small description allowed under label
+  label?: TLocalizedString; // wrappers for inputs
+  labelByLine?: TLocalizedString; // extra small description allowed under label
   valueKey?: string;
   validations?: string[];
   onClick?: TContextFn<void>; // standard onClick override
@@ -105,7 +109,7 @@ export type TContentDefinition = {
   // --- Media / link properties ---
   url?: string; // video url
   src?: string; // image src
-  alt?: string; // image alt text
+  alt?: TLocalizedString; // image alt text
   href?: string; // link href
   // --- Input-specific properties ---
   config?: Record<string, any>; // configuration for resourceEditor, address, countdownTimer, etc.
@@ -247,14 +251,15 @@ export type TSpellConfig = {
   autofillSubmitTargets?: boolean;
   exitTo?: string; // Path to direct user to when they want to exit a flow (doesn't progress/end state, just navigates away)
   initial: string; // state that machine should start on
+  locales?: string[]; // e.g. ["en", "es"] — available locale codes for inline translations
   outlineMode?: boolean; // DEPRECATE? Boolean that passes through from DirectedGraphAsOutline.tsx
   sectionsBar?: {
-    name: string | ((t: TTranslateFn) => string);
+    name: TLocalizedString;
     trigger: string;
     highlight?: boolean;
   }[];
   session?: Record<string, any>; // holds machine id, state value, version, etc. (ex: questionnaire machines)
-  title?: string | ((t: TTranslateFn) => string); // Just the machine label prop, (prev: label)
+  title?: TLocalizedString;
 };
 
 export type TSpellUserHistoryRecord = {
