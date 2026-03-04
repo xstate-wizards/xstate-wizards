@@ -1,4 +1,5 @@
 import "@xstate-wizards/wizards-of-react/styles.css";
+import "@xstate-wizards/crystal-ball/styles.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
