@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@xstate-wizards/crystal-ball": "^0.1.7",
-    "@xstate-wizards/spells": "^0.8.16",
-    "@xstate-wizards/wizards-of-react": "^0.8.6",
+    "@xstate-wizards/spells": "^3.0.1",
+    "@xstate-wizards/wizards-of-react": "^3.0.1",
     "date-fns": "^2.29.1",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
