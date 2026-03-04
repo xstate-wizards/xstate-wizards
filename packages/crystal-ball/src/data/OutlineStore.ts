@@ -1,5 +1,5 @@
-import createVanilla from "zustand/vanilla";
-import create from "zustand";
+import { createStore } from "zustand/vanilla";
+import { useStore } from "zustand";
 
 type TOutlineHighlight = {
   sourceId: string | null;
@@ -18,11 +18,11 @@ type TOutlineStore = {
   setNodeHighlights: (nodeHighlights: TOutlineHighlight) => void;
 };
 
-export const outlineStore = createVanilla<TOutlineStore>((set, get) => ({
+export const outlineStore = createStore<TOutlineStore>((set, get) => ({
   initConditionalVisibility: OutlineCondVisibility.all,
   setInitConditionalVisibility: (initConditionalVisibility) => set({ initConditionalVisibility }),
   nodeHighlights: { sourceId: null, targetIds: [] },
   setNodeHighlights: (nodeHighlights) => set({ nodeHighlights }),
 }));
 
-export const useOutline = create(outlineStore);
+export const useOutline = () => useStore(outlineStore);

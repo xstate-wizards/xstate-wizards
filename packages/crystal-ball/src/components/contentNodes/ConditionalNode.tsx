@@ -4,7 +4,7 @@ import { contentNodeToOutlineNode } from "./contentNodeToOutlineNode";
 
 export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) => {
   const { initConditionalVisibility } = useOutline();
-  const [show, setShow] = useState(initConditionalVisibility || OutlineCondVisibility.all);
+  const [show, setShow] = useState<string>(initConditionalVisibility || OutlineCondVisibility.all);
   const [localOverride, setLocalOverride] = useState(false);
 
   // Sync with global toggle unless user has manually overridden this node
