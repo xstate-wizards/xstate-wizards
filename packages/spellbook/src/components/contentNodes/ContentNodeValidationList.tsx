@@ -40,7 +40,7 @@ export const ContentNodeValidationList = ({ onChange, validations, value }) => {
                 onChange((value ?? []).filter((validation) => validation !== v));
               }}
             >
-              ❌
+              ×
             </span>
           </small>
         ))}

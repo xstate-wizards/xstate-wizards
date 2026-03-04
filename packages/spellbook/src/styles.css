@@ -836,10 +836,13 @@
 .xw-sb__content-node-editor {
   display: flex;
   width: 100%;
-  padding: 4px 0;
-  border-bottom: 1px solid #eee;
+  padding: 4px 1em;
+  border-bottom: 1px solid #ddd;
   position: relative;
   transition: background 0.15s ease;
+}
+.xw-sb__content-node-editor:nth-child(even) {
+  background: #fcfcfc;
 }
 .xw-sb__content-node-editor:last-of-type {
   border-bottom: none;
@@ -1104,18 +1107,61 @@
 
 .xw-sb__validation-list .active-validations {
   display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-left: 4px;
 }
 
 .xw-sb__validation-list .active-validations small {
-  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #e8e8e8;
+  border-radius: 3px;
+  padding: 0px 4px;
+  font-size: 11px;
+  max-height: 18px;
+  white-space: nowrap;
+}
+
+.xw-sb__validation-list .active-validations small span {
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.xw-sb__validation-list .active-validations small span:hover {
+  opacity: 1;
 }
 
 /* --- JSON Logic Builder -------------------------------------------------- */
 .xw-sb__json-logic {
   display: flex;
-  padding-left: 2px;
-  border-left: 2px solid #ccc;
+  padding: 2px 0 2px 2px;
+  border-left: 2px solid #6c9bd1;
   margin-left: 2px;
+  background: rgba(108, 155, 209, 0.06);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Alternating nesting colors */
+.xw-sb__json-logic .xw-sb__json-logic {
+  border-left-color: #d1a06c;
+  background: rgba(209, 160, 108, 0.06);
+}
+.xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic {
+  border-left-color: #8c6cd1;
+  background: rgba(140, 108, 209, 0.06);
+}
+.xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic {
+  border-left-color: #6cb8a0;
+  background: rgba(108, 184, 160, 0.06);
+}
+
+.xw-sb__json-logic .logic__operation {
+  flex-shrink: 0;
 }
 
 .xw-sb__json-logic input,
@@ -1127,6 +1173,24 @@
 .xw-sb__json-logic .logic__args {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+}
+
+.xw-sb__json-logic .logic__arg {
+  border-left: 2px solid #6c9bd1;
+  padding-left: 2px;
+  margin-left: 2px;
+}
+
+/* Match arg border colors to parent nesting level */
+.xw-sb__json-logic .xw-sb__json-logic .logic__arg {
+  border-left-color: #d1a06c;
+}
+.xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic .logic__arg {
+  border-left-color: #8c6cd1;
+}
+.xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic .xw-sb__json-logic .logic__arg {
+  border-left-color: #6cb8a0;
 }
 
 .xw-sb__json-logic .logic__args__actions {
@@ -1338,7 +1402,7 @@
 }
 
 .xw-sb__state-content .xw-sb__spell-state__content-nodes {
-  padding: 0.5em 1em 0;
+  padding: 0;
 }
 
 .xw-sb__state-content .xw-sb__spell-state__content-nodes--none {
