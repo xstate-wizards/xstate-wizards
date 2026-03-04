@@ -432,7 +432,7 @@
   margin: 0 4px;
 }
 
-.xw-sb__states .content-node--reorder-handle {
+.xw-sb__states .content-node__actions {
   display: flex;
   flex-direction: row;
 }
@@ -451,7 +451,7 @@
   width: 100%;
   background: white;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
   margin: 1em 0 1.5em;
   box-shadow: 0 4px 16px 0 rgba(228, 228, 230, 1), 0 4px 16px 0 rgba(228, 228, 230, 1),
     0 4px 16px 0 rgba(228, 228, 230, 1), 0 2px 4px 0 rgba(228, 228, 230, 1);
@@ -477,7 +477,7 @@
 }
 
 .xw-sb__state .xw-sb__spell-state__body {
-  overflow-y: scroll;
+  overflow: visible;
 }
 
 .xw-sb__state .xw-sb__spell-state__body__events {
@@ -836,6 +836,16 @@
 .xw-sb__content-node-editor {
   display: flex;
   width: 100%;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  transition: background 0.15s ease;
+}
+.xw-sb__content-node-editor:last-of-type {
+  border-bottom: none;
+}
+.xw-sb__content-node-editor:hover {
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .xw-sb__content-node-editor .content-node__type {
@@ -881,8 +891,8 @@
 }
 
 .xw-sb__content-node-editor .content-node__config__stack td.stack-label {
-  max-width: 220px;
-  width: 15%;
+  max-width: 100px;
+  width: 100px;
   font-size: 12px;
 }
 
@@ -900,12 +910,37 @@
   margin: 0 4px;
 }
 
-.xw-sb__content-node-editor .content-node__reorder-handle {
+.xw-sb__content-node-editor .content-node__actions {
+  display: none;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  z-index: 1;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 1px 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+.xw-sb__content-node-editor:hover > .content-node__actions {
   display: flex;
 }
 
-.xw-sb__content-node-editor .content-node__reorder-handle button {
-  font-size: 7px;
+.xw-sb__content-node-editor .content-node__actions .content-node__attrs-trigger {
+  display: flex;
+  height: 100%;
+}
+
+.xw-sb__content-node-editor .content-node__actions button {
+  font-size: 10px;
+  height: 100%;
+}
+
+.xw-sb__content-node-editor .content-node__actions .content-node__reorder-arrows {
+  display: flex;
+  flex-direction: row;
 }
 
 .xw-sb__content-node-editor .content-node__config__select-options {
@@ -940,7 +975,7 @@
 }
 
 .xw-sb__content-node-adder select {
-  max-width: 80px;
+  max-width: 110px;
   width: 100%;
 }
 
@@ -1086,7 +1121,7 @@
 .xw-sb__json-logic input,
 .xw-sb__json-logic select {
   flex-grow: 1;
-  max-width: 100px;
+  max-width: 160px;
 }
 
 .xw-sb__json-logic .logic__args {
@@ -1278,7 +1313,6 @@
 .xw-sb__input-assign .input-assign__editor>input,
 .xw-sb__input-assign .input-assign__editor>select {
   flex-grow: 1;
-  max-width: 120px;
   margin: 0 4px;
 }
 

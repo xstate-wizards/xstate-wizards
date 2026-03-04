@@ -104,7 +104,6 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                 <select
                   value={contentNode.buttonType}
                   onChange={(e) => contentNodeUpdateHandler("buttonType", e.target.value)}
-                  style={{ display: "flex", maxWidth: "120px" }}
                 >
                   <option value="">Basic Button</option>
                   <option value="submit">Submit Button (Reqs Validation)</option>
@@ -130,7 +129,6 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                         type: e.target.value,
                       })
                     }
-                    style={{ display: "flex", maxWidth: "120px" }}
                   >
                     <option value=""></option>
                     {Object.keys(state.on).map((on) => (
@@ -951,28 +949,24 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         )}
       </div>
 
-      {/* ATTRS */}
-      <ContentNodeAttrsEditor
-        attrs={contentNode.attrs}
-        type={contentNode.type}
-        onUpdate={(attrs) => contentNodeUpdateHandler("attrs", attrs)}
-      />
-
-      {/* REORDERING */}
-      <div className="content-node__reorder-handle">
+      {/* ATTRS + REORDERING */}
+      <div className="content-node__actions">
+        <ContentNodeAttrsEditor
+          attrs={contentNode.attrs}
+          type={contentNode.type}
+          onUpdate={(attrs) => contentNodeUpdateHandler("attrs", attrs)}
+        />
         {canReorder && (
-          <div style={{ display: "flex", flexDirection: "column", maxWidth: "30px" }}>
+          <div className="content-node__reorder-arrows">
             <button
               disabled={contentNodeIndex === 0}
               onClick={() => onReorder(REORDER_DIRECTION.UP)}
-              style={{ maxHeight: "13px" }}
             >
               ⬆︎
             </button>
             <button
               disabled={contentNodeIndex === state.content.length - 1}
               onClick={() => onReorder(REORDER_DIRECTION.DOWN)}
-              style={{ maxHeight: "13px" }}
             >
               ⬇︎
             </button>
