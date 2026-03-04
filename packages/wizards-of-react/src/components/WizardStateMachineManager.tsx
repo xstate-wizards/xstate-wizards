@@ -180,7 +180,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     // --- set sections highlights (set active to true once we pass states/sections). highlight if this state is current/passed
     if (machineMeta?.sectionsBar != null && sections) {
       // v5: access machine states via actorRef.logic.config.states
-      const listOfMachineStates = Object.keys(actorRef.logic?.config?.states ?? {});
+      const listOfMachineStates = Object.keys((actorRef as any).logic?.config?.states ?? {});
       setSections(
         sections.reduce(
           (arr, section) => [

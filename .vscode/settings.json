@@ -1,11 +1,13 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.packageManager": "yarn",
   "eslint.workingDirectories": [
-    { "directory": "./examples" }
+    {
+      "directory": "./examples"
+    }
   ],
   "eslint.validate": [
     "javascript",
@@ -13,8 +15,12 @@
     "typescript",
     "typescriptreact"
   ],
-	"javascript.suggest.completeFunctionCalls": true,
-	"typescript.suggest.completeFunctionCalls": true,
-  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
+  "javascript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
