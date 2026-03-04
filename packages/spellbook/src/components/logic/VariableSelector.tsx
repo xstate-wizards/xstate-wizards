@@ -70,7 +70,9 @@ const flattenContentNodesNaively = (contentNodes): $TSFixMe[] => {
       flattenedNodes.push(node);
     } else if (ContentNodeType.CONDITIONAL === node.type) {
       for (const k in node.options) {
-        nodes.push(...node.options[k]);
+        if (Array.isArray(node.options[k])) {
+          nodes.push(...node.options[k]);
+        }
       }
     } else {
       flattenedNodes.push(node);

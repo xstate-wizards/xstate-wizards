@@ -82,7 +82,6 @@ export const SelectDatePicker: React.FC<TSelectDatePickerProps> = ({
   return (
     <div
       className="xw__date-picker"
-      data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       <Select

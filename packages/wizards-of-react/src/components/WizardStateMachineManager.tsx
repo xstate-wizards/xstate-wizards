@@ -1,9 +1,10 @@
 import React, { Component, useEffect, useState } from "react";
 import { useMachine, useSelector } from "@xstate/react";
-import { ID_GENERAL } from "@xstate-wizards/spells";
+import { ID_GENERAL, resolveText } from "@xstate-wizards/spells";
 
 import { WizardStateViewer } from "./WizardStateViewer";
 import { WizardWrap } from "./layout/WizardWrap";
+import { WizardLocaleProvider, useWizardLocale } from "./WizardLocaleContext";
 import { logger } from "../wizardDebugger";
 import { TWizardStateMachineManagerProps } from "../types";
 
@@ -84,7 +85,6 @@ const NestedMachineNode = (props) => {
       meta={stateMeta}
       state={state}
       transition={send}
-      translate={props.translate}
       machineMeta={props.machineMeta}
       serializations={props.serializations}
       navigate={props.navigate}
@@ -95,6 +95,7 @@ const NestedMachineNode = (props) => {
 // <WizardStateMachineManager /> - The Key Component. Manages state changes, session API calls, communicating to <WizardRunner />
 const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManagerProps) => {
   const { useNavigationBlocker } = props;
+  const locale = useWizardLocale();
 
   const machine = useMachine(props.machine);
   const [state, send, actorRef] = machine;
@@ -179,7 +180,7 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
     // --- set sections highlights (set active to true once we pass states/sections). highlight if this state is current/passed
     if (machineMeta?.sectionsBar != null && sections) {
       // v5: access machine states via actorRef.logic.config.states
-      const listOfMachineStates = Object.keys(actorRef.logic?.config?.states ?? {});
+      const listOfMachineStates = Object.keys((actorRef as any).logic?.config?.states ?? {});
       setSections(
         sections.reduce(
           (arr, section) => [
@@ -214,13 +215,12 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
   // RENDER
   const WizardWrapComponent: any = props.serializations?.components?.WizardWrap ?? WizardWrap;
 
-  //TODO: ideally shouldn't be handling translations here like this
-  const processedSections = sections?.map((section) =>
-    typeof section.name === "function" ? { ...section, name: section.name(props.translate) } : section
-  );
+  const processedSections = sections?.map((section) => ({
+    ...section,
+    name: resolveText(section.name, locale),
+  }));
 
-  const processedTitle =
-    typeof machineMeta?.title === "function" ? machineMeta.title(props.translate) : machineMeta?.title;
+  const processedTitle = resolveText(machineMeta?.title, locale);
 
   // --- If interview node
   if (stateMeta.nodeType === ID_GENERAL) {
@@ -242,7 +242,6 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
           meta={stateMeta}
           state={state}
           transition={send}
-          translate={props.translate}
           machineMeta={machineMeta}
           serializations={props.serializations}
           navigate={props.navigate}
@@ -271,7 +270,6 @@ const WizardStateMachineManagerWithoutCatch = (props: TWizardStateMachineManager
             machine={machine}
             machineMeta={machineMeta}
             serializations={props.serializations}
-            translate={props.translate}
             navigate={props.navigate}
             onMachineChange={props?.onMachineChange}
           />

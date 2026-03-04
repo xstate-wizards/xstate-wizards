@@ -1,6 +1,8 @@
 import { $TSFixMe } from "@xstate-wizards/spells";
-import { set } from "lodash";
+import { cloneDeep, set } from "lodash";
 import React from "react";
+import { useEditor } from "../../stores/EditorStore";
+import { LocalizedInput } from "../inputs/LocalizedInput";
 
 
 type TSpellSectionsEditor = {
@@ -11,6 +13,8 @@ type TSpellSectionsEditor = {
 };
 
 export const SpellSectionsEditor: React.FC<TSpellSectionsEditor> = ({ sectionsBar, states, onClose, onUpdate }) => {
+  const editorStore = useEditor();
+  const activeLocale = editorStore.activeEditingLocale || "en";
   // RENDER
   return (
     <div className="xw-sb__sections-editor" onClick={() => onClose()}>
@@ -28,10 +32,14 @@ export const SpellSectionsEditor: React.FC<TSpellSectionsEditor> = ({ sectionsBa
               {sectionsBar.map(({ name, trigger }, index) => (
                 <tr key={trigger}>
                   <td>
-                    <input
-                      type="text"
+                    <LocalizedInput
+                      activeLocale={activeLocale}
                       value={name}
-                      onChange={(e) => onUpdate(set(sectionsBar, `[${index}].name`, e.target.value))}
+                      onChange={(localizedName) => {
+                        const updated = cloneDeep(sectionsBar);
+                        updated[index] = { ...updated[index], name: localizedName };
+                        onUpdate(updated);
+                      }}
                     />
                   </td>
                   <td>
@@ -61,8 +69,8 @@ export const SpellSectionsEditor: React.FC<TSpellSectionsEditor> = ({ sectionsBa
                   <button
                     onClick={() => {
                       const name = prompt("Section Name");
-                      if (name && !sectionsBar.some((sb) => sb.name === name)) {
-                        onUpdate(sectionsBar.concat({ name }));
+                      if (name) {
+                        onUpdate(sectionsBar.concat({ name: { [activeLocale]: name } }));
                       }
                     }}
                   >

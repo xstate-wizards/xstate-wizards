@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { spellMap } from "../spells/spellMap";
-import { ID_LANGUAGE_PICKER } from "../spells/languagePicker";
+import { ID_INLINE_I18N } from "../spells/inlineI18n";
 import { WizardRunner } from "@xstate-wizards/wizards-of-react";
 import { TWizardNavigationPanelProps } from "@xstate-wizards/spells";
-import { useTranslation } from "react-i18next";
 
 export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
   allowBack,
   allowStartOver,
   exitTo,
-  machineMeta,
-  serializations,
   navigate,
   onBack,
   onStartOver,
 }) => {
-  const { t } = useTranslation();
   const [showOptions, setShowOptions] = useState(false);
 
   return (
@@ -32,7 +28,7 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
           )}
           <div>
             <button onClick={() => navigate(exitTo, { state: { skipConfirm: true } })}>
-              {t("exit")}
+              Exit
             </button>
           </div>
           {allowStartOver && (
@@ -47,28 +43,23 @@ export const WizardNavigationPanel: React.FC<TWizardNavigationPanelProps> = ({
 };
 
 export const Home = () => {
-  const [languageCode, setLanguageCode] = useState("en");
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    i18n.changeLanguage(languageCode);
-  }, [languageCode]);
+  const [locale, setLocale] = useState("en");
 
   return (
     <div className="app">
       <header className="app-header">
         <h1>i18n Example</h1>
         <div className="app-header__controls">
-          <span className="app-header__label">Language</span>
+          <span className="app-header__label">Language:</span>
           <button
-            className={languageCode === "en" ? "active" : ""}
-            onClick={() => setLanguageCode("en")}
+            className={locale === "en" ? "active" : ""}
+            onClick={() => setLocale("en")}
           >
             English
           </button>
           <button
-            className={languageCode === "es" ? "active" : ""}
-            onClick={() => setLanguageCode("es")}
+            className={locale === "es" ? "active" : ""}
+            onClick={() => setLocale("es")}
           >
             Spanish
           </button>
@@ -80,8 +71,9 @@ export const Home = () => {
           logging: true,
           skipSaves: true,
         }}
-        spellKey={ID_LANGUAGE_PICKER}
+        spellKey={ID_INLINE_I18N}
         spellMap={spellMap}
+        locale={locale}
         models={{
           User: {
             modelName: "User",
@@ -95,7 +87,6 @@ export const Home = () => {
           guards: {},
           functions: {},
         }}
-        translate={t}
         navigate={console.log}
         sessionEnabled={false}
         onWizardFinal={({ machine }) => {

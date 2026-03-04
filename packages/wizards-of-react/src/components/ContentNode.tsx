@@ -16,6 +16,7 @@ import {
   isEveryInputValid,
   isJsonLogic,
   resolveAssignId,
+  resolveText,
   TContentNode,
   TContentDefinition,
   validateInputValue,
@@ -23,6 +24,7 @@ import {
 } from "@xstate-wizards/spells";
 
 import { logger } from "../wizardDebugger";
+import { useWizardLocale } from "./WizardLocaleContext";
 // TODO: make text with auto suggest? the input for states to better handle other countries?
 import { COUNTRIES, STATES_US } from "../constants/geo";
 
@@ -107,6 +109,16 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // ===================
   const { serializations, node, state, transition, validationMap, setValidationMap } = props; // : { serializations: TWizardSerializations, node: TContentDefinition, state: $TSFixMe, transition: $TSFixMe, validationMap: TValidationMap, setValidationMap: Function }
   const contentTree = node.contentTree ?? props.contentTree; // not sure why we prefer node before props
+  // i18n: resolve localized strings
+  const locale = useWizardLocale();
+  const rt = (value: any) => resolveText(value, locale, state.context);
+  // Build per-locale data attributes (e.g. data-wiz-label-en, data-wiz-label-es) for stable test selectors
+  const localeDataAttrs = (prefix: string, value: any): Record<string, string> => {
+    if (value == null || typeof value === "string") return {};
+    return Object.fromEntries(
+      Object.entries(value).map(([loc, text]) => [`${prefix}-${loc}`, String(text)])
+    );
+  };
   // --- Input Prep
   const {
     suggestions,
@@ -442,7 +454,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.IMG) {
     return (
       <div className={`xw__image-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
-        <img key={node} src={node.src} alt={node.alt || ""} />
+        <img key={node} src={node.src} alt={rt(node.alt) || ""} />
       </div>
     );
   }
@@ -475,7 +487,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.HR) return <HR />;
   // --- Text
   if (node.type === ContentNodeType.TEXT)
-    return renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree });
+    return renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree });
   if (node.type === ContentNodeType.H1)
     return (
       <H1
@@ -483,7 +495,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H1>
     );
   if (node.type === ContentNodeType.H2)
@@ -493,7 +505,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H2>
     );
   if (node.type === ContentNodeType.H3)
@@ -503,7 +515,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H3>
     );
   if (node.type === ContentNodeType.H4)
@@ -513,7 +525,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H4>
     );
   if (node.type === ContentNodeType.H5)
@@ -523,7 +535,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H5>
     );
   if (node.type === ContentNodeType.H6)
@@ -533,7 +545,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </H6>
     );
   if (node.type === ContentNodeType.P)
@@ -543,7 +555,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </P>
     );
   if (node.type === ContentNodeType.SMALL)
@@ -553,7 +565,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </Small>
     );
   if (node.type === ContentNodeType.LABEL)
@@ -563,7 +575,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
         {node.attrs?.required && <span className="xw__node-required">*</span>}
       </Small>
     );
@@ -633,9 +645,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     return (
       <Callout className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
         {node.fullSize ? (
-          renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })
+          renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })
         ) : (
-          <Small>{renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}</Small>
+          <Small>{renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}</Small>
         )}
       </Callout>
     );
@@ -730,8 +742,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       if (node.inputType === ContentNodeInputType.AGE) {
         innerInput = (
           <AgeInput
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             className={nodeClassName(node)}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -750,8 +762,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         innerInput = (
           <Input
             {...nodeAttrsClean(node.attrs)}
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             className={nodeClassName(node, "xw__input-lg", showInputAsInvalid && "xw__input-invalid")}
             type={node.inputType}
             disabled={inputDisabled}
@@ -766,8 +778,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.CURRENCY) {
         innerInput = (
           <CurrencyInput
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             className={nodeClassName(node)}
             disabled={inputDisabled}
             value={inputValue != null ? inputValue : ""}
@@ -785,8 +797,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.DATE) {
         innerInput = (
           <SelectDatePicker
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             disabled={inputDisabled}
             className={nodeClassName(node)}
             value={inputValue}
@@ -806,8 +818,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else if (node.inputType === ContentNodeInputType.TEL) {
         innerInput = (
           <InputPhoneNumber
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             //@ts-ignore
             disabled={inputDisabled}
             className={nodeClassName(node)}
@@ -828,13 +840,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       } else {
         innerInput = (
           <Input
-            data-test-label={node.label} // DEPRECATE
-            data-wiz-label={node.label}
+            data-wiz-label={rt(node.label)}
+            {...localeDataAttrs("data-wiz-label", node.label)}
             className={nodeClassName(node, showInputAsInvalid && "xw__input-invalid")}
             type={node.inputType === ContentNodeInputType.INTEGER ? "number" : node.inputType}
             inputMode={node.inputMode}
             disabled={inputDisabled}
-            placeholder={node.placeholder}
+            placeholder={rt(node.placeholder)}
             autocomplete={node.inputType === ContentNodeInputType.PASSWORD ? false : undefined}
             value={node.value || (inputValue ?? "")}
             onChange={(e) => {
@@ -855,7 +867,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label && innerInput && (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -864,7 +876,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
               {node.labelByLine && (
                 <Small className="xw__node-byline">
-                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                  {renderWizardML({ ctx: state.context, text: rt(node.labelByLine), serializations, contentTree })}
                 </Small>
               )}
               {innerInput}
@@ -885,8 +897,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const selectOptions = evalSelectOptions(node.options, { content: contentTree, context: state.context });
       const SelectJSX = (
         <SelectComponent
-          data-test-label={node.label} // DEPRECATE
-          data-wiz-label={node.label}
+          data-wiz-label={rt(node.label)}
+          {...localeDataAttrs("data-wiz-label", node.label)}
           className={nodeClassName(node, showInputAsInvalid && "xw__select-invalid")}
           value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
           disabled={inputDisabled}
@@ -920,7 +932,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
           {selectOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
-              {opt.text}
+              {rt(opt.text)}
             </option>
           ))}
         </SelectComponent>
@@ -930,7 +942,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label ? (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -939,7 +951,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
               {node.labelByLine && (
                 <Small className="xw__node-byline">
-                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                  {renderWizardML({ ctx: state.context, text: rt(node.labelByLine), serializations, contentTree })}
                 </Small>
               )}
               {SelectJSX}
@@ -959,8 +971,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     if (node.type === ContentNodeType.TEXTAREA) {
       const TextareaJSX = (
         <Textarea
-          data-test-label={node.label} // DEPRECATE
-          data-wiz-label={node.label}
+          data-wiz-label={rt(node.label)}
+          {...localeDataAttrs("data-wiz-label", node.label)}
           className={nodeClassName(node, "xw__textarea-sm", showInputAsInvalid && "xw__textarea-invalid")}
           type={node.inputType}
           disabled={inputDisabled}
@@ -978,7 +990,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label ? (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -987,7 +999,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
               {node.labelByLine && (
                 <Small className="xw__node-byline">
-                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                  {renderWizardML({ ctx: state.context, text: rt(node.labelByLine), serializations, contentTree })}
                 </Small>
               )}
               {TextareaJSX}
@@ -1009,13 +1021,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const InputCheckboxJSX = (
         <div
           className={`xw__checkbox-btn ${!inputCheckboxValue ? "xw__cb-inverted" : ""}`}
-          data-test-label={node.text}
-          data-wiz-label={node.label}
+          data-wiz-label={rt(node.label)}
+          {...localeDataAttrs("data-wiz-label", node.label)}
           onClick={() => inputOnChange(!inputCheckboxValue)}
           {...nodeAttrsClean(node.attrs)}
         >
           <div className="xw__cb-check">{inputCheckboxValue ? <IconCheck /> : <div className="xw__cb-box" />}</div>
-          <div className="xw__cb-text">{node.text}</div>
+          <div className="xw__cb-text">{rt(node.text)}</div>
         </div>
       );
       return (
@@ -1040,7 +1052,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label && (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -1049,7 +1061,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
               {node.labelByLine && (
                 <Small className="xw__node-byline">
-                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                  {renderWizardML({ ctx: state.context, text: rt(node.labelByLine), serializations, contentTree })}
                 </Small>
               )}
             </label>
@@ -1057,8 +1069,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.inputType === "list" ? (
             <div>
               <SelectComponent
-                data-test-label={node.label} // DEPRECATE
-                data-wiz-label={node.label}
+                data-wiz-label={rt(node.label)}
+                {...localeDataAttrs("data-wiz-label", node.label)}
                 className={nodeClassName(node, showInputAsInvalid && "xw__select-invalid")}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
                 disabled={inputDisabled}
@@ -1099,7 +1111,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <option value="">{nodeAttrs?.defaultOptionText ?? "--- Select ---"}</option>
                 {selectOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.text}
+                    {rt(opt.text)}
                   </option>
                 ))}
               </SelectComponent>
@@ -1112,7 +1124,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     style={{ display: "flex", justifyContent: "space-between" }}
                     onClick={() => inputOnChange(selections.filter((v) => v !== value))}
                   >
-                    {selectOptions?.find((o) => o.value === value)?.text ?? "N/A"}{" "}
+                    {rt(selectOptions?.find((o) => o.value === value)?.text) || "N/A"}{" "}
                     <span>
                       <IconX />
                     </span>
@@ -1126,11 +1138,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div key={option?.value} className="xw__node-input">
                   <div
                     className={`xw__checkbox-btn ${!selections.includes(option?.value) ? "xw__cb-inverted" : ""}`}
-                    data-test-label={node.label}
-                    data-test-option={option.text}
-                    data-wiz-label={node.label}
+                    data-wiz-label={rt(node.label)}
+                    {...localeDataAttrs("data-wiz-label", node.label)}
                     data-wiz-option-value={String(option.value)}
-                    data-wiz-option-text={option?.text}
+                    data-wiz-option-text={rt(option?.text)}
                     onClick={() =>
                       selections.includes(option?.value)
                         ? inputOnChange(selections.filter((v) => v !== option?.value))
@@ -1141,7 +1152,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     <div className="xw__cb-check">
                       {selections.includes(option?.value) ? <IconCheck /> : <div className="xw__cb-box" />}
                     </div>
-                    <div className="xw__cb-text">{option.text}</div>
+                    <div className="xw__cb-text">{rt(option.text)}</div>
                   </div>
                 </div>
               ))}
@@ -1149,9 +1160,8 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 <div className="xw__node-input">
                   <div
                     className={`xw__checkbox-btn ${!(selections.length > 0 && selections.filter((str) => str).length === 0) ? "xw__cb-inverted" : ""}`}
-                    data-test-label={node.label}
-                    data-test-option="None of the above"
-                    data-wiz-label={node.label}
+                    data-wiz-label={rt(node.label)}
+                    {...localeDataAttrs("data-wiz-label", node.label)}
                     data-wiz-option-value=""
                     data-wiz-option-text="None of the above"
                     onClick={() => {
@@ -1191,7 +1201,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label && (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -1200,7 +1210,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               </Small>
               {node.labelByLine && (
                 <Small className="xw__node-byline">
-                  {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
+                  {renderWizardML({ ctx: state.context, text: rt(node.labelByLine), serializations, contentTree })}
                 </Small>
               )}
             </label>
@@ -1211,11 +1221,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <div key={option?.value} className="xw__node-input">
                 <div
                   className={`xw__checkbox-btn ${selection !== option?.value ? "xw__cb-inverted" : ""} ${(inputDisabled || optionDisabled) ? "xw__cb-disabled" : ""}`}
-                  data-test-label={node.label}
-                  data-test-option={option.text}
-                  data-wiz-label={node.label}
+                  data-wiz-label={rt(node.label)}
+                  {...localeDataAttrs("data-wiz-label", node.label)}
                   data-wiz-option-value={String(option.value)}
-                  data-wiz-option-text={option?.text}
+                  data-wiz-option-text={rt(option?.text)}
                   onClick={() => {
                     if (!inputDisabled && !optionDisabled && selection !== option?.value) inputOnChange(option?.value);
                   }}
@@ -1225,7 +1234,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     {selection === option?.value ? <IconCheck /> : <div className="xw__cb-box xw__cb-radio" />}
                   </div>
                   <div className="xw__cb-text">
-                    {renderWizardML({ ctx: state.context, text: option.text, serializations, contentTree })}
+                    {renderWizardML({ ctx: state.context, text: rt(option.text), serializations, contentTree })}
                   </div>
                 </div>
               </div>
@@ -1253,7 +1262,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {node.label && (
             <label>
               <Small className="xw__node-label">
-                {node.label}
+                {rt(node.label)}
                 {(node.validations || []).includes("required") ? (
                   <span className="xw__node-required">*</span>
                 ) : (
@@ -1267,7 +1276,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <div className={`xw__json-panel-inputs ${Object.keys(node.config.schema).length <= 3 ? "row" : ""}`}>
                 {Object.keys(node.config.schema).map((key) => (
                   <label key={key} className={node.config.schema[key].type} style={{ marginBottom: "10px", flex: 1 }}>
-                    <Small className="xw__node-label">{node.config.schema[key].label}</Small>
+                    <Small className="xw__node-label">{rt(node.config.schema[key].label)}</Small>
                     {(() => {
                       if (node.config.schema[key].type === ContentNodeType.SELECT) {
                         return (
@@ -1281,7 +1290,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                             <option value="">--- Select ---</option>
                             {node.config.schema[key].options.map((option) => (
                               <option key={option.value} value={option.value}>
-                                {option.text}
+                                {rt(option.text)}
                               </option>
                             ))}
                           </Select>
@@ -1305,7 +1314,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                           type={node.config.schema[key].type}
                           value={json[key] || ""}
                           checked={json[key] || ""}
-                          placeholder={node.config.schema[key].placeholder || ""}
+                          placeholder={rt(node.config.schema[key].placeholder) || ""}
                           onChange={(e) =>
                             inputOnChange(
                               set(
@@ -1340,7 +1349,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 className="xw__btn-sm xw__btn-default xw__btn-inverted"
                 onClick={() => inputOnChange(jsonArrayValue.concat({}))}
               >
-                {`+ Add ${node?.config?.addLabel || ""}`.trim()}
+                {`+ Add ${rt(node?.config?.addLabel) || ""}`.trim()}
               </Button>
             </div>
           )}
@@ -1362,7 +1371,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             className={nodeClassName(node)}
             {...nodeAttrsClean(node.attrs)}
           >
-            {node.text || "Upload / Take Picture"}
+            {rt(node.text) || "Upload / Take Picture"}
           </FileUploadButton>
           <Callout className="xw__callout-warning" style={{ textAlign: "center" }}>
             <Small>If you have issues uploading files, please try a different a browser.</Small>
@@ -1738,7 +1747,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.A) {
     return node.href?.includes("https://") ? (
       <A href={node.href} target="_blank" className={nodeClassName(node)} {...nodeAttrsClean(node.attrs)}>
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </A>
     ) : (
       <A
@@ -1749,7 +1758,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           if (node?.onClick) node?.onClick();
         }}
       >
-        {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+        {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
       </A>
     );
   }
@@ -1777,7 +1786,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         onClick={onButtonLinkClick}
         {...nodeAttrsClean(node.attrs)}
       >
-        <b>{renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}</b>
+        <b>{renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}</b>
       </ButtonLink>
     ) : (
       <A
@@ -1790,7 +1799,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         }}
       >
         <Button>
-          {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+          {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
         </Button>
       </A>
     );
@@ -1878,7 +1887,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           className={nodeClassName(node)}
           {...nodeAttrsClean(node.attrs)}
         >
-          {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
+          {renderWizardML({ ctx: state.context, text: rt(node.text), serializations, contentTree })}
         </Button>
       );
     }
@@ -1887,7 +1896,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         <ConfirmButton
           disabled={buttonIsDisabled}
           onConfirm={onButtonClick}
-          messagePrompts={node.text}
+          messagePrompts={Array.isArray(node.text) ? node.text.map(rt) : [rt(node.text)]}
           className={nodeClassName(node)}
           {...nodeAttrsClean(node.attrs)}
           serializations={{

@@ -34,7 +34,7 @@ export const SpellEditor: React.FC<TSpellEditorProps> = (props) => {
   const sidebarStore = useSidebar();
   const previewStore = usePreview();
   const [isDirty, setIsDirty] = useState(false);
-  const [config, setConfig] = useState(props.spell.config ?? {});
+  const [config, setConfig] = useState<$TSFixMe>(props.spell.config ?? {});
   const [editor, setEditor] = useState(props.spell.editor ?? {});
   const [models, setModels] = useState(props.spell.models ?? {});
   const [schema, setSchema] = useState(props.spell.schema ?? {});

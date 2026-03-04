@@ -36,5 +36,8 @@ export { wizardModelsFetching } from "./models/wizardModelsFetching";
 // VALIDATIONS
 export { validateInputValue } from "./validation/validateInputValue";
 
+// I18N
+export { resolveText } from "./i18n/resolveText";
+
 // MISC
 export { logger } from "./wizardDebugger";
