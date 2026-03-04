@@ -58,12 +58,12 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
 
   return (
     <div
-      className="xw--phone-input-wrapper"
+      className="xw__phone-input-wrapper"
       data-test-label={props["data-test-label"]}
       data-wiz-label={props["data-wiz-label"]}
     >
       {allowSelectingCountryCode === false ? (
-        <span className="xw--phone-us-code">+{defaultCountryCode}</span>
+        <span className="xw__phone-us-code">+{defaultCountryCode}</span>
       ) : (
         <Select
           className={className}
@@ -82,7 +82,7 @@ export const InputPhoneNumber: React.FC<TInputPhoneNumberProps> = ({
         </Select>
       )}
       <Input
-        className={`xw--phone-input ${className || ""}`}
+        className={`xw__phone-input ${className || ""}`}
         type="tel"
         placeholder={countryCode === "+1" ? "(###) ###-####" : "### ### ###"}
         value={phoneNumberDisplay}

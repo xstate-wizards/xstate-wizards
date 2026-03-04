@@ -47,13 +47,13 @@ export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props
   }, COUNTDOWN_INTERVAL);
 
   return (
-    <div className="xw--countdown">
-      <svg className="xw--countdown-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g className="xw--countdown-circle">
-          <circle className={`xw--countdown-elapsed ${status}`} cx="50" cy="50" r="45" />
+    <div className="xw__countdown">
+      <svg className="xw__countdown-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g className="xw__countdown-circle">
+          <circle className={`xw__countdown-elapsed ${status}`} cx="50" cy="50" r="45" />
           <path
             strokeDasharray={strokeDashArray}
-            className={`xw--countdown-remaining ${status}`}
+            className={`xw__countdown-remaining ${status}`}
             d="
               M 50, 50
               m -45, 0
@@ -63,7 +63,7 @@ export const CountdownTimer: React.FC<TCountdownTimerProps> = ({ timer, ...props
           />
         </g>
       </svg>
-      <span className={`xw--countdown-label ${status}`}>
+      <span className={`xw__countdown-label ${status}`}>
         {Math.floor(timeLeft / 1000) === 0 ? (
           <>
             <IconCheck />

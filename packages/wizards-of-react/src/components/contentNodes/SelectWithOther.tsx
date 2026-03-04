@@ -35,7 +35,7 @@ export const SelectWithOther = ({ onChange, children, ...props }) => {
   );
 
   return (
-    <div className="xw--select-with-other">
+    <div className="xw__select-with-other">
       <Select ref={selectRef} onChange={onChangeSelectHandler} {...props} value={showOther ? OTHER_VALUE : props.value}>
         {children}
         <option value={OTHER_VALUE}>Other:</option>

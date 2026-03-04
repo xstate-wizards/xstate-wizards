@@ -17,8 +17,8 @@ export const CurrencyInput: React.FC<TCurrencyInputProps> = ({
   const Input = props.serializations?.components?.Input ?? FallbackInput;
   // Handlers
   return (
-    <div className="xw--currency-input">
-      <span className="xw--currency-symbol">$</span>
+    <div className="xw__currency-input">
+      <span className="xw__currency-symbol">$</span>
       <Input
         type="text"
         className={className}

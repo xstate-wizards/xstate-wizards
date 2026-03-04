@@ -10,7 +10,7 @@ export const VideoHolder = React.forwardRef<HTMLDivElement, TVideoHolderProps>(
   ({ className, height, heightMobile, style, ...props }, ref) => (
     <div
       ref={ref}
-      className={`xw--video-holder ${className || ""}`}
+      className={`xw__video-holder ${className || ""}`}
       style={{
         ...style,
         ...(height ? { "--xw--video-height": height } as any : {}),

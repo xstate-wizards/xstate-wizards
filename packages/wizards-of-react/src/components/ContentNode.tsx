@@ -369,7 +369,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Array = Input Row (array is shorthand for node type 'row', which can allow for attrs passing like style)
   if (Array.isArray(node) || node?.type === ContentNodeType.ROW) {
     return (
-      <div {...nodeAttrsClean(node.attrs)} className={`xw--node-row ${nodeClassName(node)}`}>
+      <div {...nodeAttrsClean(node.attrs)} className={`xw__node-row ${nodeClassName(node)}`}>
         {(Array.isArray(node) ? node : node?.content || []).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
@@ -441,7 +441,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Image
   if (node.type === ContentNodeType.IMG) {
     return (
-      <div className={`xw--image-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
+      <div className={`xw__image-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
         <img key={node} src={node.src} alt={node.alt || ""} />
       </div>
     );
@@ -449,7 +449,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.ILLUSTRATION) {
     // Cancel out any height/width properties on svg default
     return (
-      <div className={`xw--illustration-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
+      <div className={`xw__illustration-wrapper ${nodeClassName(node)}`} {...nodeAttrsClean(node.attrs)}>
         <node.svg height="100%" width="100%" />
       </div>
     );
@@ -559,12 +559,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (node.type === ContentNodeType.LABEL)
     return (
       <Small
-        className={nodeClassName(node, "xw--node-label")}
+        className={nodeClassName(node, "xw__node-label")}
         {...nodeAttrsClean(node.attrs)}
         onClick={() => (typeof node.onClick === "function" ? node.onClick({ transition }) : undefined)}
       >
         {renderWizardML({ ctx: state.context, text: node.text, serializations, contentTree })}
-        {node.attrs?.required && <span className="xw--node-required">*</span>}
+        {node.attrs?.required && <span className="xw__node-required">*</span>}
       </Small>
     );
   // --- Lists
@@ -662,7 +662,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // --- Timers
   if (node.type === ContentNodeType.COUNTDOWN_TIMER) {
     return (
-      <div className={`xw--countdown-node ${nodeClassName(node)}`}>
+      <div className={`xw__countdown-node ${nodeClassName(node)}`}>
         <CountdownTimer timer={node.config.timer} serializations={{ ...fallbackComponents, ...serializations }} />
       </div>
     );
@@ -676,13 +676,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       // TODO: Maybe make the description a bit more descriptive?
       // <Small>No {startCase(node.resourceType).toLowerCase()}s listed.</Small>
       return (
-        <div className="xw--resources-list xw--empty">
+        <div className="xw__resources-list xw__empty">
           <Small>None listed.</Small>
         </div>
       );
     }
     return (
-      <div className="xw--resources-list">
+      <div className="xw__resources-list">
         {(node?.items || []).map((resource, resourceIndex) => (
           <ResourcePanel
             key={`${node.resourceType}-${resourceIndex}`}
@@ -752,7 +752,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             {...nodeAttrsClean(node.attrs)}
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            className={nodeClassName(node, "xw--input-lg", showInputAsInvalid && "xw--input-invalid")}
+            className={nodeClassName(node, "xw__input-lg", showInputAsInvalid && "xw__input-invalid")}
             type={node.inputType}
             disabled={inputDisabled}
             checked={inputValue || false}
@@ -830,7 +830,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           <Input
             data-test-label={node.label} // DEPRECATE
             data-wiz-label={node.label}
-            className={nodeClassName(node, showInputAsInvalid && "xw--input-invalid")}
+            className={nodeClassName(node, showInputAsInvalid && "xw__input-invalid")}
             type={node.inputType === ContentNodeInputType.INTEGER ? "number" : node.inputType}
             inputMode={node.inputMode}
             disabled={inputDisabled}
@@ -849,21 +849,21 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       return (
         <div
           style={node.divProps?.style || {}}
-          className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""} ${node.inputType ?? ""}`}
+          className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""} ${node.inputType ?? ""}`}
         >
           {!node.label && innerInput}
           {node.label && innerInput && (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
               </Small>
               {node.labelByLine && (
-                <Small className="xw--node-byline">
+                <Small className="xw__node-byline">
                   {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
                 </Small>
               )}
@@ -871,7 +871,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             </label>
           )}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -887,7 +887,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         <SelectComponent
           data-test-label={node.label} // DEPRECATE
           data-wiz-label={node.label}
-          className={nodeClassName(node, showInputAsInvalid && "xw--select-invalid")}
+          className={nodeClassName(node, showInputAsInvalid && "xw__select-invalid")}
           value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
           disabled={inputDisabled}
           onChange={(e) => {
@@ -926,19 +926,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         </SelectComponent>
       );
       return (
-        <div className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""}`} {...nodeAttrs}>
+        <div className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""}`} {...nodeAttrs}>
           {node.label ? (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
               </Small>
               {node.labelByLine && (
-                <Small className="xw--node-byline">
+                <Small className="xw__node-byline">
                   {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
                 </Small>
               )}
@@ -948,7 +948,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             SelectJSX
           )}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -961,7 +961,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         <Textarea
           data-test-label={node.label} // DEPRECATE
           data-wiz-label={node.label}
-          className={nodeClassName(node, "xw--textarea-sm", showInputAsInvalid && "xw--textarea-invalid")}
+          className={nodeClassName(node, "xw__textarea-sm", showInputAsInvalid && "xw__textarea-invalid")}
           type={node.inputType}
           disabled={inputDisabled}
           value={inputValue || ""}
@@ -974,19 +974,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         />
       );
       return (
-        <div className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""}`}>
+        <div className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""}`}>
           {node.label ? (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
               </Small>
               {node.labelByLine && (
-                <Small className="xw--node-byline">
+                <Small className="xw__node-byline">
                   {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
                 </Small>
               )}
@@ -996,7 +996,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             TextareaJSX
           )}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -1008,21 +1008,21 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const inputCheckboxValue = typeof node.selected === "boolean" ? node.selected : inputValue;
       const InputCheckboxJSX = (
         <div
-          className={`xw--checkbox-btn ${!inputCheckboxValue ? "xw--cb-inverted" : ""}`}
+          className={`xw__checkbox-btn ${!inputCheckboxValue ? "xw__cb-inverted" : ""}`}
           data-test-label={node.text}
           data-wiz-label={node.label}
           onClick={() => inputOnChange(!inputCheckboxValue)}
           {...nodeAttrsClean(node.attrs)}
         >
-          <div className="xw--cb-check">{inputCheckboxValue ? <IconCheck /> : <div className="xw--cb-box" />}</div>
-          <div className="xw--cb-text">{node.text}</div>
+          <div className="xw__cb-check">{inputCheckboxValue ? <IconCheck /> : <div className="xw__cb-box" />}</div>
+          <div className="xw__cb-text">{node.text}</div>
         </div>
       );
       return (
-        <div className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""}`}>
+        <div className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""}`}>
           {InputCheckboxJSX}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -1036,19 +1036,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const selections = inputValue || [];
       const nodeAttrs = omit(node.attrs || {}, ["canInputOther"]);
       return (
-        <div className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""}`}>
+        <div className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""}`}>
           {node.label && (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
               </Small>
               {node.labelByLine && (
-                <Small className="xw--node-byline">
+                <Small className="xw__node-byline">
                   {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
                 </Small>
               )}
@@ -1059,7 +1059,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
               <SelectComponent
                 data-test-label={node.label} // DEPRECATE
                 data-wiz-label={node.label}
-                className={nodeClassName(node, showInputAsInvalid && "xw--select-invalid")}
+                className={nodeClassName(node, showInputAsInvalid && "xw__select-invalid")}
                 value={inputValue != null ? inputValue : ""} // Do a != null check because $0 are falsey and lead to a '' input
                 disabled={inputDisabled}
                 onChange={(e) => {
@@ -1103,7 +1103,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   </option>
                 ))}
               </SelectComponent>
-              <div className="xw--multi-select-list">
+              <div className="xw__multi-select-list">
                 {selections.map((value) => (
                   <Button
                     key={value}
@@ -1123,9 +1123,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           ) : (
             <>
               {selectOptions.map((option) => (
-                <div key={option?.value} className="xw--node-input">
+                <div key={option?.value} className="xw__node-input">
                   <div
-                    className={`xw--checkbox-btn ${!selections.includes(option?.value) ? "xw--cb-inverted" : ""}`}
+                    className={`xw__checkbox-btn ${!selections.includes(option?.value) ? "xw__cb-inverted" : ""}`}
                     data-test-label={node.label}
                     data-test-option={option.text}
                     data-wiz-label={node.label}
@@ -1138,17 +1138,17 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     }
                     {...nodeAttrsClean(node.attrs)}
                   >
-                    <div className="xw--cb-check">
-                      {selections.includes(option?.value) ? <IconCheck /> : <div className="xw--cb-box" />}
+                    <div className="xw__cb-check">
+                      {selections.includes(option?.value) ? <IconCheck /> : <div className="xw__cb-box" />}
                     </div>
-                    <div className="xw--cb-text">{option.text}</div>
+                    <div className="xw__cb-text">{option.text}</div>
                   </div>
                 </div>
               ))}
               {node?.attrs?.canSelectNone === true && (
-                <div className="xw--node-input">
+                <div className="xw__node-input">
                   <div
-                    className={`xw--checkbox-btn ${!(selections.length > 0 && selections.filter((str) => str).length === 0) ? "xw--cb-inverted" : ""}`}
+                    className={`xw__checkbox-btn ${!(selections.length > 0 && selections.filter((str) => str).length === 0) ? "xw__cb-inverted" : ""}`}
                     data-test-label={node.label}
                     data-test-option="None of the above"
                     data-wiz-label={node.label}
@@ -1162,21 +1162,21 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                     }}
                     {...nodeAttrsClean(node.attrs)}
                   >
-                    <div className="xw--cb-check">
+                    <div className="xw__cb-check">
                       {selections.length > 0 && selections.filter((str) => str).length === 0 ? (
                         <IconCheck />
                       ) : (
-                        <div className="xw--cb-box" />
+                        <div className="xw__cb-box" />
                       )}
                     </div>
-                    <div className="xw--cb-text">None of the above</div>
+                    <div className="xw__cb-text">None of the above</div>
                   </div>
                 </div>
               )}
             </>
           )}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -1187,19 +1187,19 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     if (node.type === ContentNodeType.RADIO_SELECT) {
       const selection = node.selected || inputValue;
       return (
-        <div className={`xw--node-input ${showInputAsInvalid ? "xw--invalid" : ""}`}>
+        <div className={`xw__node-input ${showInputAsInvalid ? "xw__invalid" : ""}`}>
           {node.label && (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
               </Small>
               {node.labelByLine && (
-                <Small className="xw--node-byline">
+                <Small className="xw__node-byline">
                   {renderWizardML({ ctx: state.context, text: node.labelByLine, serializations, contentTree })}
                 </Small>
               )}
@@ -1208,9 +1208,9 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           {evalSelectOptions(node.options, { content: contentTree, context: state.context }).map((option) => {
             const optionDisabled = typeof option.disabled === "function" ? option.disabled() : false;
             return (
-              <div key={option?.value} className="xw--node-input">
+              <div key={option?.value} className="xw__node-input">
                 <div
-                  className={`xw--checkbox-btn ${selection !== option?.value ? "xw--cb-inverted" : ""} ${(inputDisabled || optionDisabled) ? "xw--cb-disabled" : ""}`}
+                  className={`xw__checkbox-btn ${selection !== option?.value ? "xw__cb-inverted" : ""} ${(inputDisabled || optionDisabled) ? "xw__cb-disabled" : ""}`}
                   data-test-label={node.label}
                   data-test-option={option.text}
                   data-wiz-label={node.label}
@@ -1221,10 +1221,10 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                   }}
                   {...nodeAttrsClean(node.attrs)}
                 >
-                  <div className="xw--cb-check">
-                    {selection === option?.value ? <IconCheck /> : <div className="xw--cb-box xw--cb-radio" />}
+                  <div className="xw__cb-check">
+                    {selection === option?.value ? <IconCheck /> : <div className="xw__cb-box xw__cb-radio" />}
                   </div>
-                  <div className="xw--cb-text">
+                  <div className="xw__cb-text">
                     {renderWizardML({ ctx: state.context, text: option.text, serializations, contentTree })}
                   </div>
                 </div>
@@ -1232,7 +1232,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             );
           })}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation">
+            <Small className="xw__node-validation">
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -1246,16 +1246,16 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       const jsonArrayValue = inputValue || [];
       return (
         <div
-          className={`xw--node-input xw--json-array ${nodeClassName(node)} ${
-            showInputAsInvalid ? "xw--invalid" : ""
+          className={`xw__node-input xw__json-array ${nodeClassName(node)} ${
+            showInputAsInvalid ? "xw__invalid" : ""
           }`}
         >
           {node.label && (
             <label>
-              <Small className="xw--node-label">
+              <Small className="xw__node-label">
                 {node.label}
                 {(node.validations || []).includes("required") ? (
-                  <span className="xw--node-required">*</span>
+                  <span className="xw__node-required">*</span>
                 ) : (
                   ""
                 )}
@@ -1263,11 +1263,11 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             </label>
           )}
           {jsonArrayValue.map((json, jsonI, jsonArr) => (
-            <div className="xw--json-panel" key={jsonI}>
-              <div className={`xw--json-panel-inputs ${Object.keys(node.config.schema).length <= 3 ? "row" : ""}`}>
+            <div className="xw__json-panel" key={jsonI}>
+              <div className={`xw__json-panel-inputs ${Object.keys(node.config.schema).length <= 3 ? "row" : ""}`}>
                 {Object.keys(node.config.schema).map((key) => (
                   <label key={key} className={node.config.schema[key].type} style={{ marginBottom: "10px", flex: 1 }}>
-                    <Small className="xw--node-label">{node.config.schema[key].label}</Small>
+                    <Small className="xw__node-label">{node.config.schema[key].label}</Small>
                     {(() => {
                       if (node.config.schema[key].type === ContentNodeType.SELECT) {
                         return (
@@ -1336,7 +1336,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             </div>
           ))}
           {(!node?.config?.limit || jsonArrayValue.length < node?.config?.limit) && (
-            <div className="xw--json-add">
+            <div className="xw__json-add">
               <Button
                 type="button"
                 size="sm"
@@ -1349,7 +1349,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             </div>
           )}
           {showInputAsInvalid && (
-            <Small className="xw--node-validation" style={{ textAlign: "center" }}>
+            <Small className="xw__node-validation" style={{ textAlign: "center" }}>
               {validationMap[pathToValue]?.validationError}
             </Small>
           )}
@@ -1368,7 +1368,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           >
             {node.text || "Upload / Take Picture"}
           </FileUploadButton>
-          <Callout className="xw--callout-warning" style={{ textAlign: "center" }}>
+          <Callout className="xw__callout-warning" style={{ textAlign: "center" }}>
             <Small>If you have issues uploading files, please try a different a browser.</Small>
           </Callout>
         </>
@@ -1440,12 +1440,12 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
           />
         )}
         {suggestions && suggestions.status === "OK" && suggestions.data.length > 0 && (
-          <div className="xw--address-suggestions">
+          <div className="xw__address-suggestions">
             <div id="address-suggestions__throw-away-map" />
             {suggestions.data.slice(0, 3).map((d) => (
               <div
                 key={d.reference}
-                className="xw--address-place"
+                className="xw__address-place"
                 onClick={() => {
                   // CORS blocks details request. So we have to do it through this map/service method
                   // google is loaded onto the window by a script tag in index.hbs
@@ -1547,13 +1547,13 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
                 {d.description}
               </div>
             ))}
-            <div className="xw--address-close" onClick={() => clearSuggestions()}>
+            <div className="xw__address-close" onClick={() => clearSuggestions()}>
               Close Suggestions
             </div>
           </div>
         )}
         {node.config?.street2?.enabled !== false && (
-          <div className="xw--node-row">
+          <div className="xw__node-row">
             {node.config?.unit?.enabled === true && (
               <ContentNode
                 {...extendAddressChildNode(props, {
@@ -1626,7 +1626,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
             serializations={serializations}
           />
         )}
-        <div className="xw--node-row">
+        <div className="xw__node-row">
           {node.config?.state?.enabled !== false && (
             <ContentNode
               {...extendAddressChildNode(props, {
@@ -1679,7 +1679,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       <>
         {node.content.map((resourceNode, resourceNodeIndex) => {
           return Array.isArray(resourceNode) || resourceNode?.type === ContentNodeType.ROW ? (
-            <div className="xw--node-row" key={resourceNodeIndex}>
+            <div className="xw__node-row" key={resourceNodeIndex}>
               {(Array.isArray(resourceNode) ? resourceNode : resourceNode?.content || []).map(
                 (rowResourceNode, rowResourceNodeIndex) => (
                   <ContentNode
@@ -1774,7 +1774,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
 
     return (node.href || "")[0] !== "/" || node?.attrs?.target === "_blank" ? (
       <ButtonLink
-        className={nodeClassName(node, "xw--btn-link")}
+        className={nodeClassName(node, "xw__btn-link")}
         href={node.href}
         target="_blank"
         rel="noopener noreferrer"
@@ -1785,7 +1785,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       </ButtonLink>
     ) : (
       <A
-        className={nodeClassName(node, "xw--btn-link")}
+        className={nodeClassName(node, "xw__btn-link")}
         to={node.href}
         {...nodeAttrsClean(node.attrs)}
         onClick={() => {
@@ -1904,7 +1904,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     // For inline buttons, we want to wrap them in a div so they don't auto-expand fully and push to button
     if (node?.attrs?.inline) {
       return (
-        <div className="xw--inline-btn-wrapper">
+        <div className="xw__inline-btn-wrapper">
           <div>{btn}</div>
         </div>
       );

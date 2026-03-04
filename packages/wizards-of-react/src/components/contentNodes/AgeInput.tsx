@@ -32,7 +32,7 @@ export const AgeInput: React.FC<TAgeInputProps> = ({ className, dataTestId, disa
   };
 
   return (
-    <InputRow className="xw--age-input">
+    <InputRow className="xw__age-input">
       <Select
         className={className}
         value={Math.trunc(Number(value || 0))}

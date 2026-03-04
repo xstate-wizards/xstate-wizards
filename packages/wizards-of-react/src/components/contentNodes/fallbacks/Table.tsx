@@ -4,7 +4,7 @@ export const Table = React.forwardRef<HTMLTableElement, any>(
   ({ className, width, style, ...props }, ref) => (
     <table
       ref={ref}
-      className={`xw--table ${className || ""}`}
+      className={`xw__table ${className || ""}`}
       style={width ? { ...style, width } : style}
       {...props}
     />

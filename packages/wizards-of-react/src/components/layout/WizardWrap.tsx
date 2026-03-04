@@ -5,7 +5,7 @@ import { P } from "../contentNodes/fallbacks/P";
 import { Small } from "../contentNodes/fallbacks/Small";
 
 // SINGLE WIZARD WRAP — full-featured (header, progress bar, section bar)
-// Consumers can hide elements via CSS (e.g. `.xw--header { display: none; }`)
+// Consumers can hide elements via CSS (e.g. `.xw__header { display: none; }`)
 export const WizardWrap = (props) => {
   const {
     children,
@@ -23,26 +23,26 @@ export const WizardWrap = (props) => {
   const shouldOverflow = sections && (sections.length > 3 || sections.map((s) => s.name).join("").length > 34);
 
   return (
-    <div className="xw--wrap">
-      {title != null && <div className="xw--header">{title}</div>}
+    <div className="xw__wrap">
+      {title != null && <div className="xw__header">{title}</div>}
       {progress ? (
         <div
-          className="xw--progress-bar"
+          className="xw__progress-bar"
           style={{ "--xw--progress": `${progress * 100}%` } as React.CSSProperties}
         >
-          <span className="xw--progress-counter">{Math.floor(progress * 100)}%</span>
-          <span className="xw--progress-flag">
+          <span className="xw__progress-counter">{Math.floor(progress * 100)}%</span>
+          <span className="xw__progress-flag">
             <IconFlag />
           </span>
         </div>
       ) : null}
       {sections ? (
-        <div className="xw--section-bar" data-overflow={shouldOverflow ? "" : undefined}>
-          <div className="xw--section-scroll">
+        <div className="xw__section-bar" data-overflow={shouldOverflow ? "" : undefined}>
+          <div className="xw__section-scroll">
             {sections.map((section) => (
               <span
                 key={section.trigger}
-                className={`xw--section-tag ${section.highlight ? "xw--highlight" : ""}`}
+                className={`xw__section-tag ${section.highlight ? "xw__highlight" : ""}`}
               >
                 {section.name}
               </span>
@@ -52,7 +52,7 @@ export const WizardWrap = (props) => {
       ) : null}
       {showResourcesUpdatesWarning && <ResourcesUpdatesWarning />}
       <form
-        className="xw--body"
+        className="xw__body"
         onSubmit={(e) => e.preventDefault()}
         data-wiz-entry-machine-id={dataWizEntryMachineId}
         data-wiz-entry-machine-state={dataWizEntryMachineState}
@@ -78,7 +78,7 @@ const ResourcesUpdatesWarning = () => {
   const onMouseLeave = useCallback(() => setExpanded(false), []);
   return (
     <Callout
-      className="xw--resources-warning"
+      className="xw__resources-warning"
       variant="warning"
       onClick={() => setExpanded((e) => !e)}
       onMouseLeave={onMouseLeave}

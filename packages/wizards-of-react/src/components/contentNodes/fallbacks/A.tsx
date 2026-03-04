@@ -2,6 +2,6 @@ import React from "react";
 
 export const A = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
   ({ className, ...props }, ref) => (
-    <a ref={ref} className={`xw--a ${className || ""}`} {...props} />
+    <a ref={ref} className={`xw__a ${className || ""}`} {...props} />
   )
 );
