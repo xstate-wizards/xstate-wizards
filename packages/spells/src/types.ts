@@ -90,6 +90,7 @@ export type TContentDefinition = {
   disabledByFreshDelay?: boolean; // disables button briefly on state entry to prevent double-clicks
   event?: string | Record<string, any>; // machine transition config
   assign?: TContextFn | string | Record<string, any>; // context assignment handling — string path, function, or { modelName, id, path } object
+  classNames?: string; // CSS class names for styling (e.g. "xw__btn-lg xw__btn-warning")
   attrs?: Record<string, any>; // Pass values like className, style, disabled checking fn, other attributes
   disabled?: TContextFn<boolean>; // can't destructure like other attributes
   selected?: TContextFn<boolean>; // mostly for inputCheckboxButton so we can invert/change color when selected

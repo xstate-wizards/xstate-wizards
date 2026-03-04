@@ -8,7 +8,7 @@ export * from "./constants/inputs";
 export * from "./constants/localStorage";
 export * from "./constants/nodeTypes";
 export * from "./constants/stateTargets";
-export { ValdidationTypes } from "./constants/validationConstants";
+export { ValidationTypes, ValidationTypes as ValdidationTypes } from "./constants/validationConstants";
 
 // MACHINES
 export { createSpell } from "./machines/createSpell";

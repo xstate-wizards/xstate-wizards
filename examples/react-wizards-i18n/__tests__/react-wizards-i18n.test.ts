@@ -5,7 +5,7 @@ test.describe("i18n Language Switching Flow", () => {
     await page.goto("/");
 
     // --- Verify English is the default language ---
-    await expect(page.getByText("Language Changing Test")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText("i18n Example")).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText("English Title")).toBeVisible();
     // English content nodes
     await expect(page.locator("h3").filter({ hasText: "English" }).first()).toBeVisible();
@@ -35,7 +35,7 @@ test.describe("i18n Language Switching Flow", () => {
 
   test("displays Spanish translations in second state when Spanish is selected", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("Language Changing Test")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText("i18n Example")).toBeVisible({ timeout: 10_000 });
 
     // Switch to Spanish first
     await page.getByRole("button", { name: "Spanish" }).click();

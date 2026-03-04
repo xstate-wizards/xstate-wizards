@@ -1,4 +1,4 @@
-export enum ValdidationTypes {
+export enum ValidationTypes {
   // base
   required = "required",
   positiveNumber = "positiveNumber",
