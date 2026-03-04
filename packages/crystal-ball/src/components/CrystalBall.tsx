@@ -6,9 +6,9 @@ import { NodeNotes } from "./contentNodes/NodeNotes";
 import { useOutline } from "../data/OutlineStore";
 
 const nodeHighlightsToClassName = (graphJSONId, nodeHighlights): string => {
-  return `${nodeHighlights.sourceId === graphJSONId ? "xw-cb--source" : ""} ${
-    nodeHighlights.targetIds.some((id) => graphJSONId.includes(id)) ? "xw-cb--edge" : ""
-  } ${nodeHighlights.targetIds.some((id) => id === graphJSONId) ? "xw-cb--target" : ""}`.trim();
+  return `${nodeHighlights.sourceId === graphJSONId ? "xw-cb__source" : ""} ${
+    nodeHighlights.targetIds.some((id) => graphJSONId.includes(id)) ? "xw-cb__edge" : ""
+  } ${nodeHighlights.targetIds.some((id) => id === graphJSONId) ? "xw-cb__target" : ""}`.trim();
 };
 
 type TCrystalBallProps = {
@@ -83,7 +83,7 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
 
   // RENDER
   return (
-    <div className="xw-cb--crystal-ball">
+    <div className="xw-cb__crystal-ball">
       {directedGraph.children.map((graphJSON, childIndex) => {
         const nodeType = get(graphJSON.stateNode, "meta.nodeType");
         const meta = get(graphJSON.stateNode, "meta", {});
@@ -98,9 +98,9 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
             <div
               key={`${childIndex}-${graphJSON.id}`}
               id={graphJSON.id}
-              className={`xw-cb--node ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
+              className={`xw-cb__node ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
             >
-              <div className={`xw-cb--node-header ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}>
+              <div className={`xw-cb__node-header ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}>
                 {(() => {
                   if (outliner.nodeHighlights.sourceId === graphJSON.id) return "CURRENT";
                   if (outliner.nodeHighlights.targetIds.some((id) => id === graphJSON.id)) return "NEXT";
@@ -133,10 +133,10 @@ export const CrystalBall: React.FC<TCrystalBallProps> = ({ spellKey, spellMap })
             <div
               key={`${childIndex}-${graphJSON.id}`}
               id={graphJSON.id}
-              className={`xw-cb--machine-section ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
+              className={`xw-cb__machine-section ${nodeHighlightsToClassName(graphJSON.id, outliner.nodeHighlights)}`}
             >
               <CrystalBall spellKey={machineId} spellMap={spellMap} />
-              <div className="xw-cb--machine-section__done-conditions">
+              <div className="xw-cb__machine-section__done-conditions">
                 {graphJSON.edges
                   .filter((e) => e.label.text.includes("done"))
                   .map((edge, edgeIndex) => (

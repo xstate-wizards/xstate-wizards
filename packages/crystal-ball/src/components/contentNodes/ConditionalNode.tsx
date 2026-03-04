@@ -21,10 +21,10 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) 
 
   // RENDER
   return (
-    <div className="xw-cb--conditional">
-      <div className="xw-cb--conditional__description">
+    <div className="xw-cb__conditional">
+      <div className="xw-cb__conditional__description">
         <span>CONDITIONAL UI: {contentNode.description}</span>
-        <span className="xw-cb--conditional__description__toggles">
+        <span className="xw-cb__conditional__description__toggles">
           {contentNode.options ? (
             <select onChange={(ev) => handleLocalToggle(ev.target.value)} value={show}>
               <option value="all">All</option>
@@ -47,9 +47,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) 
         </span>
       </div>
       {contentNode.hasOwnProperty("true") && ["all", "true"].includes(show) && (
-        <div className="xw-cb--conditional__section">
-          <div className="xw-cb--conditional__section__title">TRUE →</div>
-          <div className="xw-cb--conditional__section__nodes">
+        <div className="xw-cb__conditional__section">
+          <div className="xw-cb__conditional__section__title">TRUE →</div>
+          <div className="xw-cb__conditional__section__nodes">
             {(contentNode.true || []).map((newNode, nci) => (
               <Fragment key={nci}>
                 {contentNodeToOutlineNode({
@@ -65,9 +65,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) 
         </div>
       )}
       {contentNode.hasOwnProperty("false") && ["all", "false"].includes(show) && (
-        <div className="xw-cb--conditional__section">
-          <div className="xw-cb--conditional__section__title">FALSE →</div>
-          <div className="xw-cb--conditional__section__nodes">
+        <div className="xw-cb__conditional__section">
+          <div className="xw-cb__conditional__section__title">FALSE →</div>
+          <div className="xw-cb__conditional__section__nodes">
             {(contentNode.false || []).map((newNode, nci) => (
               <Fragment key={nci}>
                 {contentNodeToOutlineNode({
@@ -86,9 +86,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) 
         Object.entries(contentNode.options)
           .filter(([key]) => show === "all" || show === key)
           .map(([key, optionNode], index) => (
-            <div key={`${key}-${index}`} className="xw-cb--conditional__section">
-              <div className="xw-cb--conditional__section__title">{key} →</div>
-              <div className="xw-cb--conditional__section__nodes">
+            <div key={`${key}-${index}`} className="xw-cb__conditional__section">
+              <div className="xw-cb__conditional__section__title">{key} →</div>
+              <div className="xw-cb__conditional__section__nodes">
                 {/* @ts-ignore */}
                 {(optionNode || []).map((newNode, nci) => (
                   <Fragment key={nci}>

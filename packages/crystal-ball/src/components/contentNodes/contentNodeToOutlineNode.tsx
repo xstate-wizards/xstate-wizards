@@ -24,7 +24,7 @@ export const contentNodeToOutlineNode = ({
   // --- Component
   if (contentNode.type === ContentNodeType.COMPONENT) {
     return contentNode.alt || typeof contentNode.component === "string" ? (
-      <div className="xw-cb--component-placeholder">{contentNode.alt ?? contentNode.component}</div>
+      <div className="xw-cb__component-placeholder">{contentNode.alt ?? contentNode.component}</div>
     ) : (
       contentNode.component({ transition: () => null })
     );
@@ -66,11 +66,11 @@ export const contentNodeToOutlineNode = ({
     );
     const forEachItems = evalForEachItems(contentNode, { context: ctx });
     return (
-      <div className="xw-cb--conditional">
-        <div className="xw-cb--conditional__description">
+      <div className="xw-cb__conditional">
+        <div className="xw-cb__conditional__description">
           <span>Can rendering multiple of...</span>
         </div>
-        <div className="xw-cb--conditional__section">
+        <div className="xw-cb__conditional__section">
           {forEachItems.map((node) =>
             contentNodeToOutlineNode({ contentNode: node, contentNodeIndex: ci, context: ctx, graphJSON, outliner })
           )}
@@ -143,7 +143,7 @@ export const contentNodeToOutlineNode = ({
   if (contentNode.type === ContentNodeType.ILLUSTRATION) {
     // TODO: Handle rendering SVGs in a concise way
     return (
-      <div className="xw-cb--media-placeholder">
+      <div className="xw-cb__media-placeholder">
         {contentNode.alt ? `${contentNode.alt} (SVG)` : "SVG Missing Alt Text"}
       </div>
     );
@@ -151,7 +151,7 @@ export const contentNodeToOutlineNode = ({
   if (contentNode.type === ContentNodeType.IMG) {
     // TODO: Handle rendering imgs in a concise way
     return (
-      <div className="xw-cb--media-placeholder">
+      <div className="xw-cb__media-placeholder">
         {contentNode.alt ? `${contentNode.alt} (IMG)` : "IMG Missing Alt Text"}
       </div>
     );
@@ -254,7 +254,7 @@ export const contentNodeToOutlineNode = ({
   // --- Resources
   if (contentNode.type === ContentNodeType.RESOURCE_EDITOR) {
     return (
-      <div className="xw-cb--outline-component">
+      <div className="xw-cb__outline-component">
         {contentNode.content.map((newNode, nci) => (
           <Fragment key={nci}>
             {contentNodeToOutlineNode({
@@ -270,7 +270,7 @@ export const contentNodeToOutlineNode = ({
     );
   }
   if (contentNode.type === ContentNodeType.RESOURCES_LIST) {
-    return <div className="xw-cb--component-placeholder">Resources List: {contentNode.resourceType}</div>;
+    return <div className="xw-cb__component-placeholder">Resources List: {contentNode.resourceType}</div>;
   }
   // --- Buttons
   if (contentNode.type === ContentNodeType.BUTTON_LINK) {
@@ -286,10 +286,10 @@ export const contentNodeToOutlineNode = ({
     return (
       <div
         key={ci}
-        className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "xw-cb--back-button" : ""}
+        className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "xw-cb__back-button" : ""}
       >
         <button
-          className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "xw-cb--back-button" : ""}
+          className={get(contentNode, "attrs.className") === "x-wizard__header-back-button" ? "xw-cb__back-button" : ""}
           disabled={!contentNode.event}
           onClick={() => {
             if (graphJSON && contentNode.event) {
@@ -310,13 +310,13 @@ export const contentNodeToOutlineNode = ({
   // --- Inputs
   if (contentNode.type === ContentNodeType.INPUT) {
     return (
-      <div className="xw-cb--input" key={ci}>
+      <div className="xw-cb__input" key={ci}>
         {contentNode.label && (
           <label>
             {contentNode.label ? contentNode.label : ""}
             {contentNode.validations && contentNode.validations.includes("required") ? (
               <>
-                <span className="xw-cb--required-star">*</span>
+                <span className="xw-cb__required-star">*</span>
               </>
             ) : (
               ""
@@ -329,13 +329,13 @@ export const contentNodeToOutlineNode = ({
   }
   if (contentNode.type === ContentNodeType.TEXTAREA) {
     return (
-      <div className="xw-cb--input" key={ci}>
+      <div className="xw-cb__input" key={ci}>
         {contentNode.label && (
           <label>
             {contentNode.label ? contentNode.label : ""}
             {contentNode.validations && contentNode.validations.includes("required") ? (
               <>
-                <span className="xw-cb--required-star">*</span>
+                <span className="xw-cb__required-star">*</span>
               </>
             ) : (
               ""
@@ -350,7 +350,7 @@ export const contentNodeToOutlineNode = ({
   if (contentNode.type === ContentNodeType.SELECT) {
     const selectOptions = evalSelectOptions(contentNode.options, { content: contentNode.contentTree, context: ctx });
     return (
-      <div className="xw-cb--input" key={ci}>
+      <div className="xw-cb__input" key={ci}>
         {contentNode.label && <label>{contentNode.label ? <>{contentNode.label}</> : ""}</label>}
         <select>
           {selectOptions.map((opt) => (
@@ -364,7 +364,7 @@ export const contentNodeToOutlineNode = ({
   }
   if (contentNode.type === ContentNodeType.INPUT_CHECKBOX_BUTTON) {
     return (
-      <div className="xw-cb--input">
+      <div className="xw-cb__input">
         <button key={ci} type={contentNode.inputType} disabled style={{ textAlign: "left", width: "100%" }}>
           ☑︎ {contentNode.text}
         </button>
@@ -373,7 +373,7 @@ export const contentNodeToOutlineNode = ({
   }
   if ([ContentNodeType.MULTI_SELECT, ContentNodeType.RADIO_SELECT].includes(contentNode.type)) {
     return (
-      <div className="xw-cb--input">
+      <div className="xw-cb__input">
         {contentNode.options.map((option) => (
           <div key={option.text}>
             <input type={contentNode.type === "radioSelect" ? "radio" : "checkbox"} />
@@ -387,43 +387,43 @@ export const contentNodeToOutlineNode = ({
     return (
       <>
         {contentNode.config?.street1?.enabled && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>Street 1</label>
             <input type="text" disabled />
           </div>
         )}
         {contentNode.config?.street2?.enabled && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>Street 2</label>
             <input type="text" disabled />
           </div>
         )}
         {contentNode.config?.notStable?.enabled === true && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>I am experiencing homelessness</label>
             <input type="checkbox" disabled />
           </div>
         )}
         {contentNode.config?.county?.enabled === true && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>County</label>
             <input type="text" disabled />
           </div>
         )}
         {contentNode.config?.city?.enabled && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>City</label>
             <input type="text" disabled />
           </div>
         )}
         {contentNode.config?.state?.enabled && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>State</label>
             <select disabled />
           </div>
         )}
         {contentNode.config?.country?.enabled === true && (
-          <div className="xw-cb--input">
+          <div className="xw-cb__input">
             <label>Country</label>
             <select disabled />
           </div>
@@ -441,7 +441,7 @@ export const contentNodeToOutlineNode = ({
       const nodesAreSame = isEqual(JSON.stringify(nodesIfTrue), JSON.stringify(nodesIfFalse));
       const nodesBothHaveLength = nodesIfTrue.length > 0 && nodesIfFalse.length > 0;
       return (
-        <div key={ci} className="xw-cb--conditional-ui">
+        <div key={ci} className="xw-cb__conditional-ui">
           {nodesAreSame && nodesBothHaveLength ? (
             <div>
               {contentNode({ __outline__: true, ...ctx }).length &&
@@ -458,7 +458,7 @@ export const contentNodeToOutlineNode = ({
           ) : (
             <>
               {contentNode({ __outline__: true, ...ctx }).length > 0 && (
-                <div className="xw-cb--conditional-segment">
+                <div className="xw-cb__conditional-segment">
                   {contentNode({ __outline__: true, ...ctx }).map((newNode, nci) => (
                     <Fragment key={nci}>
                       {contentNodeToOutlineNode({
@@ -473,7 +473,7 @@ export const contentNodeToOutlineNode = ({
                 </div>
               )}
               {contentNode({ __outline__: false, ...ctx }).legnth > 0 && (
-                <div className="xw-cb--conditional-segment">
+                <div className="xw-cb__conditional-segment">
                   {contentNode({ __outline__: false, ...ctx }).map((newNode, nci) => (
                     <Fragment key={nci}>
                       {contentNodeToOutlineNode({

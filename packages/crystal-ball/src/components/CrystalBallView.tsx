@@ -43,17 +43,17 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
   }, []);
 
   return (
-    <div className="xw-cb--view">
-      <div className="xw-cb--sections">
-        <div className="xw-cb--sections-header">
+    <div className="xw-cb__view">
+      <div className="xw-cb__sections">
+        <div className="xw-cb__sections-header">
           <div>
             <h1>🔮</h1>
           </div>
         </div>
         {sections.map(
           ({ sectionTitle, spells }: { sectionTitle: string; spells: TCrystalBallViewSectionSpellConfig[] }) => (
-            <div key={sectionTitle} className="xw-cb--section">
-              <div className="xw-cb--section-header">
+            <div key={sectionTitle} className="xw-cb__section">
+              <div className="xw-cb__section-header">
                 <p>{sectionTitle}</p>
               </div>
               {spells.map((spellOutline: TCrystalBallViewSectionSpellConfig) => (
@@ -70,13 +70,13 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
           )
         )}
       </div>
-      <div className="xw-cb--viewer">
+      <div className="xw-cb__viewer">
         {focusedSpellKey && spellMap[focusedSpellKey] && (
-          <div className="xw-cb--viewer-header">
+          <div className="xw-cb__viewer-header">
             <span>
               <small>#{focusedSpellKey}</small>
             </span>
-            <span className="xw-cb--viewer-header__toggles">
+            <span className="xw-cb__viewer-header__toggles">
               <small>Conditionals:</small>
               <button
                 className={initConditionalVisibility === OutlineCondVisibility.all ? "active" : ""}
@@ -93,7 +93,7 @@ export const CrystalBallView: React.FC<TCrystalBallViewProps> = ({ sections, spe
             </span>
           </div>
         )}
-        <div className="xw-cb--viewer-body">
+        <div className="xw-cb__viewer-body">
           {focusedSpellKey && spellMap[focusedSpellKey] && (
             <CrystalBall key={focusedSpellKey} spellKey={focusedSpellKey} spellMap={spellMap} />
           )}
