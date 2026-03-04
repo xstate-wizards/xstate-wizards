@@ -1,21 +1,32 @@
-import React, { useState, Fragment } from "react";
-import { OutlineCondVisibility } from "../../data/OutlineStore";
+import React, { useState, useEffect, Fragment } from "react";
+import { OutlineCondVisibility, useOutline } from "../../data/OutlineStore";
 import { contentNodeToOutlineNode } from "./contentNodeToOutlineNode";
 
-export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditionalVisibility, outliner }) => {
-  // Allow parent viewer to set a default hide/show option to condense interviews for easier skimming
-  const [show, setShow] = useState(
-    contentNode.options ? OutlineCondVisibility.hide : initConditionalVisibility || OutlineCondVisibility.all
-  );
+export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, outliner }) => {
+  const { initConditionalVisibility } = useOutline();
+  const [show, setShow] = useState(initConditionalVisibility || OutlineCondVisibility.all);
+  const [localOverride, setLocalOverride] = useState(false);
+
+  // Sync with global toggle unless user has manually overridden this node
+  useEffect(() => {
+    if (!localOverride) {
+      setShow(initConditionalVisibility || OutlineCondVisibility.all);
+    }
+  }, [initConditionalVisibility]);
+
+  const handleLocalToggle = (value: string) => {
+    setLocalOverride(true);
+    setShow(value);
+  };
 
   // RENDER
   return (
-    <div className="conditional">
-      <div className="conditional__description">
+    <div className="xw-cb--conditional">
+      <div className="xw-cb--conditional__description">
         <span>CONDITIONAL UI: {contentNode.description}</span>
-        <span className="conditional__description__toggles">
+        <span className="xw-cb--conditional__description__toggles">
           {contentNode.options ? (
-            <select onChange={(ev) => setShow(ev.target.value)} value={show}>
+            <select onChange={(ev) => handleLocalToggle(ev.target.value)} value={show}>
               <option value="all">All</option>
               <option value="hide">Hide</option>
               <option disabled>---</option>
@@ -25,10 +36,10 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditio
             </select>
           ) : (
             <>
-              <button className={show === "all" ? "active" : ""} onClick={() => setShow(OutlineCondVisibility.all)}>
+              <button className={show === "all" ? "active" : ""} onClick={() => handleLocalToggle(OutlineCondVisibility.all)}>
                 All
               </button>
-              <button className={show === "hide" ? "active" : ""} onClick={() => setShow(OutlineCondVisibility.hide)}>
+              <button className={show === "hide" ? "active" : ""} onClick={() => handleLocalToggle(OutlineCondVisibility.hide)}>
                 Hide
               </button>
             </>
@@ -36,9 +47,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditio
         </span>
       </div>
       {contentNode.hasOwnProperty("true") && ["all", "true"].includes(show) && (
-        <div className="conditional__section">
-          <div className="conditional__section__title">TRUE →</div>
-          <div className="conditional__section__nodes">
+        <div className="xw-cb--conditional__section">
+          <div className="xw-cb--conditional__section__title">TRUE →</div>
+          <div className="xw-cb--conditional__section__nodes">
             {(contentNode.true || []).map((newNode, nci) => (
               <Fragment key={nci}>
                 {contentNodeToOutlineNode({
@@ -54,9 +65,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditio
         </div>
       )}
       {contentNode.hasOwnProperty("false") && ["all", "false"].includes(show) && (
-        <div className="conditional__section">
-          <div className="conditional__section__title">FALSE →</div>
-          <div className="conditional__section__nodes">
+        <div className="xw-cb--conditional__section">
+          <div className="xw-cb--conditional__section__title">FALSE →</div>
+          <div className="xw-cb--conditional__section__nodes">
             {(contentNode.false || []).map((newNode, nci) => (
               <Fragment key={nci}>
                 {contentNodeToOutlineNode({
@@ -75,9 +86,9 @@ export const ConditionalNode = ({ contentNode, ctx = {}, graphJSON, initConditio
         Object.entries(contentNode.options)
           .filter(([key]) => show === "all" || show === key)
           .map(([key, optionNode], index) => (
-            <div key={`${key}-${index}`} className="conditional__section">
-              <div className="conditional__section__title">{key} →</div>
-              <div className="conditional__section__nodes">
+            <div key={`${key}-${index}`} className="xw-cb--conditional__section">
+              <div className="xw-cb--conditional__section__title">{key} →</div>
+              <div className="xw-cb--conditional__section__nodes">
                 {/* @ts-ignore */}
                 {(optionNode || []).map((newNode, nci) => (
                   <Fragment key={nci}>
