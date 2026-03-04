@@ -173,7 +173,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   };
   // --- Handler direct writes to context (helpful for largely machine state/ui conditionals)
   const transitionContextWithAssignConfig = (ctx, assignConfig) => {
-    const value = typeof assignConfig.value === "function" ? assignConfig.value(ctx) : assignConfig.value;
+    const value = typeof assignConfig.value === "function" ? assignConfig.value({ context: ctx }) : assignConfig.value;
     transition({
       type: "ASSIGN_CONTEXT",
       assignConfig,
@@ -228,7 +228,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
     } else if (node.inputType === ContentNodeInputType.TEXT || node.inputType === ContentNodeInputType.PASSWORD) {
       value = e.target.value;
     } else if (node.assign?.path && typeof node.assign?.value === "function") {
-      value = node.assign.value(state.context);
+      value = node.assign.value({ context: state.context });
     } else {
       value = e?.target?.value;
     }
@@ -332,7 +332,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       });
       // Update value w/ assign function
     } else if (typeof node.assign === "function") {
-      transition({ type: "ASSIGN_CONTEXT", ...node.assign(state.context, value) });
+      transition({ type: "ASSIGN_CONTEXT", ...node.assign({ context: state.context }, value) });
       // Update value w/ direct assignment using path
     } else if (typeof node.assign === "string") {
       transition({ type: "ASSIGN_CONTEXT", ...set(state.context, node.assign, value) });
@@ -361,7 +361,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   if (typeof node === "function")
     return (
       <>
-        {node(state.context).map((node, nodeIndex) => (
+        {node({ context: state.context }).map((node, nodeIndex) => (
           <ContentNode key={nodeIndex} {...props} node={node} serializations={serializations} />
         ))}
       </>
@@ -719,7 +719,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
       typeof node?.assign?.transformValue?.from === "function"
         ? node?.assign?.transformValue?.from(get(state.context, pathToValue))
         : get(state.context, pathToValue);
-    const inputDisabled = typeof node.disabled === "function" ? node.disabled(state.context) : false;
+    const inputDisabled = typeof node.disabled === "function" ? node.disabled({ context: state.context }) : false;
     // - Get Disabled State
     const showInputAsInvalid =
       validationMap[pathToValue]?.dirty === true && validationMap[pathToValue]?.validationError;
@@ -1805,7 +1805,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
   // BUTTONS
   if ([ContentNodeType.BUTTON, ContentNodeType.BUTTON_CONFIRM].includes(node.type)) {
     // Disable if...
-    const buttonDisabledByHandler = typeof node.disabled === "function" && node.disabled(state.context);
+    const buttonDisabledByHandler = typeof node.disabled === "function" && node.disabled({ context: state.context });
     const buttonDisabledByFreshDelay = node.disabledByFreshDelay && isFresh;
     const buttonDisabledByInvalidation =
       node.buttonType === "submit" &&
@@ -1841,7 +1841,7 @@ export const ContentNode: React.FC<TContentNode> = (props) => {
         // --- Assign context (aka update resources/resources updates)
         if (node.assign) {
           if (typeof node.assign === "function") {
-            transition({ type: "ASSIGN_CONTEXT", ...node.assign(state.context) });
+            transition({ type: "ASSIGN_CONTEXT", ...node.assign({ context: state.context }) });
           } else if (node.assign?.path && node?.assign?.value !== undefined) {
             inputOnChange(node?.assign?.value);
           }

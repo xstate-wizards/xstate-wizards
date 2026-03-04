@@ -44,7 +44,7 @@ export const WizardStateViewer: React.FC<TWizardStateViewerProps> = ({
   translate,
 }) => {
   const [contextOnEntry] = useState(state.context);
-  const contentNodes = typeof meta.content === "function" ? meta.content(state.context, translate) : meta.content || [];
+  const contentNodes = typeof meta.content === "function" ? meta.content({ context: state.context }, translate) : meta.content || [];
   const [numContentNodes, setNumContentNodes] = useState(
     countContentNodes({ contentNodes, context: state.context, functions: serializations?.functions })
   );
