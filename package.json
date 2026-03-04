@@ -29,6 +29,9 @@
   "scripts": {
     "clean:packages": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
+    "dev:wizards": "npm run dev -w examples/react-wizards",
+    "dev:i18n": "npm run dev -w examples/react-wizards-i18n",
+    "dev:spellbook": "npm run dev -w examples/react-spellbook",
     "test": "vitest run",
     "test:e2e": "npx playwright test"
   },
