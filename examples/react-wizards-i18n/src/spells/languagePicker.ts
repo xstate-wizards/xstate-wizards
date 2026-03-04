@@ -7,7 +7,7 @@ const CONTENT_NODE_SUBMIT_DEFERRED = (t: TTranslateFn) => ({
   buttonType: "submit",
   text: t("continue"),
   event: "SUBMIT",
-  attrs: { className: "xw--btn-lg", width: "100%" },
+  attrs: { className: "xw__btn-lg", width: "100%" },
   disabledByFreshDelay: true,
 });
 
