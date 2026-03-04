@@ -33,6 +33,7 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
   const editor = useEditor();
   const preview = usePreview();
   const [lastFetchedAt, setLastFetchedAt] = useState(Date.now());
+  const [previewLocale, setPreviewLocale] = useState<string | undefined>();
   const [previewHistory, setPreviewHistory] = useState<(TPreviewHistoryItem | TPreviewHistoryError)[]>([]);
   const [isPreviewHistoryVisible, setIsPreviewHistoryVisible] = useState(false);
   // --- versions
@@ -132,6 +133,21 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
         </div>
         {/* ACTIONS */}
         <div className="xw-sb__spell-editor__header__actions">
+          {foundSpell?.config?.locales?.length > 0 && (
+            <label className="xw-sb__locale-selector">
+              <small>Preview Locale:</small>
+              <select
+                value={previewLocale || foundSpell.config.locales[0]}
+                onChange={(e) => setPreviewLocale(e.target.value)}
+              >
+                {foundSpell.config.locales.map((loc: string) => (
+                  <option key={loc} value={loc}>
+                    {loc}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <button onClick={() => setIsPreviewHistoryVisible(!isPreviewHistoryVisible)}>
             {isPreviewHistoryVisible ? "Hide" : "Show"} History Inspector
           </button>
@@ -173,6 +189,7 @@ export const PreviewWizardPage: React.FC<TPreviewWizardPage> = (props) => {
                 // clear preview id
                 preview.setIsPreviewModal(false);
               }}
+              locale={previewLocale || foundSpell?.config?.locales?.[0]}
               serializations={props.serializations}
               sessionEnabled={false}
               spellKey={editor.focusedSpellKey}

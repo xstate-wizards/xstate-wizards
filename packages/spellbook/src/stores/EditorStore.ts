@@ -6,9 +6,11 @@ type TEditorStore = {
   focusedSpellId?: string | number;
   focusedSpellKey?: string;
   focusedSpellVersion?: string;
+  activeEditingLocale?: string;
   setFocusedSpellId: (focusedSpellId?: string | number) => void;
   setFocusedSpellKey: (focusedSpellKey?: string) => void;
   setFocusedSpellVersion: (focusedSpellVersion?: string) => void;
+  setActiveEditingLocale: (locale?: string) => void;
 };
 
 export const editorStore = createStore<TEditorStore>((set, get) => ({
@@ -16,6 +18,7 @@ export const editorStore = createStore<TEditorStore>((set, get) => ({
   focusedSpellId: undefined,
   focusedSpellKey: searchParamGet(SPELLBOOK_SEARCH_PARAMS.SPELL_KEY) ?? undefined,
   focusedSpellVersion: searchParamGet(SPELLBOOK_SEARCH_PARAMS.SPELL_VERSION) ?? undefined,
+  activeEditingLocale: undefined,
   // setters
   setFocusedSpellId: (focusedSpellId) => set({ focusedSpellId }),
   setFocusedSpellKey: (focusedSpellKey) => {
@@ -26,6 +29,7 @@ export const editorStore = createStore<TEditorStore>((set, get) => ({
     set({ focusedSpellVersion });
     searchParamSet(SPELLBOOK_SEARCH_PARAMS.SPELL_VERSION, focusedSpellVersion);
   },
+  setActiveEditingLocale: (activeEditingLocale) => set({ activeEditingLocale }),
 }));
 
 export const useEditor = () => useStore(editorStore);

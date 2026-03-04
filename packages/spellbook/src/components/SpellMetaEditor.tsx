@@ -1,6 +1,8 @@
 import { $TSFixMe, TWizardModelsMap } from "@xstate-wizards/spells";
 import React, { useState } from "react";
 
+import { useEditor } from "../stores/EditorStore";
+import { LocalizedInput } from "./inputs/LocalizedInput";
 import { SpellModelsEditor } from "./metaEditors/SpellModelsEditor";
 import { SpellSchemaEditor } from "./metaEditors/SpellSchemaEditor";
 import { Dialog } from "./overlays/Dialog";
@@ -32,7 +34,9 @@ export const SpellMetaEditor: React.FC<TSpellMetaEditor> = ({
   spell,
   statesList,
 }) => {
+  const editorStore = useEditor();
   const [isSchemaVisible, setIsSchemaVisible] = useState(false);
+  const activeLocale = editorStore.activeEditingLocale || config?.locales?.[0] || "en";
   // RENDER
   return (
     <>
@@ -56,13 +60,38 @@ export const SpellMetaEditor: React.FC<TSpellMetaEditor> = ({
             ))}
         </select>
 
-        <label htmlFor="config-editor-state">Title:</label>
-        <input
-          id="config-editor-state"
-          type="text"
+        <label htmlFor="config-editor-title">Title:</label>
+        <LocalizedInput
+          activeLocale={activeLocale}
           value={config.title}
-          onChange={(e) => onConfigUpdate({ ...config, title: e.target.value })}
+          placeholder="Spell Title"
+          onChange={(title) => onConfigUpdate({ ...config, title })}
         />
+
+        <label>Locales:</label>
+        <div className="xw-sb__locale-editor">
+          <select
+            value={editorStore.activeEditingLocale || config?.locales?.[0] || ""}
+            onChange={(e) => {
+              if (e.target.value === "__add__") {
+                const code = prompt("Language code (e.g. en, es, fr):");
+                if (code && !(config?.locales ?? []).includes(code)) {
+                  const newLocales = [...(config?.locales ?? []), code];
+                  onConfigUpdate({ ...config, locales: newLocales });
+                  editorStore.setActiveEditingLocale(code);
+                }
+              } else if (e.target.value !== "") {
+                editorStore.setActiveEditingLocale(e.target.value);
+              }
+            }}
+          >
+            {!(config?.locales ?? []).length && <option value="">---</option>}
+            {(config?.locales ?? []).map((loc: string) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+            <option value="__add__">+ Add Locale</option>
+          </select>
+        </div>
         {/* TODO: allowStartOver */}
         {/* TODO: exitTo */}
         <label>Models & Context Variables: </label>

@@ -280,6 +280,46 @@
   width: 100%;
 }
 
+/* --- Locale Editor / Selector ------------------------------------------- */
+.xw-sb__locale-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.xw-sb__locale-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #e8e8e8;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 12px;
+}
+.xw-sb__locale-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0 2px;
+  color: #888;
+}
+.xw-sb__locale-tag button:hover {
+  color: #c00;
+}
+.xw-sb__locale-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.xw-sb__locale-selector small {
+  white-space: nowrap;
+}
+.xw-sb__config-editor .xw-sb__locale-editor {
+  flex-shrink: 0;
+}
+
 /* --- Schema Editor ------------------------------------------------------- */
 .xw-sb__schema-editor {
   position: fixed;

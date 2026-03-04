@@ -8,6 +8,8 @@ import {
   TWizardSerializations,
 } from "@xstate-wizards/spells";
 import { updateArrayItem, reorderArrayItem, removeArrayItem, REORDER_DIRECTION } from "../../utils";
+import { useEditor } from "../../stores/EditorStore";
+import { LocalizedInput } from "../inputs/LocalizedInput";
 import { JsonLogicBuilder } from "../logic/JsonLogicBuilder";
 import { ContentNodeAdder, isSpecialBackButton } from "./ContentNodeAdder";
 import { ContentNodeValidationList } from "./ContentNodeValidationList";
@@ -47,6 +49,9 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
   onReorder,
   onDelete,
 }) => {
+  const editorStore = useEditor();
+  const activeLocale = editorStore.activeEditingLocale || "en";
+
   const contentNodeUpdateHandler = (key, value) => {
     console.debug("ContentNodeEditor.contentNodeUpdateHandler", { key, value });
     const newContentNode = cloneDeep(contentNode);
@@ -82,11 +87,11 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         {[ContentNodeType.BUTTON, ContentNodeType.BUTTON_LINK].includes(contentNode.type) &&
           !isSpecialBackButton(contentNode) && (
             <>
-              <input
-                type="text"
+              <LocalizedInput
+                activeLocale={activeLocale}
                 placeholder="Button Text"
                 value={contentNode.text}
-                onChange={(e) => contentNodeUpdateHandler("text", e.target.value)}
+                onChange={(text) => contentNodeUpdateHandler("text", text)}
               />
               {[ContentNodeType.BUTTON_LINK].includes(contentNode.type) ? (
                 <input
@@ -290,14 +295,15 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                             </td>
                           </tr>
                           {contentNode.items.map((opt, optItem) => (
-                            <tr>
+                            <tr key={optItem}>
                               <td className="field">
-                                <input
+                                <LocalizedInput
+                                  activeLocale={activeLocale}
                                   value={opt.text}
                                   placeholder="Item Label"
-                                  onChange={(e) => {
-                                    const newItems = contentNode.items;
-                                    newItems[optItem].text = e.target.value;
+                                  onChange={(text) => {
+                                    const newItems = [...contentNode.items];
+                                    newItems[optItem] = { ...newItems[optItem], text };
                                     contentNodeUpdateHandler("items", newItems);
                                   }}
                                 />
@@ -397,11 +403,11 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
               placeholder="https://...."
               onChange={(e) => contentNodeUpdateHandler("src", e.target.value)}
             />
-            <input
-              type="text"
+            <LocalizedInput
+              activeLocale={activeLocale}
               value={contentNode.alt}
               placeholder="Alt-Text"
-              onChange={(e) => contentNodeUpdateHandler("alt", e.target.value)}
+              onChange={(alt) => contentNodeUpdateHandler("alt", alt)}
             />
           </>
         )}
@@ -415,10 +421,23 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     <small>Label: </small>
                   </td>
                   <td>
-                    <input
-                      type="text"
+                    <LocalizedInput
+                      activeLocale={activeLocale}
                       value={contentNode.label}
-                      onChange={(e) => contentNodeUpdateHandler("label", e.target.value)}
+                      onChange={(label) => contentNodeUpdateHandler("label", label)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="stack-label">
+                    <small>Byline: </small>
+                  </td>
+                  <td>
+                    <LocalizedInput
+                      activeLocale={activeLocale}
+                      value={contentNode.labelByLine}
+                      placeholder="Optional byline text"
+                      onChange={(labelByLine) => contentNodeUpdateHandler("labelByLine", labelByLine)}
                     />
                   </td>
                 </tr>
@@ -451,10 +470,11 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                         <small>Placeholder: </small>
                       </td>
                       <td>
-                        <input
-                          type="text"
+                        <LocalizedInput
+                          activeLocale={activeLocale}
                           value={contentNode.placeholder}
-                          onChange={(e) => contentNodeUpdateHandler("placeholder", e.target.value)}
+                          placeholder="Placeholder text"
+                          onChange={(placeholder) => contentNodeUpdateHandler("placeholder", placeholder)}
                         />
                       </td>
                     </tr>
@@ -584,13 +604,14 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                         <small>+ Add ____: </small>
                       </td>
                       <td>
-                        <input
-                          type="text"
-                          value={contentNode?.config?.addLabel ?? ""}
-                          onChange={(e) =>
+                        <LocalizedInput
+                          activeLocale={activeLocale}
+                          value={contentNode?.config?.addLabel}
+                          placeholder="Add label"
+                          onChange={(addLabel) =>
                             contentNodeUpdateHandler("config", {
                               ...(contentNode.config ?? {}),
-                              addLabel: e.target.value,
+                              addLabel,
                             })
                           }
                         />
@@ -705,10 +726,23 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     <small>Label: </small>
                   </td>
                   <td>
-                    <input
-                      type="text"
+                    <LocalizedInput
+                      activeLocale={activeLocale}
                       value={contentNode.label}
-                      onChange={(e) => contentNodeUpdateHandler("label", e.target.value)}
+                      onChange={(label) => contentNodeUpdateHandler("label", label)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="stack-label">
+                    <small>Byline: </small>
+                  </td>
+                  <td>
+                    <LocalizedInput
+                      activeLocale={activeLocale}
+                      value={contentNode.labelByLine}
+                      placeholder="Optional byline text"
+                      onChange={(labelByLine) => contentNodeUpdateHandler("labelByLine", labelByLine)}
                     />
                   </td>
                 </tr>
@@ -749,14 +783,15 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                             </td>
                           </tr>
                           {contentNode.options.map((opt, optIndex) => (
-                            <tr>
+                            <tr key={optIndex}>
                               <td className="field">
-                                <input
+                                <LocalizedInput
+                                  activeLocale={activeLocale}
                                   value={opt.text}
                                   placeholder="Option Label"
-                                  onChange={(e) => {
-                                    const newOpts = contentNode.options;
-                                    newOpts[optIndex].text = e.target.value;
+                                  onChange={(text) => {
+                                    const newOpts = [...contentNode.options];
+                                    newOpts[optIndex] = { ...newOpts[optIndex], text };
                                     contentNodeUpdateHandler("options", newOpts);
                                   }}
                                 />
@@ -895,22 +930,13 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         )}
         {/* --- TEXT --- */}
         {CONTENT_NODE_OPTIONS_TEXT.includes(contentNode.type) && (
-          <>
-            {/* If a paragraph tag, use a textarea since there will prob be more writing */}
-            {[ContentNodeType.P].includes(contentNode.type) ? (
-              <textarea
-                value={contentNode.text}
-                rows={3}
-                onChange={(e) => contentNodeUpdateHandler("text", e.target.value)}
-              />
-            ) : (
-              <input
-                type="text"
-                value={contentNode.text}
-                onChange={(e) => contentNodeUpdateHandler("text", e.target.value)}
-              />
-            )}
-          </>
+          <LocalizedInput
+            activeLocale={activeLocale}
+            value={contentNode.text}
+            multiline={[ContentNodeType.P].includes(contentNode.type)}
+            rows={3}
+            onChange={(text) => contentNodeUpdateHandler("text", text)}
+          />
         )}
         {/* --- VIDEO --- */}
         {[ContentNodeType.VIDEO].includes(contentNode.type) && (

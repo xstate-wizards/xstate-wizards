@@ -54,10 +54,10 @@ export const CONTENT_NODE_OPTIONS_TEXT = [
 
 // ATTRS
 const canInputOtherProp = { key: "canInputOther", type: "boolean" };
-const colorProp = { key: "color", type: "text" };
+const classNameProp = { key: "className", type: "text" };
 const invertedProp = { key: "inverted", type: "boolean" };
 const sizeProp = { key: "size", type: "text" };
-const textAlignProp = { key: "textAlign", type: "text" };
+const styleProp = { key: "style", type: "text" };
 const variantProp = { key: "variant", type: "text" };
 
 export const contentTypeAttrs = {
@@ -68,5 +68,5 @@ export const contentTypeAttrs = {
   [ContentNodeType.SELECT]: [canInputOtherProp, sizeProp],
 };
 CONTENT_NODE_OPTIONS_TEXT.forEach((key) => {
-  contentTypeAttrs[key] = [colorProp, textAlignProp];
+  contentTypeAttrs[key] = [classNameProp, styleProp];
 });

@@ -44,6 +44,7 @@ export const PreviewWizardModal: React.FC<TPreviewWizardModalProps> = ({
 }) => {
   const editor = useEditor();
   const preview = usePreview();
+  const [previewLocale, setPreviewLocale] = useState<string | undefined>();
   const [previewHistory, setPreviewHistory] = useState<(TPreviewHistoryItem | TPreviewHistoryError)[]>([]);
   // TODO: Need to fix typings for what we pass into WizardRunner
   const { foundSpell, preppedSpellMap }: $TSFixMe = useMemo(() => {
@@ -76,8 +77,23 @@ export const PreviewWizardModal: React.FC<TPreviewWizardModalProps> = ({
   return !foundSpell || !preppedSpellMap ? null : (
     <div className="xw-sb__preview-modal" onClick={() => preview.setIsPreviewModal(false)}>
       <div className="xw-sb__preview" onClick={(e) => e.stopPropagation()}>
-        <div className="xw-sb__preview__close" onClick={() => preview.setIsPreviewModal(false)}>
-          Close Preview
+        <div className="xw-sb__preview__close">
+          {foundSpell?.config?.locales?.length > 0 && (
+            <label className="xw-sb__locale-selector">
+              <small>Preview Locale:</small>
+              <select
+                value={previewLocale || foundSpell.config.locales[0]}
+                onChange={(e) => setPreviewLocale(e.target.value)}
+              >
+                {foundSpell.config.locales.map((loc: string) => (
+                  <option key={loc} value={loc}>
+                    {loc}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <span onClick={() => preview.setIsPreviewModal(false)}>Close Preview</span>
         </div>
         <div className="xw-sb__preview__wiz">
           <div className="xw-sb__preview__wiz__runner">
@@ -109,6 +125,7 @@ export const PreviewWizardModal: React.FC<TPreviewWizardModalProps> = ({
                   // clear preview id
                   preview.setIsPreviewModal(false);
                 }}
+                locale={previewLocale || foundSpell?.config?.locales?.[0]}
                 serializations={serializations}
                 sessionEnabled={false}
                 spellKey={editor.focusedSpellKey}
