@@ -1,6 +1,4 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import styled from "styled-components";
-
 const OTHER_VALUE = "__OTHER__";
 
 export const SelectWithOther = ({ onChange, otherLabel, children, ...props }) => {
@@ -29,7 +27,7 @@ export const SelectWithOther = ({ onChange, otherLabel, children, ...props }) =>
   );
 
   return (
-    <Container>
+    <div className="xw-sb__select-with-other">
       <select ref={selectRef} onChange={onChangeSelectHandler} {...props} value={showOther ? OTHER_VALUE : props.value}>
         {children}
         <option value={OTHER_VALUE}>{otherLabel ?? "Other"}:</option>
@@ -39,17 +37,6 @@ export const SelectWithOther = ({ onChange, otherLabel, children, ...props }) =>
           <input onChange={onChange} placeholder={props.type === "number" ? "123..." : "Aa..."} {...props} />
         </>
       )}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  select {
-    width: 30%;
-    max-width: 30%;
-  }
-  input {
-    flex-grow: 1;
-  }
-`;

@@ -1,7 +1,6 @@
 import { $TSFixMe, TSpellInstructions } from "@xstate-wizards/spells";
 import { groupBy, findIndex, orderBy, set, sortBy } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
-import styled, { css } from "styled-components";
 import { useEditor } from "../stores/EditorStore";
 import { useSidebar } from "../stores/SidebarStore";
 import { searchParamGet, searchParamSet, SPELLBOOK_SEARCH_PARAMS } from "../utils";
@@ -53,7 +52,7 @@ const SpellDirectory = ({ selectSpellKey, directory, directoryTree, spellDirecto
   const [isExpanded, setIsExpanded] = useState(!directory); // more inteligent auto expanding/collapsing
   // RENDER
   return (
-    <StyledSpellDirectory hasDirectory={!!directory}>
+    <div className={`xw-sb__directory${directory ? " xw-sb__directory--has-dir" : ""}`}>
       {/* This directory's header */}
       {directory && (
         <h4>
@@ -80,7 +79,7 @@ const SpellDirectory = ({ selectSpellKey, directory, directoryTree, spellDirecto
             ))}
           {/* Spells for this Directory */}
           <ul
-            className={`spell-directory__spells-list ${
+            className={`xw-sb__spell-directory__spells-list ${
               Object.keys(directoryTree[""] ?? {})?.length > 0 ? "top-level" : ""
             }`}
           >
@@ -98,63 +97,10 @@ const SpellDirectory = ({ selectSpellKey, directory, directoryTree, spellDirecto
           </ul>
         </>
       )}
-    </StyledSpellDirectory>
+    </div>
   );
 };
 
-const StyledSpellDirectory = styled.div<{ hasDirectory: boolean }>`
-  h4 {
-    font-size: 13px;
-  }
-  ul {
-    margin: 0;
-  }
-  ul.spell-directory__spells-list {
-    margin-left: 8px;
-    padding-left: 12px;
-    border-left: 1px solid #ccc;
-    & > li {
-      list-style: disc;
-      margin-left: -3px;
-    }
-    &.top-level {
-      ul {
-        margin-left: 3px;
-      }
-      li {
-        list-style: none;
-      }
-    }
-  }
-  ul.spell-directory__versions-list {
-    margin-left: 12px;
-  }
-  li {
-    margin: 0;
-    font-size: 10px;
-    color: #777;
-    &.selected {
-      color: black;
-      font-weight: 900;
-    }
-  }
-  ${({ hasDirectory }) =>
-    hasDirectory
-      ? css`
-          margin-left: 8px;
-          padding-left: 12px;
-          border-left: 1px solid #ccc;
-        `
-      : css`
-          margin-left: 0;
-          & > div,
-          ul.spell-directory__spells-list {
-            margin-left: 0;
-            padding-left: 0;
-            border: none;
-          }
-        `}
-`;
 
 type TSpellsSidebarProps = {
   onSpellCreate: Function;
@@ -221,9 +167,9 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
 
   // RENDER
   return (
-    <StyledSpellsSidebar isCollapsed={sidebar.isCollapsed && editor.focusedSpellKey != null}>
-      <aside className="spells-list">
-        <div className="spells-list__header" onClick={() => sidebar.setIsCollapsed(true)}>
+    <div className={`xw-sb__sidebar${sidebar.isCollapsed && editor.focusedSpellKey != null ? " xw-sb__sidebar--collapsed" : ""}`}>
+      <aside className="xw-sb__spells-list">
+        <div className="xw-sb__spells-list__header" onClick={() => sidebar.setIsCollapsed(true)}>
           <h4>✨🔮✨</h4>
           <button
             onClick={(e) => {
@@ -234,7 +180,7 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
             +
           </button>
         </div>
-        <div className="spells-list__directory">
+        <div className="xw-sb__spells-list__directory">
           <SpellDirectory
             selectSpellKey={selectSpellKey}
             directory={null}
@@ -244,78 +190,7 @@ export const SpellsSidebar: React.FC<TSpellsSidebarProps> = ({ onSpellCreate, sp
           />
         </div>
       </aside>
-    </StyledSpellsSidebar>
+    </div>
   );
 };
 
-const StyledSpellsSidebar = styled.div<{ isCollapsed?: boolean; isSkinny?: boolean }>`
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  // bottom: 0;
-  // z-index: 11;
-  height: 100vh;
-  display: flex;
-  min-width: 200px;
-  width: 200px;
-  overflow: hidden;
-  border-right: 2px solid #000;
-
-  .spells-sidebar-button {
-    position: fixed;
-    top: 4px;
-    left: 4px;
-  }
-  .spells-list {
-    width: 100%;
-    height: auto;
-    background: #fafafa;
-    overflow-y: scroll;
-    li {
-      cursor: pointer;
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
-    h4 {
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-  .spells-list__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8em 1em;
-    background-color: #000;
-    // background-color: #fde74c;
-    // background-image: linear-gradient(319deg, #fde74c 0%, #32ff7a 37%, #2fcbe0 100%);
-    button {
-      max-width: 40px;
-    }
-  }
-  .spells-list__directory {
-    padding: 1em;
-    height: auto;
-    overflow: scroll;
-  }
-
-  ${({ isSkinny }) =>
-    isSkinny &&
-    css`
-      width: 48px;
-      min-width: 48px;
-      cursor: pointer;
-      .spells-list {
-        width: 48px;
-        min-width: 48px;
-      }
-    `}
-  ${({ isCollapsed }) =>
-    isCollapsed &&
-    css`
-      width: 0;
-      min-width: 0;
-      border-right: none;
-    `}
-`;

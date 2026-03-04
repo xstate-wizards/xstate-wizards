@@ -1,6 +1,5 @@
 import { cloneDeep, difference, omit, set, startCase } from "lodash";
 import React from "react";
-import styled from "styled-components";
 import {
   ContentNodeType,
   ContentNodeInputType,
@@ -56,7 +55,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
   };
 
   return (
-    <StyledContentNodeEditor>
+    <div className="xw-sb__content-node-editor">
       {/* TYPE */}
       <div className="content-node__type">
         {/* For text options, let a person change the sizing/category. Everything else is set bc of incompatible options/config */}
@@ -187,7 +186,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       <small>{option}</small>
                     </td>
                     <td>
-                      <div className="spell-state__content-nodes--nested">
+                      <div className="xw-sb__spell-state__content-nodes--nested">
                         {contentNode.options?.[option]?.map((node, nodeIndex) => (
                           <ContentNodeEditor
                             key={`${node.value}-${node.type}-${nodeIndex}`}
@@ -349,7 +348,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                     <small>Content: </small>
                   </td>
                   <td>
-                    <div className="spell-state__content-nodes--nested">
+                    <div className="xw-sb__spell-state__content-nodes--nested">
                       {contentNode.content?.map((node, nodeIndex) => (
                         <ContentNodeEditor
                           key={`${node.value}-${node.type}-${nodeIndex}`}
@@ -665,7 +664,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         {[ContentNodeType.CALLOUT, ContentNodeType.ROW, ContentNodeType.OL, ContentNodeType.UL].includes(
           contentNode.type
         ) && (
-          <div className="spell-state__content-nodes--nested">
+          <div className="xw-sb__spell-state__content-nodes--nested">
             {contentNode.content?.map((node, nodeIndex) => (
               <ContentNodeEditor
                 key={`${node.value}-${node.type}-${nodeIndex}`}
@@ -955,91 +954,6 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
         )}
         <button onClick={onDelete}>❌</button>
       </div>
-    </StyledContentNodeEditor>
+    </div>
   );
 };
-
-const StyledContentNodeEditor = styled.div`
-  display: flex;
-  width: 100%;
-  .content-node__type {
-    max-width: 80px;
-    width: 100%;
-    display: flex;
-    input,
-    select {
-      flex-grow: 1;
-      width: 100%;
-    }
-  }
-  .content-node__config {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    input,
-    textarea {
-      flex-grow: 1;
-    }
-  }
-  .content-node__config__stack {
-    display: flex;
-    width: 100%;
-    table {
-      flex-grow: 1;
-    }
-    td {
-      border: 1px solid #ccc;
-      width: 100%;
-      input,
-      select {
-        width: 100%;
-      }
-      &.stack-label {
-        max-width: 220px;
-        width: 15%;
-        font-size: 12px;
-        .stack-label__actions {
-          small {
-            margin-right: 4px;
-            font-size: 10px;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-  }
-  .content-node__config__event-trigger {
-    display: flex;
-    & > small {
-      margin: 0 4px;
-    }
-  }
-  .content-node__reorder-handle {
-    display: flex;
-    button {
-      font-size: 7px;
-    }
-  }
-  .content-node__config__select-options {
-    width: 100%;
-    .field {
-      // flex-grow: 1;
-      width: 48%;
-      max-width: 48%;
-      min-width: 48%;
-    }
-    .select-options__header {
-      width: 48%;
-      max-width: 48%;
-      min-width: 48%;
-      font-size: 13px;
-      small {
-        margin-left: 4px;
-      }
-    }
-    small {
-      font-size: 10px;
-      margin-right: 6px;
-    }
-  }
-`;

@@ -1,13 +1,12 @@
 import { cloneDeep } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { reorderArrayItem, removeArrayItem } from "../../utils";
 import {
   ContentNodeAdder,
   isSpecialBackButtonIncluded,
   sortBackButtonToTop,
-  StyledContentNodeAdder,
 } from "../contentNodes/ContentNodeAdder";
 import { ContentNodeEditor } from "../contentNodes/ContentNodeEditor";
 
@@ -32,13 +31,13 @@ export const SpellStateContentEditor: React.FC<TSpellStateContentEditorProps> = 
 }) => {
   // RENDER
   return (
-    <StyledSpellStateContentEditor>
+    <div className="xw-sb__state-content">
       {state.content?.length === 0 && (
-        <div className="spell-state__content-nodes--none">
+        <div className="xw-sb__spell-state__content-nodes--none">
           <i>No Content Added Yet</i>
         </div>
       )}
-      <div className="spell-state__content-nodes">
+      <div className="xw-sb__spell-state__content-nodes">
         {sortBackButtonToTop(state.content).map((contentNode, contentNodeIndex) => (
           <ContentNodeEditor
             key={`${stateName}-${contentNode.type}-${contentNodeIndex}`}
@@ -77,33 +76,6 @@ export const SpellStateContentEditor: React.FC<TSpellStateContentEditorProps> = 
         includeBackButton={isSpecialBackButtonIncluded(state.content)}
         onAdd={(node) => onUpdate({ content: state.content.concat(node) })}
       />
-    </StyledSpellStateContentEditor>
+    </div>
   );
 };
-
-const StyledSpellStateContentEditor = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px sold gray;
-  .spell-state__content-nodes {
-    padding: 0.5em 1em 0;
-  }
-  .spell-state__content-nodes--none {
-    height: 40px;
-    margin: 0.5em 1em 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed #ccc;
-    color: #aaa;
-    font-size: 12px;
-  }
-  .spell-state__content-nodes--nested {
-    padding: 0.5em;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.05);
-    ${StyledContentNodeAdder} {
-      padding: 0 0 0.25em;
-    }
-  }
-`;

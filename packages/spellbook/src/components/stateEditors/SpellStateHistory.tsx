@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import React from "react";
-import styled from "styled-components";
+
 import { Dialog } from "../overlays/Dialog";
 
 export function ellipseString(string = "", limit = 180, endString = "...") {
@@ -9,7 +9,7 @@ export function ellipseString(string = "", limit = 180, endString = "...") {
 
 export const SpellStateHistory = ({ editor, onUpdate, stateName }) => {
   return (
-    <StyledSpellStateHistory>
+    <div className="xw-sb__state-history">
       {/* Updated Timestamp */}
       <small className="section-title">Updated:</small>
       {editor?.states?.[stateName]?.updatesBy?.[0] ? (
@@ -43,48 +43,6 @@ export const SpellStateHistory = ({ editor, onUpdate, stateName }) => {
           />
         </div>
       </Dialog>
-    </StyledSpellStateHistory>
+    </div>
   );
 };
-
-const StyledSpellStateHistory = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 120px;
-  padding: 1em 0;
-  margin-left: 0.5em;
-  color: #999;
-  small {
-    line-height: 150%;
-    font-size: 11px;
-    &.section-title {
-      font-size: 10px;
-      font-weight: 900;
-      &:not(:first-of-type) {
-        margin-top: 1.25em;
-      }
-    }
-  }
-  .section-notes {
-    line-height: 100%;
-    margin-top: 0.75em;
-    small:not(.section-title) {
-      font-size: 11px;
-    }
-    &:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  }
-  .dialog-notes {
-    background: white;
-    padding: 1em;
-    color: #000;
-    p {
-      margin: 0 0 0.5em;
-    }
-    textarea {
-      width: 100%;
-    }
-  }
-`;

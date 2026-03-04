@@ -1,6 +1,5 @@
 import { difference, intersection, startCase } from "lodash";
 import React, { useState } from "react";
-import styled from "styled-components";
 import { $TSFixMe, ContentNodeType, CONTENT_NODE_BACK } from "@xstate-wizards/spells";
 import { CONTENT_NODE_OPTIONS } from "./consts";
 
@@ -25,7 +24,7 @@ export const ContentNodeAdder: React.FC<TContentNodeAdder> = ({
 }) => {
   const [addContentNodeType, setAddContentNodeType] = useState("");
   return (
-    <StyledContentNodeAdder>
+    <div className="xw-sb__content-node-adder">
       <select value={addContentNodeType} onChange={(e) => setAddContentNodeType(e.target.value)}>
         <option value="">---</option>
         {difference(Object.keys(CONTENT_NODE_OPTIONS), excludeGroups ?? []).map((label) => (
@@ -61,14 +60,6 @@ export const ContentNodeAdder: React.FC<TContentNodeAdder> = ({
       >
         + Add Content
       </button>
-    </StyledContentNodeAdder>
+    </div>
   );
 };
-
-export const StyledContentNodeAdder = styled.div`
-  padding: 0.5em 1em;
-  select {
-    max-width: 80px;
-    width: 100%;
-  }
-`;

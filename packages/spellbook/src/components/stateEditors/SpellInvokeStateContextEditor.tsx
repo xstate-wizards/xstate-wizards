@@ -1,6 +1,6 @@
 import { castArray, get, isEmpty, omit, set, unset } from "lodash";
 import React, { useMemo } from "react";
-import styled from "styled-components";
+
 import {
   $TSFixMe,
   isJsonLogic,
@@ -92,7 +92,7 @@ export const SpellInvokeStateContextEditor: React.FC<TSpellInvokeStateContextEdi
 
   // RENDER
   return (
-    <StyledSpellInvokeStateContextEditor>
+    <div className="xw-sb__invoke-context">
       <div className="context-editor__key">
         <small>Send Context: </small>
         <button onClick={() => onUpdate({ context: { ...state.context, "": {} } })}>+</button>
@@ -151,42 +151,6 @@ export const SpellInvokeStateContextEditor: React.FC<TSpellInvokeStateContextEdi
           </div>
         ))}
       </div>
-    </StyledSpellInvokeStateContextEditor>
+    </div>
   );
 };
-
-const StyledSpellInvokeStateContextEditor = styled.div`
-  display: flex;
-  padding: 0.5em 1em 0;
-  .context-editor__key {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
-    button {
-      max-width: 18px;
-    }
-  }
-  .context-editor__value {
-    width: 100%;
-  }
-
-  .context-key {
-    display: flex;
-    padding-bottom: 0.2em;
-    border-bottom: 1px solid #bbb;
-    margin-bottom: 0.2em;
-    .context-key__name {
-      font-size: 13px;
-      padding-top: 0.2em;
-      min-width: 40px;
-      select {
-        max-width: 100%;
-        width: 100%;
-      }
-    }
-    .context-key__editor {
-      display: flex;
-      width: 100%;
-    }
-  }
-`;

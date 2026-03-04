@@ -1,6 +1,6 @@
 import { orderBy } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { $TSFixMe, TPrepparedSpellMapping, TSpellInstructions } from "@xstate-wizards/spells";
 import { searchParamSet, SPELLBOOK_SEARCH_PARAMS } from "../../utils";
 
@@ -28,9 +28,9 @@ export const SpellInvokeStateKeySelector: React.FC<TSpellInvokeStateKeySelectorP
   };
 
   return (
-    <StyledSpellInvokeStateKeySelector>
-      <div className="spell-state__content-nodes">
-        <div className="select-label">
+    <div className="xw-sb__invoke-key">
+      <div className="xw-sb__spell-state__content-nodes">
+        <div className="xw-sb__select-label">
           <small>Spawn: </small>
         </div>
         <div>
@@ -38,7 +38,7 @@ export const SpellInvokeStateKeySelector: React.FC<TSpellInvokeStateKeySelectorP
             [⬈]
           </button>
         </div>
-        <div className="select-key">
+        <div className="xw-sb__select-key">
           <select
             value={state.key}
             onChange={(e) => {
@@ -68,35 +68,6 @@ export const SpellInvokeStateKeySelector: React.FC<TSpellInvokeStateKeySelectorP
           </select>
         </div>
       </div>
-    </StyledSpellInvokeStateKeySelector>
+    </div>
   );
 };
-
-const StyledSpellInvokeStateKeySelector = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px sold gray;
-  .spell-state__content-nodes {
-    padding: 0.5em 1em;
-    display: flex;
-    .select-label {
-      width: 80px;
-      min-width: 80px;
-      max-width: 80px;
-    }
-    .select-key {
-      width: 100%;
-      display: flex;
-      & > div {
-        width: 100%;
-      }
-    }
-    select {
-      width: 100%;
-    }
-  }
-  .select-warning {
-    font-size: 10px;
-    width: 320px;
-  }
-`;

@@ -4,7 +4,7 @@ import { DragControls, Reorder, useDragControls } from "framer-motion";
 const ReorderGroup = Reorder.Group as any;
 const ReorderItem = Reorder.Item as any;
 import React, { useState } from "react";
-import styled from "styled-components";
+
 import { SpellSectionsEditor } from "./SpellSectionsEditor";
 
 interface Props {
@@ -46,7 +46,7 @@ export const SpellStatesEditorMiniMap = ({ config, statesList, onConfigUpdate, o
           onUpdate={(sectionsBar) => onConfigUpdate({ ...config, sectionsBar })}
         />
       )}
-      <StyledSpellStatesMiniMap>
+      <div className="xw-sb__mini-map">
         <small className="sections-bar__trigger" onClick={() => setIsSectionsEditing(true)}>
           [+] Sections
         </small>
@@ -73,46 +73,7 @@ export const SpellStatesEditorMiniMap = ({ config, statesList, onConfigUpdate, o
             </li>
           ))}
         </ReorderGroup>
-      </StyledSpellStatesMiniMap>
+      </div>
     </>
   );
 };
-
-const StyledSpellStatesMiniMap = styled.div`
-  position: sticky;
-  top: 30px;
-  min-width: 240px;
-  padding: 1em 0 0 1em;
-  user-select: none;
-  max-height: calc(100vh - 105px);
-  overflow-y: scroll;
-  div {
-    padding: 0 0.5em 0 0;
-    margin: 0.25em 0;
-    font-size: 11px;
-    letter-spacing: -0.1px;
-    font-weight: 900;
-    p {
-      margin: 0;
-    }
-    display: flex;
-    align-items: center;
-    svg {
-      padding-right: 4px;
-      cursor: grab;
-    }
-  }
-  small.sections-bar__trigger {
-    display: flex;
-    font-size: 11px;
-    height: 14px;
-    color: #aaa;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  a {
-    color: gray;
-  }
-`;

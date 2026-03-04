@@ -1,6 +1,6 @@
 import { cloneDeep, omit } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { SpellStateEditor } from "./SpellStateEditor";
 import { isAfter, subMinutes } from "date-fns";
 import { SpellStatesEditorMiniMap } from "./miniMap/SpellStatesEditorMiniMap";
@@ -139,15 +139,15 @@ export const SpellStatesEditor = ({
 
   // RENDER
   return (
-    <StyledSpellStates>
+    <div className="xw-sb__states">
       <SpellStatesEditorMiniMap
         config={config}
         statesList={statesList}
         onConfigUpdate={onConfigUpdate}
         onStatesUpdate={onStatesUpdate}
       />
-      <div className="spell-states__view">
-        <div className="spell-states__view__list">
+      <div className="xw-sb__spell-states__view">
+        <div className="xw-sb__spell-states__view__list">
           {statesList.map(({ stateName }) => (
             <SpellStateEditor
               key={stateName}
@@ -166,47 +166,12 @@ export const SpellStatesEditor = ({
             />
           ))}
         </div>
-        <div className="spell-states__view__add">
+        <div className="xw-sb__spell-states__view__add">
           <button onClick={addGeneralStateHandler}>+Add State</button>
           <button onClick={addInvokeSpellStateHandler}>+Add Spawning State</button>
           <button onClick={addCopiedStateHandler}>+Add State (Copied JSON 📋)</button>
         </div>
       </div>
-    </StyledSpellStates>
+    </div>
   );
 };
-
-const StyledSpellStates = styled.div`
-  display: flex;
-  justify-content: space-between;
-  overflow: hidden;
-  width: 100%;
-  .spell-states__view {
-    scroll-behavior: smooth;
-    width: 100%;
-    height: 100%;
-    max-height: calc(100vh - 105px);
-    overflow-y: scroll;
-  }
-  .spell-states__view__list {
-    display: flex;
-    flex-direction: column;
-  }
-  .spell-states__view__add {
-    position: relative;
-    left: -60px;
-    padding: 1em 0 4em;
-    margin: 0 auto;
-    text-align: center;
-    max-width: 960px;
-    button {
-      margin: 0 4px;
-    }
-  }
-  .spell-states__mini-map {
-  }
-  .content-node--reorder-handle {
-    display: flex;
-    flex-direction: row;
-  }
-`;

@@ -1,10 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { ValdidationTypes } from "@xstate-wizards/spells";
 
 export const ContentNodeValidationList = ({ onChange, validations, value }) => {
   return (
-    <StyledContentNodeValidationList>
+    <div className="xw-sb__validation-list">
       <select
         onChange={(e) => {
           onChange((value ?? []).concat(e.target.value));
@@ -46,20 +45,6 @@ export const ContentNodeValidationList = ({ onChange, validations, value }) => {
           </small>
         ))}
       </div>
-    </StyledContentNodeValidationList>
+    </div>
   );
 };
-
-const StyledContentNodeValidationList = styled.div`
-  display: flex;
-  select {
-    width: 100%;
-    max-width: 120px;
-  }
-  .active-validations {
-    display: flex;
-    small {
-      margin-left: 6px;
-    }
-  }
-`;

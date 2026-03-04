@@ -1,6 +1,6 @@
 import { omit } from "lodash";
 import React from "react";
-import styled from "styled-components";
+
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { SpellStateEventTransitionsEditor } from "./SpellStateEventTransitionsEditor";
 
@@ -22,7 +22,7 @@ export const SpellStateEventsEditor: React.FC<TSpellStateEventsEditorProps> = ({
   states,
 }) => {
   return (
-    <StyledSpellStateEventsEditor>
+    <div className="xw-sb__events-editor">
       <div>
         {Object.keys(state.on ?? {})
           .sort()
@@ -71,39 +71,6 @@ export const SpellStateEventsEditor: React.FC<TSpellStateEventsEditorProps> = ({
           + Event Listener
         </button>
       </div>
-    </StyledSpellStateEventsEditor>
+    </div>
   );
 };
-
-const StyledSpellStateEventsEditor = styled.div`
-  padding: 0.5em 1em;
-  background: #f0f0f0;
-  overflow-x: scroll;
-  .on-event {
-    display: flex;
-    padding-bottom: 0.2em;
-    border-bottom: 1px solid #bbb;
-    margin-bottom: 0.2em;
-    .on-event__name {
-      min-width: 120px;
-      max-width: 120px;
-      width: 120px;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      padding-top: 0.2em;
-      font-weight: 900;
-      font-size: 14px;
-      div {
-        display: flex;
-        justify-content: flex-start;
-      }
-      button {
-        font-size: 10px;
-      }
-    }
-    .on-event__transitions {
-      display: flex;
-      width: 100%;
-    }
-  }
-`;
