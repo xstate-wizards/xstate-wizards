@@ -23,13 +23,11 @@ To make this work across multiple frontends, we've separated out our logic & UI 
 
 - `@xstate-wizards/spells` has state machine ("spell") setup functions and references
 - `@xstate-wizards/wizards-of-react` has UI components for running in a [React](https://react.dev/) setup
-- `@xstate-wizards/wizards-of-vue` Placeholder for [Vue](https://vuejs.org/) implementation of components
-- `@xstate-wizards/wizards-of-svelte` Placeholder for [Svelte](https://svelte.dev/) implementation of components
 
 In addition, as we've built complex flows that need input from non-technical team members, we've created some packages to aid in visibility as well as an entire no-code editor.
 
 - `@xstate-wizards/crystal-ball` is a way to view state machines in an 'outline' mode, or in other words, in a linear chart with their branching sub-components revealed as well.
-- `@xstate-wizards/spellbook` is a no-code editor for these flows. It takes advantage of the fact that state machines can be serialized as JSON. (If you decide to turn this into a wildly successful for-profit company, please consider throwing some money back to this project)
+- `@xstate-wizards/spellbook` is a no-code editor for these flows. It takes advantage of the fact that state machines can be serialized as JSON.
 
 | *Crystal Ball* Reviewer | *Spellbook* No-code Editor |
 | :--: | :--: |
@@ -199,25 +197,28 @@ This library stands on the shoulders of the XState community, which is why the n
 
 ### Getting Started
 
-Since we have several layers of package dependency, we use `Lerna` for pushing installs/builds of packages through to one another. We use `yalc` for propagating package changes up the chain (ex: /spells -> /wizards-of-react -> /spellbook) locally so we can play in our examples with refinements.
+Requires Node >= 22. The project uses npm workspaces — all packages and examples are linked automatically.
 
-But before we do anything, get onto the right Node version, and run our install/build lerna scripts via yarn.
+```bash
+npm install
+npm run build
+```
 
-- `nvm use`
-- `yarn install`
-- `yarn build`
+### Running Examples
 
-Then we'll want to connect our package directories to our local registry mirror using `yalc`:
+```bash
+cd examples/react-wizards && npm run dev
+cd examples/react-wizards-i18n && npm run dev
+cd examples/react-spellbook && npm run dev
+```
 
-- `yarn yalclink`
+### Testing
 
-And whenever we make changes across packages, to easily propagate them to the registry and into our other packages:
+```bash
+npm test           # unit tests
+npm run test:e2e   # Playwright e2e tests
+```
 
-- `yarn yalcpush`
+### Publishing
 
-
-### Norms
-
-This project has a wrapper to `console.log` so we can prefix output and make it easier to spot/filter. This means you cannot use console.log. Look for examples of logger.debug or logger.info instead.
-
-To update these packages on the NPM registry, we have commands such as `yarn patch` that you can run on each of the packages.
+Each package has `patch`, `minor`, and `major` scripts for publishing to npm.
