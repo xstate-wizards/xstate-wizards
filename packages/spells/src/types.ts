@@ -6,10 +6,12 @@ export type $TSFixMe = any;
 // --- Typed function signatures for content node callbacks ---
 // Translate function (for i18n support)
 export type TTranslateFn = (key: string, params?: Record<string, any>) => string;
-// Content function: receives machine context and optional translate fn
-export type TContentFn = (ctx: TCreateMachineContext, translate?: TTranslateFn) => (TContentDefinition | TContentDefinition[])[];
-// Callback receiving context (for disabled, selected, conditional, onClick, items, etc.)
-export type TContextFn<R = any> = (ctx: TCreateMachineContext, ...args: any[]) => R;
+// Base args matching XState v5 convention: { context, event }
+export type TContextArgs = { context: TCreateMachineContext; event?: any; item?: any; itemIndex?: number; items?: any[] };
+// Content function: receives { context } and optional translate fn
+export type TContentFn = (args: TContextArgs, translate?: TTranslateFn) => (TContentDefinition | TContentDefinition[])[];
+// Callback receiving { context, event } (for disabled, selected, conditional, onClick, items, etc.)
+export type TContextFn<R = any> = (args: TContextArgs, ...extras: any[]) => R;
 
 export type TCreateMachineContext = {
   resources: Record<string, Record<string, any>[]>;
@@ -62,7 +64,7 @@ export type TGeneralStateNodeProps = {
   exit?: TContextFn<void> | string | Record<string, any>; // action fn, action string, or action object
   invoke?: Record<string, any> | Function;
   nodeType?: string; // Default to ID_GENERAL
-  on: Record<string, any>;
+  on: Record<string, TStateTransition | TStateTransition[]>;
   progress?: number;
   showValidateErrorsAtEntry?: boolean; // DEPRECATE: I think?
   test?: (utils: TTestNodeHandlerProps) => Promise<void>;
@@ -87,17 +89,27 @@ export type TContentDefinition = {
   buttonType?: string; // "submit" triggers validation before firing event
   disabledByFreshDelay?: boolean; // disables button briefly on state entry to prevent double-clicks
   event?: string | Record<string, any>; // machine transition config
-  assign?: TContextFn | string; // context assignment handling
+  assign?: TContextFn | string | Record<string, any>; // context assignment handling — string path, function, or { modelName, id, path } object
   attrs?: Record<string, any>; // Pass values like className, style, disabled checking fn, other attributes
   disabled?: TContextFn<boolean>; // can't destructure like other attributes
   selected?: TContextFn<boolean>; // mostly for inputCheckboxButton so we can invert/change color when selected
-  items?: (TContentDefinition | TContentTableDefinition)[];
+  content?: (TContentDefinition | TContextFn | (TContentDefinition | TContextFn)[])[] | TContentFn; // nested content for row, forEach, callout, card, collapsiblePanel, resourceEditor, etc.
+  items?: (TContentDefinition | TContentTableDefinition)[] | TContextFn<any[]> | Record<string, any> | any[];
   // --- Conditional node properties ---
   conditional?: TContextFn | Record<string, any>; // function returning a value, or json-logic object
-  options?: Record<string, TContentDefinition[]>; // map of conditional result values to content arrays
+  options?: Record<string, TContentDefinition[]> | Record<string, any>[] | Record<string, any>; // conditional: map of values to content arrays; select: array of {text,value} or json-logic
   true?: TContentDefinition[]; // shorthand for options.true
   false?: TContentDefinition[]; // shorthand for options.false
   description?: string; // metadata/documentation for the node
+  // --- Media / link properties ---
+  url?: string; // video url
+  src?: string; // image src
+  alt?: string; // image alt text
+  href?: string; // link href
+  // --- Input-specific properties ---
+  config?: Record<string, any>; // configuration for resourceEditor, address, countdownTimer, etc.
+  dateStart?: Date | string; // date picker range start
+  dateEnd?: Date | string; // date picker range end
 };
 
 export type TNote = {
@@ -194,10 +206,10 @@ export type TWizardSerializations = {
     SessionInactiveOverlay?: React.FunctionComponent;
     WizardWrap?: React.FunctionComponent;
     WizardNavigationPanel?: React.FunctionComponent<TWizardNavigationPanelProps>;
-    [key: string]: React.FunctionComponent;
+    [key: string]: React.FunctionComponent<any>;
   };
-  // --- functions for serializing variables in content/conditionals/etc
-  functions: Record<string, TContextFn>;
+  // --- functions for serializing variables in content/conditionals/etc (called by json-logic, not content callbacks)
+  functions: Record<string, (...args: any[]) => any>;
   // --- serialized guards that need to be code
   guards?: Record<string, $TSFixMe>;
   // --- states of machine that need to be custom code
@@ -236,12 +248,12 @@ export type TSpellConfig = {
   initial: string; // state that machine should start on
   outlineMode?: boolean; // DEPRECATE? Boolean that passes through from DirectedGraphAsOutline.tsx
   sectionsBar?: {
-    name: string;
+    name: string | ((t: TTranslateFn) => string);
     trigger: string;
     highlight?: boolean;
   }[];
   session?: Record<string, any>; // holds machine id, state value, version, etc. (ex: questionnaire machines)
-  title?: string; // Just the machine label prop, (prev: label)
+  title?: string | ((t: TTranslateFn) => string); // Just the machine label prop, (prev: label)
 };
 
 export type TSpellUserHistoryRecord = {
@@ -266,7 +278,24 @@ export type TSpellEditor = {
   };
 };
 
-type TTempState = { [stateName: string]: TGeneralStateNodeProps };
+export type TStateTransition = {
+  target?: string;
+  cond?: TContextFn<boolean>; // guard function
+  actions?: (string | Record<string, any>)[];
+} | string;
+
+export type TInvokedMachineStateNodeProps = {
+  key: string; // spell key to invoke
+  context?: TContextFn | Record<string, any>; // context to pass to invoked machine (function or json-logic)
+  entry?: TContextFn<void> | string | Record<string, any>;
+  exit?: TContextFn<void> | string | Record<string, any>;
+  on?: Record<string, any>;
+  onDone?: TStateTransition[];
+  onError?: TStateTransition[];
+  test?: (utils: TTestNodeHandlerProps) => Promise<void>;
+};
+
+type TSpellStates = { [stateName: string]: TGeneralStateNodeProps | TInvokedMachineStateNodeProps };
 
 export type TSpellInstructions = {
   key: string; // should correspond to spell/machine map
@@ -275,7 +304,7 @@ export type TSpellInstructions = {
   config: TSpellConfig; // | ((ctx: $TSFixMe) => TSpellConfig);
   models: TSpellModelOptionsMap;
   schema: JSONSchema7;
-  states: TTempState;
+  states: TSpellStates;
   editor?: TSpellEditor;
   // database related
   id?: string | number;

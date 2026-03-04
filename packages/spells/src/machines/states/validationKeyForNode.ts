@@ -28,7 +28,9 @@ export const validationKeyForNode = (node, { ctx, functions, contentTree }: $TSF
         contentTree: node.contentTree ?? contentTree,
       })}]${node.assign.path && String(node.assign.path)?.length > 0 ? `.${node.assign.path}` : ""}`.trim();
     } else if (node.assign?.modelName && node.assign?.id == null) {
-      logger.error("validationKeyForNode: modelName provided, but id is null/undefined", cloneDeep(node));
+      // Resource may not be hydrated yet — this resolves on re-render after setupResourcesForEditors runs
+      logger.debug("validationKeyForNode: modelName provided, but id is null/undefined (resource not yet hydrated)", cloneDeep(node));
+      return undefined;
     }
     // --- path/value
     if (node.assign?.path && node.assign?.value != null) return node.assign.path;

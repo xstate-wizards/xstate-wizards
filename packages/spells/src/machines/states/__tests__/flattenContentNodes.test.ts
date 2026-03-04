@@ -37,7 +37,7 @@ const contentForEach = [
 const contentForEachFunctional = [
   {
     type: "forEach",
-    items: (ctx) => ctx.arrayOfData,
+    items: ({ context }) => context.arrayOfData,
     content: () => [{ type: "p", text: `Data: <<<JSON_LOGIC('{"var":["content.node"]}')>>>` }],
   },
 ];
@@ -56,7 +56,7 @@ const contentConditional = [
 const contentConditionalFunctional = [
   {
     type: "conditional",
-    conditional: (ctx) => ctx.states.num < 0,
+    conditional: ({ context }) => context.states.num < 0,
     options: {
       true: [{ type: "h1", text: `Title!` }],
       false: [{ type: "p", text: "Paragraph!" }],
@@ -108,8 +108,8 @@ const contentResourceEditorFunctional = [
   { type: "h4", text: `Resource Editor` },
   {
     type: "forEach",
-    items: (ctx) => Object.values(ctx?.resources?.Thing),
-    content: (ctx, item) => [
+    items: ({ context }) => Object.values(context?.resources?.Thing),
+    content: ({ context, item }) => [
       { type: "small", text: `ID: <<<JSON_LOGIC('{"var":["content.node.id"]}')>>>` },
       {
         type: "resourceEditor",

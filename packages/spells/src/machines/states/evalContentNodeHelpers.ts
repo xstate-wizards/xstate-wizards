@@ -20,7 +20,7 @@ export const evalConditionalValue = (node: $TSFixMe, { context, content }: $TSFi
   let val;
   // --- if a function
   if (typeof node.conditional === "function") {
-    val = node.conditional(context, { isEveryInputValid: isEveryInputValid(extras?.validationMap) });
+    val = node.conditional({ context }, { isEveryInputValid: isEveryInputValid(extras?.validationMap) });
     // --- if json-logic
   } else if (isJsonLogic(node.conditional)) {
     val = evalJsonLogic(node.conditional, { context, content });
@@ -51,7 +51,7 @@ export const evalForEachItems = (node: $TSFixMe, { context, content }: $TSFixMe)
   }
   // --- if function
   if (typeof node.items === "function") {
-    return node.items(context);
+    return node.items({ context });
   }
   // --- if json logic, return evalauation
   if (isJsonLogic(node.items)) {
@@ -65,10 +65,10 @@ export const evalForEachItems = (node: $TSFixMe, { context, content }: $TSFixMe)
   return [];
 };
 
-export const evalForEachItemContentNodes = (node, item, itemIndex, items, ctx) => {
+export const evalForEachItemContentNodes = (node, item, itemIndex, items, context) => {
   // --- if function, return as is
   if (typeof node?.content === "function") {
-    return castArray(node.content(ctx, item, itemIndex, items));
+    return castArray(node.content({ context, item, itemIndex, items }));
   }
   // --- TODO: if json logic....???
   if (Array.isArray(node?.content)) {
