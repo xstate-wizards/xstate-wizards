@@ -1,4 +1,5 @@
 import "@xstate-wizards/wizards-of-react/styles.css";
+import "./app.css";
 import "./overrides.css";
 import i18next, { t } from "i18next";
 import { initReactI18next } from "react-i18next";

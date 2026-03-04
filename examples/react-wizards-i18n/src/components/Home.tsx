@@ -55,13 +55,25 @@ export const Home = () => {
   }, [languageCode]);
 
   return (
-    <div>
-      <div>
-        <h1>Language Changing Test</h1>
-        <button onClick={() => setLanguageCode("en")}>English</button>
-        <button onClick={() => setLanguageCode("es")}>Spanish</button>
-        <hr />
-      </div>
+    <div className="app">
+      <header className="app-header">
+        <h1>i18n Example</h1>
+        <div className="app-header__controls">
+          <span className="app-header__label">Language</span>
+          <button
+            className={languageCode === "en" ? "active" : ""}
+            onClick={() => setLanguageCode("en")}
+          >
+            English
+          </button>
+          <button
+            className={languageCode === "es" ? "active" : ""}
+            onClick={() => setLanguageCode("es")}
+          >
+            Spanish
+          </button>
+        </div>
+      </header>
 
       <WizardRunner
         debugConfig={{
