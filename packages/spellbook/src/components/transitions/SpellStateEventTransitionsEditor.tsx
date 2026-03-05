@@ -170,22 +170,18 @@ export const SpellStateEventTransitionsEditor: React.FC<TSpellStateEventTransiti
             )}
           </div>
           <div className="transition__row-buttons">
-            <div style={{ display: "flex", flexDirection: "column", maxWidth: "30px" }}>
-              <button
-                disabled={transitionIndex === 0}
-                onClick={() => onUpdate(reorderArrayItem(transitionArr, transitionIndex, REORDER_DIRECTION.UP))}
-                style={{ maxHeight: "13px" }}
-              >
-                ⬆︎
-              </button>
-              <button
-                disabled={transitionIndex === transitionArr.length - 1}
-                onClick={() => onUpdate(reorderArrayItem(transitionArr, transitionIndex, REORDER_DIRECTION.DOWN))}
-                style={{ maxHeight: "13px" }}
-              >
-                ⬇︎
-              </button>
-            </div>
+            <button
+              disabled={transitionIndex === 0}
+              onClick={() => onUpdate(reorderArrayItem(transitionArr, transitionIndex, REORDER_DIRECTION.UP))}
+            >
+              ⬆︎
+            </button>
+            <button
+              disabled={transitionIndex === transitionArr.length - 1}
+              onClick={() => onUpdate(reorderArrayItem(transitionArr, transitionIndex, REORDER_DIRECTION.DOWN))}
+            >
+              ⬇︎
+            </button>
             <button onClick={() => onUpdate(removeArrayItem(transitions, transitionIndex))}>❌</button>
           </div>
         </div>
