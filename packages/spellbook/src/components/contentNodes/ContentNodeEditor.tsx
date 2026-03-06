@@ -233,7 +233,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                       </div>
                     </td>
                     <td>
-                      <button onClick={() => contentNodeUpdateHandler("options", omit(contentNode.options, [option]))}>
+                      <button className="stack-btn" onClick={() => contentNodeUpdateHandler("options", omit(contentNode.options, [option]))}>
                         ❌
                       </button>
                     </td>
@@ -242,6 +242,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                 <tr>
                   <td className="stack-label">
                     <button
+                      className="stack-btn"
                       onClick={() => {
                         const newCondition = prompt("Condition value:");
                         if (newCondition)
@@ -251,7 +252,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                           });
                       }}
                     >
-                      + Option
+                      +&nbsp;Option
                     </button>
                   </td>
                   <td></td>
@@ -319,6 +320,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                               </td>
                               <td>
                                 <button
+                                  className="stack-btn"
                                   onClick={() =>
                                     contentNodeUpdateHandler("items", removeArrayItem(contentNode.items, optItem))
                                   }
@@ -863,6 +865,7 @@ export const ContentNodeEditor: React.FC<TContentNodeEditorProps> = ({
                               </td>
                               <td>
                                 <button
+                                  className="stack-btn"
                                   onClick={() =>
                                     contentNodeUpdateHandler("options", removeArrayItem(contentNode.options, optIndex))
                                   }
