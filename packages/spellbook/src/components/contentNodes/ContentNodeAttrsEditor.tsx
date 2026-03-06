@@ -16,7 +16,7 @@ export const ContentNodeAttrsEditor: React.FC<TContentNodeAttrsEditorProps> = ({
   // console.log("ContentNodeAttrsEditor: ", { attrs, type, options });
   // RENDER
   return (
-    <div>
+    <div className="content-node__attrs-trigger">
       <button onClick={() => setIsDialogOpen(!isDialogOpen)} style={{ fontSize: "11px", letterSpacing: "-0.2px" }}>
         {"{...}"}
       </button>

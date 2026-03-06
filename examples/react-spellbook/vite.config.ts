@@ -5,6 +5,7 @@ import path from "path";
 // Dev mode: resolves workspace packages to their TypeScript source
 // (hot reload on package changes, no build step needed)
 const packages = path.resolve(__dirname, "../../packages");
+const rootNodeModules = path.resolve(__dirname, "../../node_modules");
 
 export default defineConfig({
   plugins: [react()],
@@ -15,9 +16,9 @@ export default defineConfig({
       "@xstate-wizards/wizards-of-react": path.join(packages, "wizards-of-react/src"),
       "@xstate-wizards/crystal-ball": path.join(packages, "crystal-ball/src"),
       "tel-fns": path.join(packages, "tel-fns/src"),
-      // Force all packages to share a single copy of these libraries
-      "xstate": path.join(packages, "spells/node_modules/xstate"),
-      "@xstate/react": path.join(packages, "wizards-of-react/node_modules/@xstate/react"),
+      // Force all packages to share a single copy of these libraries (hoisted to root)
+      "xstate": path.join(rootNodeModules, "xstate"),
+      "@xstate/react": path.join(rootNodeModules, "@xstate/react"),
     },
   },
 });

@@ -1,5 +1,5 @@
 import { castArray, cloneDeep } from "lodash";
-import React, { Fragment } from "react";
+import React from "react";
 import { $TSFixMe, TWizardSerializations } from "@xstate-wizards/spells";
 import { VariableSelector } from "./VariableSelector";
 
@@ -87,7 +87,7 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
       {/* ARGS */}
       <div className="logic__args">
         {existingArgs.map((arg, argIndex) => (
-          <Fragment key={`${argIndex}-${typeof arg}`}>
+          <div className="logic__arg" key={`${argIndex}-${typeof arg}`}>
             {/* --- var --- */}
             {typeof arg === "string" && existingOp === "var" ? (
               <VariableSelector
@@ -138,7 +138,7 @@ export const JsonLogicBuilder: React.FC<JsonLogicBuilderProps> = ({
                 states={states}
               />
             ) : null}
-          </Fragment>
+          </div>
         ))}
         {/* ADD ARGS -- only allow 1 arg if 'var' or 'return' */}
         <div className="logic__args__actions">
